@@ -1,0 +1,407 @@
+---
+// Welcome Modal Component for first-time visitors
+---
+
+<div id="welcome-modal" class="welcome-modal-overlay">
+  <div class="welcome-modal-container">
+    <div class="welcome-modal-content">
+      <!-- Sticky Header with Close Button and Language Toggle -->
+      <div class="welcome-modal-header">
+        <!-- Close Button -->
+        <button id="close-welcome-modal" class="welcome-modal-close" aria-label="Close welcome message">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+
+        <!-- Language Toggle -->
+        <div class="language-toggle">
+          <button id="lang-en" class="lang-btn">English</button>
+          <button id="lang-si" class="lang-btn active">සිංහල</button>
+        </div>
+      </div>
+
+      <!-- Scrollable Body -->
+      <div class="welcome-modal-body">
+        <!-- English Content -->
+        <div id="content-en" class="welcome-content">
+        <h2 class="welcome-header">Welcome to Our Launch!</h2>
+        <p class="welcome-team">The Kalyanamitta Team -</p>
+        
+        <h3 class="welcome-subheader">The Start of Our Journey</h3>
+        <p class="welcome-text">
+          It is with great joy that we welcome you to the Kalyanamitta Hub. Our mission is to create a centralized, reliable, and easily accessible space for sharing Dharma.
+        </p>
+        
+        <p class="welcome-text">
+          This is our very first step. As you explore the site, you might encounter small bugs or issues. Please understand that this is an initial launch, and we are actively working to improve and enhance this space every day. Your patience and understanding are deeply appreciated.
+        </p>
+        
+        <p class="welcome-text">
+          Thank you for joining us on this journey. In the future, we hope to bring opportunities for you to join as "Kalyanamittas" (virtuous friends) and volunteer with us.
+        </p>
+        
+        <p class="welcome-closing">Be with us. May you be well and happy!</p>
+        
+        <p class="welcome-sadhu">Sādhu! Sādhu!! Sādhu!!!</p>
+      </div>
+
+      <!-- Sinhala Content -->
+      <div id="content-si" class="welcome-content active">
+        <h2 class="welcome-header">සාදරයෙන් පිළිගනිමු!</h2>
+        <p class="welcome-team">කල්‍යාණමිත්ත කණ්ඩායම -</p>
+        
+        <h3 class="welcome-subheader">අපගේ ගමනේ ආරම්භයයි</h3>
+        <p class="welcome-text">
+          කල්‍යාණමිත්ත මධ්‍යස්ථානය වෙත ඔබව සාදරයෙන් පිළිගැනීමට ලැබීම මහත් සතුටකි. අපගේ අරමුණ වන්නේ ධර්ම දානය සඳහා මධ්‍යගත, විශ්වාසනීය සහ පහසුවෙන් ප්‍රවේශ විය හැකි ස්ථානයක් නිර්මාණය කිරීමයි.
+        </p>
+        
+        <p class="welcome-text">
+          මෙය අපගේ පළමු පියවරයි. ඔබ මෙම වෙබ් අඩවිය භාවිතා කරන විට කුඩා දෝෂ හෝ ගැටළු ඇති විය හැක. අප තවමත් මෙම අඩවිය වැඩිදියුණු කරමින් සිටින අතර, ඔබගේ අවබෝධය සහ ඉවසීම අපි බෙහෙවින් අගය කරමු.
+        </p>
+        
+        <p class="welcome-text">
+          මෙම ගමනට අප හා එක්වීම ගැන ඔබට ස්තූතියි. "කල්‍යාණමිත්තන්" ලෙස ස්වේච්ඡාවෙන් අප හා සම්බන්ධ වීමට ඔබටත් අනාගතයේදී අවස්ථාවන් උදා කර දීමට අපි බලාපොරොත්තු වෙමු.
+        </p>
+        
+        <p class="welcome-closing">අප සමඟ රැඳී සිටින්න. ඔබ සැමට තෙරුවන් සරණයි!</p>
+        
+        <p class="welcome-sadhu">සාදු! සාදු!! සාදු!!!</p>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .welcome-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    animation: fadeIn 0.3s ease-out;
+    overflow-y: auto;
+    padding: 1rem;
+  }
+
+  .welcome-modal-overlay.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .welcome-modal-container {
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+  }
+
+  .welcome-modal-content {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 0;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    position: relative;
+    animation: slideUp 0.4s ease-out;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  @media (max-width: 640px) {
+    .welcome-modal-content {
+      border-radius: 12px;
+    }
+  }
+
+  .welcome-modal-header {
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    padding: 1.5rem 2rem 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    z-index: 20;
+    border-radius: 16px 16px 0 0;
+  }
+
+  @media (max-width: 640px) {
+    .welcome-modal-header {
+      padding: 1.25rem 1.5rem 0.75rem;
+      border-radius: 12px 12px 0 0;
+    }
+  }
+
+  .welcome-modal-body {
+    overflow-y: auto;
+    padding: 2rem;
+    flex: 1;
+  }
+
+  @media (max-width: 640px) {
+    .welcome-modal-body {
+      padding: 1.5rem;
+    }
+  }
+
+  .welcome-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: white;
+    border: 2px solid #e5e7eb;
+    cursor: pointer;
+    color: #6b7280;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s;
+    z-index: 30;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  @media (max-width: 640px) {
+    .welcome-modal-close {
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  .welcome-modal-close:hover {
+    background-color: #8E050F;
+    border-color: #8E050F;
+    color: white;
+    transform: rotate(90deg);
+    box-shadow: 0 4px 6px rgba(142, 5, 15, 0.2);
+  }
+
+  .welcome-modal-close:active {
+    transform: rotate(90deg) scale(0.95);
+  }
+
+  .language-toggle {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .lang-btn {
+    flex: 1;
+    padding: 0.5rem 1rem;
+    border: 2px solid #e5e7eb;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+    color: #6b7280;
+  }
+
+  .lang-btn:hover {
+    border-color: #8E050F;
+    color: #8E050F;
+  }
+
+  .lang-btn.active {
+    background: #8E050F;
+    border-color: #8E050F;
+    color: white;
+  }
+
+  .welcome-content {
+    display: none;
+  }
+
+  .welcome-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .welcome-header {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #8E050F;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+  }
+
+  @media (max-width: 640px) {
+    .welcome-header {
+      font-size: 1.5rem;
+    }
+  }
+
+  .welcome-team {
+    font-size: 1rem;
+    color: #4b5563;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+
+  .welcome-subheader {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 640px) {
+    .welcome-subheader {
+      font-size: 1.1rem;
+    }
+  }
+
+  .welcome-text {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #374151;
+    margin-bottom: 1rem;
+    text-align: justify;
+  }
+
+  @media (max-width: 640px) {
+    .welcome-text {
+      font-size: 0.9rem;
+      text-align: left;
+    }
+  }
+
+  .welcome-closing {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #1f2937;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .welcome-sadhu {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #8E050F;
+    text-align: center;
+    margin-top: 1rem;
+    letter-spacing: 0.5px;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  /* Custom scrollbar for modal body */
+  .welcome-modal-body::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .welcome-modal-body::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+  }
+
+  .welcome-modal-body::-webkit-scrollbar-thumb {
+    background: rgba(142, 5, 15, 0.3);
+    border-radius: 10px;
+  }
+
+  .welcome-modal-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(142, 5, 15, 0.5);
+  }
+</style>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Check if user has visited before
+    const hasVisited = localStorage.getItem('hasVisitedKalyanamitta');
+    const modal = document.getElementById('welcome-modal');
+    const closeBtn = document.getElementById('close-welcome-modal');
+    const langEnBtn = document.getElementById('lang-en');
+    const langSiBtn = document.getElementById('lang-si');
+    const contentEn = document.getElementById('content-en');
+    const contentSi = document.getElementById('content-si');
+
+    // Show modal if first visit
+    if (!hasVisited && modal) {
+      setTimeout(() => {
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+      }, 500);
+    }
+
+    // Close modal function
+    function closeModal() {
+      if (modal) {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+        localStorage.setItem('hasVisitedKalyanamitta', 'true');
+      }
+    }
+
+    // Close button event
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeModal);
+    }
+
+    // Close on overlay click
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+    }
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal?.classList.contains('show')) {
+        closeModal();
+      }
+    });
+
+    // Language toggle functionality
+    if (langEnBtn && langSiBtn && contentEn && contentSi) {
+      langEnBtn.addEventListener('click', () => {
+        langEnBtn.classList.add('active');
+        langSiBtn.classList.remove('active');
+        contentEn.classList.add('active');
+        contentSi.classList.remove('active');
+      });
+
+      langSiBtn.addEventListener('click', () => {
+        langSiBtn.classList.add('active');
+        langEnBtn.classList.remove('active');
+        contentSi.classList.add('active');
+        contentEn.classList.remove('active');
+      });
+    }
+  });
+</script>
