@@ -1,9 +1,36 @@
 # Website Optimization Summary
 
 ## Overview
-Your Kalyanamitta website has been optimized for better performance, cleaner code structure, and improved maintainability.
+Your Kalyanamitta website has been optimized for better performance, cleaner code structure, improved maintainability, and now implements "The Portal Plan" architecture for unlimited scalability.
 
-## Key Improvements
+## Latest Updates - Portal Plan & Mobile Optimization
+
+### **The Portal Plan Architecture** 🎯
+- ✅ Implemented centralized `posts.json` master list in `src/data/`
+- ✅ Homepage carousel now links to external monthly post sites
+- ✅ Writings page displays posts from master list with external URLs
+- ✅ Removed local post files (`post-1.astro`, `post-2.astro`)
+- ✅ All posts open in new tabs with external link indicators
+- ✅ Unlimited scalability - no more Git size limits
+- ✅ Each month = separate repository/deployment
+
+**Architecture Benefits:** Tiny main site, unlimited creative posts, professional scalability
+
+### **Mobile Responsiveness** 📱
+- ✅ Optimized all text sizes with responsive breakpoints (sm/md/lg)
+- ✅ Improved touch targets for buttons (minimum 44x44px)
+- ✅ Responsive padding and spacing across all components
+- ✅ Optimized search bar placeholder text for mobile
+- ✅ Improved carousel card sizing for small screens (260px min-width)
+- ✅ Better calendar grid spacing and button sizes on mobile
+- ✅ Responsive hero section with proper text hierarchy
+- ✅ Optimized filter buttons layout for narrow screens
+- ✅ Improved post card padding and border radius on mobile
+- ✅ Better spacing in writings grid (gap-4 on mobile, gap-6 on desktop)
+
+**Mobile Impact:** Professional mobile experience, improved touch usability, better readability
+
+## Previous Key Improvements
 
 ### 1. **Layout.astro** - Performance Enhancements
 - ✅ Removed unnecessary comments
