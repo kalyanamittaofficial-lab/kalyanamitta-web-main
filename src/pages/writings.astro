@@ -211,34 +211,41 @@ const sortedPosts = [...postsData].sort((a, b) =>
   </div>
 
   <script define:vars={{ postsData }}>
-    let selectedDate = null;
-    let currentMonth = new Date();
-    let datesWithPosts = postsData.map(p => new Date(p.pubDate).toDateString());
+    // Initialize writings page functionality
+    function initWritingsPage() {
+      // State variables
+      let selectedDate = null;
+      let currentMonth = new Date();
+      let datesWithPosts = postsData.map(p => new Date(p.pubDate).toDateString());
 
-    // Get all post cards and elements
-    const postCards = document.querySelectorAll('.post-card');
-    const searchInput = document.getElementById('search-input');
-    const clearSearchBtn = document.getElementById('clear-search');
-    const searchResultsCount = document.getElementById('search-results-count');
-    const sortSelect = document.getElementById('sort-select');
-    const calendarToggle = document.getElementById('calendar-toggle');
-    const calendarContainer = document.getElementById('calendar-container');
-    const postsContainer = document.getElementById('posts-container');
-    const noResults = document.getElementById('no-results');
-    const prevMonthBtn = document.getElementById('prev-month');
-    const nextMonthBtn = document.getElementById('next-month');
-    const clearDateBtn = document.getElementById('clear-date');
-    const todayBtn = document.getElementById('today-date');
-    const calendarGrid = document.getElementById('calendar-grid');
-    const calendarMonth = document.getElementById('calendar-month');
-    const selectedDateDisplay = document.getElementById('selected-date-display');
-    const selectedDateText = document.getElementById('selected-date-text');
-    const activeFiltersContainer = document.getElementById('active-filters');
+      // Get all post cards and elements (with error checking)
+      const postCards = document.querySelectorAll('.post-card');
+      const searchInput = document.getElementById('search-input');
+      const clearSearchBtn = document.getElementById('clear-search');
+      const searchResultsCount = document.getElementById('search-results-count');
+      const sortSelect = document.getElementById('sort-select');
+      const calendarToggle = document.getElementById('calendar-toggle');
+      const calendarContainer = document.getElementById('calendar-container');
+      const postsContainer = document.getElementById('posts-container');
+      const noResults = document.getElementById('no-results');
+      const prevMonthBtn = document.getElementById('prev-month');
+      const nextMonthBtn = document.getElementById('next-month');
+      const clearDateBtn = document.getElementById('clear-date');
+      const todayBtn = document.getElementById('today-date');
+      const calendarGrid = document.getElementById('calendar-grid');
+      const calendarMonth = document.getElementById('calendar-month');
+      const selectedDateDisplay = document.getElementById('selected-date-display');
+      const selectedDateText = document.getElementById('selected-date-text');
+      const activeFiltersContainer = document.getElementById('active-filters');
 
+      // Exit if essential elements are not found
+      if (!postCards.length || !searchInput || !sortSelect || !calendarToggle || !postsContainer) {
+        console.warn('Writings page: Essential elements not found, skipping initialization');
+        return;
+      }
 
-
-    // Update active filters display
-    function updateActiveFilters() {
+      // Update active filters display
+      function updateActiveFilters() {
       const filters = [];
       
       if (searchInput.value.trim()) {
@@ -301,10 +308,10 @@ const sortedPosts = [...postsData].sort((a, b) =>
       } else {
         activeFiltersContainer.classList.add('hidden');
       }
-    }
+      }
 
-    // Enhanced Filter and sort posts
-    function filterAndSortPosts(showAnimation = true) {
+      // Enhanced Filter and sort posts
+      function filterAndSortPosts(showAnimation = true) {
       const searchTerm = searchInput.value.toLowerCase().trim();
       const sortOrder = sortSelect.value;
       let visibleCount = 0;
@@ -402,31 +409,31 @@ const sortedPosts = [...postsData].sort((a, b) =>
         selectedDateDisplay.classList.add('hidden');
       }
 
-      // Update active filters display
-      updateActiveFilters();
-    }
+        // Update active filters display
+        updateActiveFilters();
+      }
 
-    // Enhanced Calendar functions
-    function hasPostsInMonth(year, month) {
+      // Enhanced Calendar functions
+      function hasPostsInMonth(year, month) {
       return datesWithPosts.some(dateStr => {
         const date = new Date(dateStr);
         return date.getFullYear() === year && date.getMonth() === month;
-      });
-    }
+        });
+      }
 
-    function canNavigateToPreviousMonth() {
+      function canNavigateToPreviousMonth() {
       const prevMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1);
       const oldestPost = new Date(Math.min(...postsData.map(p => new Date(p.pubDate))));
-      return prevMonth >= new Date(oldestPost.getFullYear(), oldestPost.getMonth(), 1);
-    }
+        return prevMonth >= new Date(oldestPost.getFullYear(), oldestPost.getMonth(), 1);
+      }
 
-    function canNavigateToNextMonth() {
+      function canNavigateToNextMonth() {
       const nextMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1);
       const newestPost = new Date(Math.max(...postsData.map(p => new Date(p.pubDate))));
-      return nextMonth <= new Date(newestPost.getFullYear(), newestPost.getMonth(), 1);
-    }
+        return nextMonth <= new Date(newestPost.getFullYear(), newestPost.getMonth(), 1);
+      }
 
-    function renderCalendar() {
+      function renderCalendar() {
       const year = currentMonth.getFullYear();
       const month = currentMonth.getMonth();
       
@@ -511,133 +518,150 @@ const sortedPosts = [...postsData].sort((a, b) =>
           dayCell.disabled = true;
         }
 
-        calendarGrid.appendChild(dayCell);
-      }
-    }
-
-    // Event listeners with debouncing for search
-    let searchTimeout;
-    searchInput?.addEventListener('input', () => {
-      clearTimeout(searchTimeout);
-      searchTimeout = setTimeout(() => filterAndSortPosts(true), 300);
-    });
-
-    clearSearchBtn?.addEventListener('click', () => {
-      if (searchInput) {
-        searchInput.value = '';
-        searchInput.focus();
-        filterAndSortPosts(true);
-      }
-    });
-
-    sortSelect?.addEventListener('change', () => filterAndSortPosts(true));
-
-    const toggleCalendar = (e) => {
-      e?.preventDefault();
-      e?.stopPropagation();
-      const isHidden = calendarContainer?.classList.contains('hidden');
-      
-      if (isHidden) {
-        calendarContainer?.classList.remove('hidden');
-        calendarToggle?.setAttribute('aria-expanded', 'true');
-        renderCalendar();
-      } else {
-        calendarContainer?.classList.add('hidden');
-        calendarToggle?.setAttribute('aria-expanded', 'false');
-      }
-    };
-
-    calendarToggle?.addEventListener('click', toggleCalendar);
-
-    prevMonthBtn?.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      if (!prevMonthBtn.disabled && canNavigateToPreviousMonth()) {
-        currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1);
-        renderCalendar();
-      }
-    });
-
-    nextMonthBtn?.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      if (!nextMonthBtn.disabled && canNavigateToNextMonth()) {
-        currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1);
-        renderCalendar();
-      }
-    });
-
-    clearDateBtn?.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      selectedDate = null;
-      renderCalendar();
-      filterAndSortPosts(true);
-    });
-
-    todayBtn?.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const today = new Date();
-      const todayStr = today.toDateString();
-      
-      if (datesWithPosts.includes(todayStr)) {
-        selectedDate = today.toISOString();
-        currentMonth = new Date(today.getFullYear(), today.getMonth());
-        renderCalendar();
-        filterAndSortPosts(true);
-      } else {
-        currentMonth = new Date(today.getFullYear(), today.getMonth());
-        renderCalendar();
-      }
-    });
-
-    // Close calendar when clicking outside
-    const handleOutsideClick = (e) => {
-      if (calendarContainer && !calendarContainer.classList.contains('hidden')) {
-        if (!calendarContainer.contains(e.target) && !calendarToggle?.contains(e.target)) {
-          calendarContainer.classList.add('hidden');
-          calendarToggle?.setAttribute('aria-expanded', 'false');
+          calendarGrid.appendChild(dayCell);
         }
       }
-    };
-    
-    document.addEventListener('click', handleOutsideClick);
 
-    // Reset all filters
-    const resetFiltersBtn = document.getElementById('reset-filters');
-    if (resetFiltersBtn) {
-      resetFiltersBtn.addEventListener('click', () => {
-        searchInput.value = '';
-        selectedDate = null;
-        sortSelect.value = 'desc';
-        currentMonth = new Date();
-        calendarContainer.classList.add('hidden');
-        renderCalendar();
-        filterAndSortPosts(true);
+      // Event listeners with debouncing for search
+      let searchTimeout;
+      searchInput.addEventListener('input', () => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => filterAndSortPosts(true), 300);
       });
-    }
 
-    // Keyboard shortcuts
-    document.addEventListener('keydown', (e) => {
-      // Escape to close calendar
-      if (e.key === 'Escape' && calendarContainer && !calendarContainer.classList.contains('hidden')) {
-        calendarContainer.classList.add('hidden');
-        calendarToggle?.setAttribute('aria-expanded', 'false');
-        calendarToggle?.focus();
+      if (clearSearchBtn) {
+        clearSearchBtn.addEventListener('click', () => {
+          searchInput.value = '';
+          searchInput.focus();
+          filterAndSortPosts(true);
+        });
       }
-      
-      // Ctrl/Cmd + K to focus search
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+
+      sortSelect.addEventListener('change', () => filterAndSortPosts(true));
+
+      const toggleCalendar = (e) => {
         e.preventDefault();
-        if (searchInput) {
+        e.stopPropagation();
+        const isHidden = calendarContainer.classList.contains('hidden');
+        
+        if (isHidden) {
+          calendarContainer.classList.remove('hidden');
+          calendarToggle.setAttribute('aria-expanded', 'true');
+          renderCalendar();
+        } else {
+          calendarContainer.classList.add('hidden');
+          calendarToggle.setAttribute('aria-expanded', 'false');
+        }
+      };
+
+      calendarToggle.addEventListener('click', toggleCalendar);
+
+      if (prevMonthBtn) {
+        prevMonthBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          if (!prevMonthBtn.disabled && canNavigateToPreviousMonth()) {
+            currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1);
+            renderCalendar();
+          }
+        });
+      }
+
+      if (nextMonthBtn) {
+        nextMonthBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          if (!nextMonthBtn.disabled && canNavigateToNextMonth()) {
+            currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1);
+            renderCalendar();
+          }
+        });
+      }
+
+      if (clearDateBtn) {
+        clearDateBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          selectedDate = null;
+          renderCalendar();
+          filterAndSortPosts(true);
+        });
+      }
+
+      if (todayBtn) {
+        todayBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const today = new Date();
+          const todayStr = today.toDateString();
+          
+          if (datesWithPosts.includes(todayStr)) {
+            selectedDate = today.toISOString();
+            currentMonth = new Date(today.getFullYear(), today.getMonth());
+            renderCalendar();
+            filterAndSortPosts(true);
+          } else {
+            currentMonth = new Date(today.getFullYear(), today.getMonth());
+            renderCalendar();
+          }
+        });
+      }
+
+      // Close calendar when clicking outside
+      const handleOutsideClick = (e) => {
+        if (calendarContainer && !calendarContainer.classList.contains('hidden')) {
+          if (!calendarContainer.contains(e.target) && !calendarToggle.contains(e.target)) {
+            calendarContainer.classList.add('hidden');
+            calendarToggle.setAttribute('aria-expanded', 'false');
+          }
+        }
+      };
+      
+      document.addEventListener('click', handleOutsideClick);
+
+      // Reset all filters
+      const resetFiltersBtn = document.getElementById('reset-filters');
+      if (resetFiltersBtn) {
+        resetFiltersBtn.addEventListener('click', () => {
+          searchInput.value = '';
+          selectedDate = null;
+          sortSelect.value = 'desc';
+          currentMonth = new Date();
+          calendarContainer.classList.add('hidden');
+          renderCalendar();
+          filterAndSortPosts(true);
+        });
+      }
+
+      // Keyboard shortcuts
+      const handleKeydown = (e) => {
+        // Escape to close calendar
+        if (e.key === 'Escape' && calendarContainer && !calendarContainer.classList.contains('hidden')) {
+          calendarContainer.classList.add('hidden');
+          calendarToggle.setAttribute('aria-expanded', 'false');
+          calendarToggle.focus();
+        }
+        
+        // Ctrl/Cmd + K to focus search
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+          e.preventDefault();
           searchInput.focus();
         }
-      }
-    });
+      };
+      
+      document.addEventListener('keydown', handleKeydown);
 
-    // Initialize
-    filterAndSortPosts(false);
-    document.addEventListener('astro:page-load', () => filterAndSortPosts(false));
+      // Initialize on first load
+      filterAndSortPosts(false);
+    }
+
+    // Run on page load and after Astro page transitions
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initWritingsPage);
+    } else {
+      initWritingsPage();
+    }
+    
+    document.addEventListener('astro:page-load', initWritingsPage);
   </script>
 </Layout>

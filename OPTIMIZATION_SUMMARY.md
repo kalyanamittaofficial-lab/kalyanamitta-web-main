@@ -30,6 +30,20 @@ Your Kalyanamitta website has been optimized for better performance, cleaner cod
 
 **Mobile Impact:** Professional mobile experience, improved touch usability, better readability
 
+### **Critical Bug Fix: Calendar & Sort Stuck Issue** 🐛
+- ✅ Fixed race condition where sort and calendar buttons became unresponsive after page navigation
+- ✅ Wrapped all JavaScript in proper `initWritingsPage()` function
+- ✅ Added element existence checks before attaching event listeners
+- ✅ Implemented proper initialization on both `DOMContentLoaded` and `astro:page-load` events
+- ✅ Removed optional chaining that silently failed when elements weren't ready
+- ✅ Added console warning for debugging if essential elements are missing
+
+**Technical Details:** 
+- The issue occurred when using Astro View Transitions - the script would run before DOM elements were ready
+- Event listeners with optional chaining (`?.`) would silently fail, making buttons non-functional
+- Now properly initializes after both initial page load and subsequent navigation
+- **Result:** Sort dropdown and calendar toggle now work reliably every time, with or without page refresh
+
 ## Previous Key Improvements
 
 ### 1. **Layout.astro** - Performance Enhancements
