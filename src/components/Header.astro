@@ -1,0 +1,164 @@
+<div class="sticky top-0 z-50 w-full bg-gray-50 pb-2">
+  <div class="w-full px-3 pt-3">
+    <nav 
+      class="w-full max-w-6xl mx-auto bg-white/95 backdrop-blur-sm border border-gray-200 rounded-2xl shadow-md"
+      transition:persist
+      transition:name="main-nav"
+    >
+      <div class="px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16 sm:h-20">
+          <!-- Logo -->
+          <div class="flex-shrink-0 min-w-0">
+            <a href="/" class="flex items-center gap-2 sm:gap-3">
+              <div class="w-8 h-8 sm:w-10 sm:h-10 bg-monk-900 rounded-full flex items-center justify-center shadow-md flex-shrink-0">
+                <span class="text-white font-bold text-lg sm:text-xl">☸</span>
+              </div>
+              <span class="text-lg sm:text-2xl font-display font-bold text-monk-900 truncate">
+                Kalyanamitta
+              </span>
+            </a>
+          </div>
+
+          <!-- Desktop Navigation -->
+          <div class="hidden md:flex md:items-center md:space-x-1">
+            <a href="/" class="px-5 py-2.5 text-sm font-medium text-gray-700 hover:text-monk-900 hover:bg-gray-100 rounded-xl transition-colors">
+              Home
+            </a>
+            <a href="/writings" class="px-5 py-2.5 text-sm font-medium text-gray-700 hover:text-monk-900 hover:bg-gray-100 rounded-xl transition-colors">
+              Writings
+            </a>
+            <a href="/connect" class="px-5 py-2.5 text-sm font-medium text-gray-700 hover:text-monk-900 hover:bg-gray-100 rounded-xl transition-colors">
+              Connect
+            </a>
+          </div>
+
+          <!-- Mobile menu button -->
+          <div class="md:hidden flex-shrink-0">
+            <button 
+              id="mobile-menu-button"
+              type="button" 
+              class="p-2 rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 border border-gray-200 transition-colors"
+              aria-controls="mobile-menu"
+              aria-expanded="false"
+            >
+              <span class="sr-only">Open menu</span>
+              <svg id="menu-icon" class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+              <svg id="close-icon" class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<!-- Mobile menu (Sidebar) -->
+<div class="fixed inset-0 z-[60] md:hidden hidden" id="mobile-menu-overlay">
+  <div class="fixed inset-0 bg-black/50" id="mobile-menu-backdrop"></div>
+  <div class="fixed top-0 right-0 bottom-0 w-72 max-w-[80vw] bg-white shadow-2xl transform translate-x-full transition-transform duration-300" id="mobile-menu">
+    <div class="flex flex-col h-full">
+      <div class="flex items-center justify-between p-6 border-b border-gray-200">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 bg-monk-900 rounded-full flex items-center justify-center">
+            <span class="text-white font-bold text-lg">☸</span>
+          </div>
+          <span class="text-lg font-display font-bold text-gray-900">Menu</span>
+        </div>
+        <button id="mobile-menu-close" class="p-2 rounded-lg hover:bg-gray-100 transition-colors">
+          <svg class="w-6 h-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      
+      <nav class="flex-1 p-6 space-y-2 overflow-y-auto">
+        <a href="/" class="block px-5 py-4 rounded-xl text-base font-medium text-gray-700 hover:text-monk-900 hover:bg-gray-100 transition-colors">
+          <div class="flex items-center gap-3">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+            </svg>
+            Home
+          </div>
+        </a>
+        <a href="/writings" class="block px-5 py-4 rounded-xl text-base font-medium text-gray-700 hover:text-monk-900 hover:bg-gray-100 transition-colors">
+          <div class="flex items-center gap-3">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+            </svg>
+            Writings
+          </div>
+        </a>
+        <a href="/connect" class="block px-5 py-4 rounded-xl text-base font-medium text-gray-700 hover:text-monk-900 hover:bg-gray-100 transition-colors">
+          <div class="flex items-center gap-3">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path>
+            </svg>
+            Connect
+          </div>
+        </a>
+      </nav>
+      
+      <div class="p-6 border-t border-gray-200">
+        <p class="text-xs text-center text-gray-500">
+          May all beings be happy and free
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function setupMobileMenu() {
+    const elements = {
+      button: document.getElementById('mobile-menu-button'),
+      overlay: document.getElementById('mobile-menu-overlay'),
+      menu: document.getElementById('mobile-menu'),
+      close: document.getElementById('mobile-menu-close'),
+      backdrop: document.getElementById('mobile-menu-backdrop'),
+      menuIcon: document.getElementById('menu-icon'),
+      closeIcon: document.getElementById('close-icon')
+    };
+
+    if (!elements.button) return;
+
+    let isAnimating = false;
+
+    const toggleMenu = (open) => {
+      if (isAnimating) return;
+      isAnimating = true;
+
+      if (open) {
+        elements.overlay?.classList.remove('hidden');
+        requestAnimationFrame(() => elements.menu?.classList.remove('translate-x-full'));
+        elements.menuIcon?.classList.add('hidden');
+        elements.closeIcon?.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      } else {
+        elements.menu?.classList.add('translate-x-full');
+        elements.menuIcon?.classList.remove('hidden');
+        elements.closeIcon?.classList.add('hidden');
+        setTimeout(() => {
+          elements.overlay?.classList.add('hidden');
+          document.body.style.overflow = '';
+        }, 300);
+      }
+
+      elements.button?.setAttribute('aria-expanded', open.toString());
+      setTimeout(() => isAnimating = false, open ? 350 : 300);
+    };
+
+    elements.button.addEventListener('click', () => {
+      const isExpanded = elements.button?.getAttribute('aria-expanded') === 'true';
+      toggleMenu(!isExpanded);
+    });
+
+    elements.close?.addEventListener('click', () => toggleMenu(false));
+    elements.backdrop?.addEventListener('click', () => toggleMenu(false));
+  }
+
+  document.addEventListener('astro:page-load', setupMobileMenu);
+</script>
