@@ -14,9 +14,13 @@ export default defineConfig({
     build: {
       cssCodeSplit: true,
       minify: 'esbuild',
+      cssMinify: true,
       rollupOptions: {
         output: {
-          manualChunks: undefined
+          manualChunks: undefined,
+          assetFileNames: '_assets/[name].[hash][extname]',
+          chunkFileNames: '_assets/[name].[hash].js',
+          entryFileNames: '_assets/[name].[hash].js'
         }
       }
     }

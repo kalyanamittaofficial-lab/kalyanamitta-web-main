@@ -48,6 +48,7 @@
   
   img, video {
     content-visibility: auto;
+    loading: lazy;
   }
 }
 

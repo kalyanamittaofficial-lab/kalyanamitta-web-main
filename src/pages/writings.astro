@@ -62,8 +62,8 @@ const sortedPosts = [...postsData].sort((a, b) =>
               id="sort-select"
               class="appearance-none w-full md:w-auto pl-3 md:pl-4 pr-8 md:pr-10 py-3 md:py-3.5 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-monk-900 focus:ring-4 focus:ring-monk-100 bg-white cursor-pointer transition-all shadow-sm hover:border-gray-400 font-medium text-sm md:text-base"
             >
-              <option value="desc">📅 Newest</option>
-              <option value="asc">📅 Oldest</option>
+              <option value="desc">Newest</option>
+              <option value="asc">Oldest</option>
             </select>
             <svg class="absolute right-2 md:right-3 top-1/2 -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-gray-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -211,8 +211,16 @@ const sortedPosts = [...postsData].sort((a, b) =>
   </div>
 
   <script define:vars={{ postsData }}>
+    // Track if already initialized to prevent duplicate listeners
+    let isInitialized = false;
+
     // Initialize writings page functionality
     function initWritingsPage() {
+      // Prevent double initialization
+      if (isInitialized) {
+        return;
+      }
+
       // State variables
       let selectedDate = null;
       let currentMonth = new Date();
@@ -240,9 +248,11 @@ const sortedPosts = [...postsData].sort((a, b) =>
 
       // Exit if essential elements are not found
       if (!postCards.length || !searchInput || !sortSelect || !calendarToggle || !postsContainer) {
-        console.warn('Writings page: Essential elements not found, skipping initialization');
         return;
       }
+
+      // Mark as initialized
+      isInitialized = true;
 
       // Update active filters display
       function updateActiveFilters() {
@@ -661,6 +671,11 @@ const sortedPosts = [...postsData].sort((a, b) =>
     } else {
       initWritingsPage();
     }
+    
+    // Reset initialization flag on before navigation so it can re-initialize
+    document.addEventListener('astro:before-preparation', () => {
+      isInitialized = false;
+    });
     
     document.addEventListener('astro:page-load', initWritingsPage);
   </script>

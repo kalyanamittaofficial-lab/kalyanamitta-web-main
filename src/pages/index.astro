@@ -11,12 +11,15 @@ const allPosts = [...postsData].sort((a, b) =>
   <!-- Background Video -->
   <div class="fixed top-0 left-0 w-full h-screen -z-10 overflow-hidden">
     <video 
+      id="bg-video"
       autoplay 
       loop 
       muted 
       playsinline
-      loading="lazy"
+      preload="auto"
+      poster="/logo.png"
       class="min-w-full min-h-full w-auto h-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover opacity-60"
+      aria-hidden="true"
     >
       <source src="/video/background.mp4" type="video/mp4">
     </video>
@@ -72,7 +75,7 @@ const allPosts = [...postsData].sort((a, b) =>
     <!-- Continuous Train Carousel (Portal Plan: External Links) -->
     <div class="relative overflow-hidden -mx-4 px-4">
       <div class="flex gap-4 md:gap-6" id="carousel">
-        {allPosts.concat(allPosts).map((post, index) => (
+        {(allPosts.length > 1 ? allPosts.concat(allPosts) : allPosts).map((post, index) => (
           <div class="min-w-[260px] sm:min-w-[300px] md:min-w-[420px] flex-shrink-0">
               <a 
                 href={post.url}
@@ -126,9 +129,26 @@ const allPosts = [...postsData].sort((a, b) =>
   </div>
 
   <script>
-    function initTrainCarousel() {
+    function initHomePage() {
+      // Reset and play background video
+      const bgVideo = document.getElementById('bg-video');
+      if (bgVideo) {
+        bgVideo.currentTime = 0;
+        bgVideo.play().catch(() => {
+          // Autoplay might be blocked, try muted
+          bgVideo.muted = true;
+          bgVideo.play();
+        });
+      }
+
+      // Initialize carousel
       const carousel = document.getElementById('carousel');
       if (!carousel) return;
+
+      const itemCount = carousel.children.length;
+      
+      // Only animate if there are duplicated items (more than 1 unique post)
+      if (itemCount <= 1) return;
 
       let scrollPosition = 0;
       let animationId;
@@ -160,7 +180,10 @@ const allPosts = [...postsData].sort((a, b) =>
       animate();
     }
 
-    document.addEventListener('astro:page-load', initTrainCarousel);
+    // Run on initial load
+    document.addEventListener('DOMContentLoaded', initHomePage);
+    // Run on navigation (Astro View Transitions)
+    document.addEventListener('astro:page-load', initHomePage);
   </script>
 
 </Layout>

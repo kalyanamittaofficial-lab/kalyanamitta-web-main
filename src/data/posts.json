@@ -1,14 +1,8 @@
 [
   {
-    "title": "My First Special Post",
+    "title": "Writings coming soon...",
     "pubDate": "2025-11-14",
-    "description": "This post is a standalone HTML page with unique animations.",
-    "url": "https://kalyanamitta-posts-2025-11.vercel.app/day-01/post.html"
-  },
-  {
-    "title": "My Second Post",
-    "pubDate": "2025-11-15",
-    "description": "This is the second post in my November site.",
-    "url": "https://kalyanamitta-posts-2025-11.vercel.app/day-02/post.html"
+    "description": "Stay tuned for upcoming posts!",
+    "url": null
   }
 ]
