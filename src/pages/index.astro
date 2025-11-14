@@ -131,7 +131,7 @@ const allPosts = [...postsData].sort((a, b) =>
   <script>
     function initHomePage() {
       // Reset and play background video
-      const bgVideo = document.getElementById('bg-video');
+      const bgVideo = document.getElementById('bg-video') as HTMLVideoElement | null;
       if (bgVideo) {
         bgVideo.currentTime = 0;
         bgVideo.play().catch(() => {
@@ -142,7 +142,7 @@ const allPosts = [...postsData].sort((a, b) =>
       }
 
       // Initialize carousel
-      const carousel = document.getElementById('carousel');
+      const carousel = document.getElementById('carousel') as HTMLElement | null;
       if (!carousel) return;
 
       const itemCount = carousel.children.length;
@@ -151,12 +151,12 @@ const allPosts = [...postsData].sort((a, b) =>
       if (itemCount <= 1) return;
 
       let scrollPosition = 0;
-      let animationId;
+      let animationId: number;
       let isPaused = false;
       const speed = 0.5;
 
       function animate() {
-        if (!isPaused) {
+        if (!isPaused && carousel) {
           scrollPosition += speed;
           const maxScroll = carousel.scrollWidth / 2;
           
