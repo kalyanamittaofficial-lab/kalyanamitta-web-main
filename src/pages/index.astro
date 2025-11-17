@@ -75,10 +75,10 @@ const allPosts = [...postsData].sort((a, b) =>
     </div>
     
     <!-- Continuous Train Carousel (Portal Plan: External Links) -->
-    <div class="relative overflow-hidden -mx-4 px-4">
-      <div class="flex gap-4 md:gap-6" id="carousel">
+    <div class="relative overflow-hidden">
+      <div class="flex gap-4 md:gap-6 px-4" id="carousel">
         {(allPosts.length > 1 ? allPosts.concat(allPosts) : allPosts).map((post, index) => (
-          <div class="min-w-[260px] sm:min-w-[300px] md:min-w-[420px] flex-shrink-0">
+          <div class="min-w-[calc(100vw-2rem)] sm:min-w-[300px] md:min-w-[420px] flex-shrink-0">
               <a 
                 href={post.url}
                 target="_blank"
