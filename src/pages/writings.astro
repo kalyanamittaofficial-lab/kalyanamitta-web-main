@@ -77,7 +77,7 @@ const sortedPosts = [...postsData].sort((a, b) =>
               class="appearance-none w-full md:w-auto pl-3 md:pl-4 pr-8 md:pr-10 py-3 md:py-3.5 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-monk-900 focus:ring-4 focus:ring-monk-100 bg-white cursor-pointer transition-all shadow-sm hover:border-gray-400 font-medium text-sm md:text-base"
             >
               <option value="all">All Languages</option>
-              <option value="Sinhala">Sinhala</option>
+              <option value="සිංහල">සිංහල</option>
               <option value="English">English</option>
             </select>
             <svg class="absolute right-2 md:right-3 top-1/2 -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-gray-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -186,7 +186,7 @@ const sortedPosts = [...postsData].sort((a, b) =>
                 </div>
                 {post.languages && post.languages.map((lang: string) => (
                   <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold shadow-sm" class:list={[
-                    lang === 'Sinhala' ? 'bg-gradient-to-r from-amber-100 to-amber-50 text-amber-900' : 'bg-gradient-to-r from-blue-100 to-blue-50 text-blue-900'
+                    lang === 'සිංහල' ? 'bg-gradient-to-r from-amber-100 to-amber-50 text-amber-900' : 'bg-gradient-to-r from-blue-100 to-blue-50 text-blue-900'
                   ]}>
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
@@ -470,6 +470,20 @@ const sortedPosts = [...postsData].sort((a, b) =>
         updateActiveFilters();
       }
 
+      // Helper function to get posts for a specific date
+      function getPostsForDate(dateStr) {
+        return postsData.filter(post => {
+          return new Date(post.pubDate).toDateString() === dateStr;
+        });
+      }
+
+      // Helper function to get unique languages for a date
+      function getLanguagesForDate(dateStr) {
+        const posts = getPostsForDate(dateStr);
+        const allLanguages = posts.flatMap(post => post.languages || []);
+        return [...new Set(allLanguages)];
+      }
+
       // Enhanced Calendar functions
       function hasPostsInMonth(year, month) {
       return datesWithPosts.some(dateStr => {
@@ -569,8 +583,94 @@ const sortedPosts = [...postsData].sort((a, b) =>
             filterAndSortPosts(true);
           });
           
-          // Add tooltip
-          dayCell.title = `View posts from ${dateStr}`;
+          // Get post statistics for this date
+          const postsForDate = getPostsForDate(dateStr);
+          const languagesForDate = getLanguagesForDate(dateStr);
+          const postCount = postsForDate.length;
+          
+          // Create tooltip element with enhanced styling
+          const tooltip = document.createElement('div');
+          tooltip.className = 'absolute left-1/2 px-4 py-2.5 bg-gradient-to-br from-monk-800 to-monk-900 text-white rounded-xl shadow-2xl whitespace-nowrap opacity-0 pointer-events-none transition-all duration-300 border border-monk-700';
+          tooltip.style.cssText = 'bottom: calc(100% + 8px); left: 50%; transform: translate(-50%, 5px); z-index: 9999;';
+          
+          // Create tooltip content with better formatting
+          const countSpan = document.createElement('span');
+          countSpan.className = 'font-bold text-amber-300';
+          countSpan.textContent = postCount;
+          
+          const postText = document.createElement('span');
+          postText.className = 'text-white/90';
+          postText.textContent = ` post${postCount > 1 ? 's' : ''}`;
+          
+          const separator = document.createElement('span');
+          separator.className = 'mx-2 text-monk-400';
+          separator.textContent = '•';
+          
+          const langContainer = document.createElement('span');
+          langContainer.className = 'flex items-center gap-1.5';
+          
+          languagesForDate.forEach((lang, index) => {
+            const langBadge = document.createElement('span');
+            langBadge.className = lang === 'සිංහල' 
+              ? 'px-2 py-0.5 bg-amber-500/20 text-amber-300 rounded-md text-xs font-medium border border-amber-500/30'
+              : 'px-2 py-0.5 bg-blue-500/20 text-blue-300 rounded-md text-xs font-medium border border-blue-500/30';
+            langBadge.textContent = lang;
+            langContainer.appendChild(langBadge);
+          });
+          
+          tooltip.appendChild(countSpan);
+          tooltip.appendChild(postText);
+          tooltip.appendChild(separator);
+          tooltip.appendChild(langContainer);
+          
+          // Add enhanced arrow to tooltip
+          const arrow = document.createElement('div');
+          arrow.className = 'absolute top-full left-1/2 -translate-x-1/2 -mt-px';
+          arrow.innerHTML = '<div class="border-[6px] border-transparent border-t-monk-900"></div>';
+          tooltip.appendChild(arrow);
+          
+          dayCell.style.position = 'relative';
+          dayCell.appendChild(tooltip);
+          
+          // Show tooltip on hover (desktop) with smooth animation
+          dayCell.addEventListener('mouseenter', () => {
+            tooltip.style.opacity = '1';
+            tooltip.style.transform = 'translate(-50%, 0)';
+          });
+          
+          dayCell.addEventListener('mouseleave', () => {
+            tooltip.style.opacity = '0';
+            tooltip.style.transform = 'translate(-50%, 5px)';
+          });
+          
+          // Show tooltip on long press (mobile)
+          let pressTimer;
+          let touchMoved = false;
+          
+          dayCell.addEventListener('touchstart', (e) => {
+            touchMoved = false;
+            pressTimer = setTimeout(() => {
+              if (!touchMoved) {
+                tooltip.style.opacity = '1';
+                tooltip.style.transform = 'translate(-50%, 0)';
+                // Hide after 2.5 seconds
+                setTimeout(() => {
+                  tooltip.style.opacity = '0';
+                  tooltip.style.transform = 'translate(-50%, 5px)';
+                }, 2500);
+              }
+            }, 500); // 500ms long press
+          });
+          
+          dayCell.addEventListener('touchmove', () => {
+            touchMoved = true;
+            clearTimeout(pressTimer);
+          });
+          
+          dayCell.addEventListener('touchend', () => {
+            clearTimeout(pressTimer);
+          });
+          
         } else {
           dayCell.disabled = true;
         }
