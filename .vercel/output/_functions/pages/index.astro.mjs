@@ -1,5 +1,5 @@
 import { e as createComponent, m as maybeRenderHead, h as addAttribute, n as renderScript, r as renderTemplate, f as createAstro, k as renderComponent } from '../_assets/astro/server.CkAL1Q0G.js';
-import { $ as $$Layout } from '../_assets/Layout.D7moAORm.js';
+import { $ as $$Layout } from '../_assets/Layout.sRuhOru5.js';
 import 'clsx';
 /* empty css                                 */
 import { p as postsData } from '../_assets/posts.DHMr_XRR.js';

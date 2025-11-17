@@ -1,5 +1,5 @@
 import { e as createComponent, k as renderComponent, n as renderScript, r as renderTemplate, m as maybeRenderHead } from '../../_assets/astro/server.CkAL1Q0G.js';
-import { $ as $$Layout } from '../../_assets/Layout.D7moAORm.js';
+import { $ as $$Layout } from '../../_assets/Layout.sRuhOru5.js';
 export { renderers } from '../../renderers.mjs';
 
 const $$Login = createComponent(async ($$result, $$props, $$slots) => {

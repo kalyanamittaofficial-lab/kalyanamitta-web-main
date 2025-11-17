@@ -33,11 +33,27 @@ const csrfToken = Astro.locals.csrfToken;
         </button>
       </div>
 
+      <!-- Loading State -->
+      <div id="loadingState" class="flex items-center justify-center py-12">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600"></div>
+      </div>
+
+      <!-- Empty State -->
+      <div id="emptyState" class="hidden text-center py-12">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
+          <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+          </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">No News Items Yet</h3>
+        <p class="text-gray-600">Click the "+ Add News" button to create your first news article.</p>
+      </div>
+
       <div id="newsContainer" class="grid grid-cols-1 gap-6"></div>
 
       <!-- Modal -->
-      <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 backdrop-blur-sm transition-opacity duration-300">
+        <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95" id="modalContent">
           <div class="p-6">
             <div class="flex justify-between items-center mb-6">
               <h3 id="modalTitle" class="text-2xl font-bold text-gray-900">Add News</h3>
@@ -173,14 +189,20 @@ const csrfToken = Astro.locals.csrfToken;
       // Add new button
       if (addNewBtn) {
         addNewBtn.addEventListener('click', () => {
-          console.log('Add button clicked, showing modal');
           document.getElementById('modalTitle').textContent = 'Add News';
           if (newsForm) newsForm.reset();
           const itemIdInput = document.getElementById('itemId');
           if (itemIdInput) itemIdInput.value = '';
           if (modal) {
-            modal.style.display = 'flex';
             modal.classList.remove('hidden');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+              modal.style.opacity = '1';
+              const modalContent = document.getElementById('modalContent');
+              if (modalContent) {
+                modalContent.style.transform = 'scale(1)';
+              }
+            }, 10);
           }
         });
       }
@@ -189,39 +211,93 @@ const csrfToken = Astro.locals.csrfToken;
       const closeModalBtn = document.getElementById('closeModal');
       const cancelBtn = document.getElementById('cancelBtn');
       
-      if (closeModalBtn) {
-        closeModalBtn.addEventListener('click', () => {
-          if (modal) {
+      function closeModal() {
+        if (modal) {
+          const modalContent = document.getElementById('modalContent');
+          if (modalContent) modalContent.style.transform = 'scale(0.95)';
+          modal.style.opacity = '0';
+          setTimeout(() => {
             modal.style.display = 'none';
             modal.classList.add('hidden');
-          }
-        });
+          }, 200);
+        }
+      }
+      
+      if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeModal);
       }
       
       if (cancelBtn) {
-        cancelBtn.addEventListener('click', () => {
-          if (modal) {
-            modal.style.display = 'none';
-            modal.classList.add('hidden');
-          }
+        cancelBtn.addEventListener('click', closeModal);
+      }
+      
+      // Close modal on escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+          closeModal();
+        }
+      });
+      
+      // Close modal on backdrop click
+      if (modal) {
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) closeModal();
         });
       }
 
       async function loadNews() {
+        const loadingState = document.getElementById('loadingState');
+        const emptyState = document.getElementById('emptyState');
+        
         try {
-          const response = await fetch('/api/admin/news');
+          // Show loading
+          if (loadingState) loadingState.style.display = 'flex';
+          if (emptyState) emptyState.style.display = 'none';
+          if (newsContainer) newsContainer.style.display = 'none';
+          
+          const response = await fetch('/api/admin/news', {
+            headers: { 'Cache-Control': 'no-cache' }
+          });
+          
           if (!response.ok) {
             console.error('API Error:', response.status, response.statusText);
             if (response.status === 401) {
               window.location.href = '/admin/login';
               return;
             }
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
           }
+          
           newsData = await response.json();
-          renderNews();
+          
+          // Hide loading
+          if (loadingState) loadingState.style.display = 'none';
+          
+          // Show content or empty state
+          if (newsData.length === 0) {
+            if (emptyState) emptyState.style.display = 'block';
+          } else {
+            if (newsContainer) newsContainer.style.display = 'grid';
+            renderNews();
+          }
         } catch (error) {
           console.error('Failed to load news:', error);
-          newsContainer.innerHTML = '<div class="text-red-600 p-4">Error loading news. Please refresh the page.</div>';
+          if (loadingState) loadingState.style.display = 'none';
+          if (newsContainer) {
+            newsContainer.style.display = 'block';
+            newsContainer.innerHTML = `
+              <div class="bg-red-50 border-2 border-red-200 rounded-xl p-8 text-center">
+                <svg class="w-16 h-16 text-red-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <h3 class="text-xl font-semibold text-red-900 mb-2">Failed to Load News</h3>
+                <p class="text-red-700 mb-6">${error.message}</p>
+                <button onclick="location.reload()" class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition">
+                  Reload Page
+                </button>
+              </div>
+            `;
+          }
         }
       }
 

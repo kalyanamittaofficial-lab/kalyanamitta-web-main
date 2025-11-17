@@ -1,5 +1,5 @@
 import { e as createComponent, f as createAstro, k as renderComponent, r as renderTemplate, l as defineScriptVars, m as maybeRenderHead } from '../../_assets/astro/server.CkAL1Q0G.js';
-import { $ as $$Layout } from '../../_assets/Layout.D7moAORm.js';
+import { $ as $$Layout } from '../../_assets/Layout.sRuhOru5.js';
 export { renderers } from '../../renderers.mjs';
 
 var __freeze = Object.freeze;
@@ -15,7 +15,19 @@ const $$Posts = createComponent(async ($$result, $$props, $$slots) => {
   if (!user) {
     return Astro2.redirect("/admin/login");
   }
-  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Posts Management - Admin" }, { "default": async ($$result2) => renderTemplate(_a || (_a = __template([" ", '<div class="min-h-screen bg-gray-50"> <header class="bg-white shadow-sm border-b border-gray-200"> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> <div class="flex justify-between items-center py-4"> <div> <h1 class="text-2xl font-bold text-gray-900">Posts Management</h1> </div> <div class="flex items-center space-x-4"> <a href="/admin/dashboard" class="text-amber-600 hover:text-amber-700 font-medium text-sm">\n\u2190 Dashboard\n</a> <button id="logoutBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">\nLogout\n</button> </div> </div> </div> </header> <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"> <div class="mb-6 flex justify-between items-center"> <h2 class="text-xl font-semibold text-gray-900">All Posts</h2> <button id="addNewBtn" class="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg font-medium transition">\n+ Add Post\n</button> </div> <div id="postsContainer" class="grid grid-cols-1 gap-6"></div> <!-- Modal --> <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"> <div class="bg-white rounded-xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto"> <div class="p-6"> <div class="flex justify-between items-center mb-6"> <h3 id="modalTitle" class="text-2xl font-bold text-gray-900">Add Post</h3> <button id="closeModal" class="text-gray-400 hover:text-gray-600"> <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path> </svg> </button> </div> <form id="postForm" class="space-y-4"> <input type="hidden" id="itemId"> <div class="grid grid-cols-1 gap-4"> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Title *</label> <input type="text" id="title" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Description *</label> <textarea id="description" required rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"></textarea> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Post URL *</label> <input type="url" id="url" required placeholder="https://example.com/post" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> <p class="text-xs text-gray-500 mt-1">Full URL to the post content</p> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Publication Date *</label> <input type="date" id="pubDate" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Languages</label> <input type="text" id="languages" placeholder="\u0DC3\u0DD2\u0D82\u0DC4\u0DBD, English (comma separated)" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> <p class="text-xs text-gray-500 mt-1">Enter languages separated by commas</p> </div> </div> <div class="flex justify-end space-x-3 pt-4"> <button type="button" id="cancelBtn" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">\nCancel\n</button> <button type="submit" class="px-6 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-medium transition">\nSave Post\n</button> </div> </form> </div> </div> </div> </main> </div> <script>(function(){', `
+  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Posts Management - Admin" }, { "default": async ($$result2) => renderTemplate(_a || (_a = __template([" ", `<div class="min-h-screen bg-gray-50"> <header class="bg-white shadow-sm border-b border-gray-200"> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> <div class="flex justify-between items-center py-4"> <div> <h1 class="text-2xl font-bold text-gray-900">Posts Management</h1> </div> <div class="flex items-center space-x-4"> <a href="/admin/dashboard" class="text-amber-600 hover:text-amber-700 font-medium text-sm">
+\u2190 Dashboard
+</a> <button id="logoutBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+Logout
+</button> </div> </div> </div> </header> <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"> <div class="mb-6 flex justify-between items-center"> <h2 class="text-xl font-semibold text-gray-900">All Posts</h2> <button id="addNewBtn" class="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg font-medium transition shadow-lg hover:shadow-xl">
++ Add Post
+</button> </div> <!-- Loading State --> <div id="loadingState" class="flex flex-col items-center justify-center py-16"> <div class="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-amber-600 mb-4"></div> <p class="text-gray-600 font-medium">Loading posts...</p> </div> <!-- Empty State --> <div id="emptyState" class="hidden text-center py-16 bg-white rounded-xl border-2 border-dashed border-gray-300"> <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-purple-50 mb-6"> <svg class="w-10 h-10 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path> </svg> </div> <h3 class="text-xl font-semibold text-gray-900 mb-2">No Posts Yet</h3> <p class="text-gray-600 mb-6">Get started by creating your first post.</p> <button onclick="document.getElementById('addNewBtn').click()" class="inline-flex items-center px-6 py-3 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-semibold transition shadow-lg hover:shadow-xl"> <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path> </svg>
+Create First Post
+</button> </div> <div id="postsContainer" class="grid grid-cols-1 gap-6"></div> <!-- Modal --> <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"> <div class="bg-white rounded-xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto"> <div class="p-6"> <div class="flex justify-between items-center mb-6"> <h3 id="modalTitle" class="text-2xl font-bold text-gray-900">Add Post</h3> <button id="closeModal" class="text-gray-400 hover:text-gray-600"> <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path> </svg> </button> </div> <form id="postForm" class="space-y-4"> <input type="hidden" id="itemId"> <div class="grid grid-cols-1 gap-4"> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Title *</label> <input type="text" id="title" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Description *</label> <textarea id="description" required rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"></textarea> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Post URL *</label> <input type="url" id="url" required placeholder="https://example.com/post" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> <p class="text-xs text-gray-500 mt-1">Full URL to the post content</p> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Publication Date *</label> <input type="date" id="pubDate" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Languages</label> <input type="text" id="languages" placeholder="\u0DC3\u0DD2\u0D82\u0DC4\u0DBD, English (comma separated)" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> <p class="text-xs text-gray-500 mt-1">Enter languages separated by commas</p> </div> </div> <div class="flex justify-end space-x-3 pt-4"> <button type="button" id="cancelBtn" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
+Cancel
+</button> <button type="submit" class="px-6 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-medium transition">
+Save Post
+</button> </div> </form> </div> </div> </div> </main> </div> <script>(function(){`, `
     let postsData = [];
     let csrfTokenValue = csrfToken;
 
@@ -71,14 +83,46 @@ const $$Posts = createComponent(async ($$result, $$props, $$slots) => {
       }
 
       async function loadPosts() {
-      try {
-        const response = await fetch('/api/admin/posts');
-        postsData = await response.json();
-        renderPosts();
-      } catch (error) {
-        console.error('Failed to load posts:', error);
+        const loadingState = document.getElementById('loadingState');
+        const emptyState = document.getElementById('emptyState');
+        const postsContainer = document.getElementById('postsContainer');
+        
+        try {
+          if (loadingState) loadingState.style.display = 'flex';
+          if (emptyState) emptyState.style.display = 'none';
+          if (postsContainer) postsContainer.style.display = 'none';
+          
+          const response = await fetch('/api/admin/posts', {
+            headers: { 'Cache-Control': 'no-cache' }
+          });
+          
+          if (!response.ok) {
+            if (response.status === 401) {
+              window.location.href = '/admin/login';
+              return;
+            }
+            throw new Error(\`HTTP \${response.status}\`);
+          }
+          
+          postsData = await response.json();
+          
+          if (loadingState) loadingState.style.display = 'none';
+          
+          if (postsData.length === 0) {
+            if (emptyState) emptyState.style.display = 'block';
+          } else {
+            if (postsContainer) postsContainer.style.display = 'grid';
+            renderPosts();
+          }
+        } catch (error) {
+          console.error('Failed to load posts:', error);
+          if (loadingState) loadingState.style.display = 'none';
+          if (postsContainer) {
+            postsContainer.style.display = 'block';
+            postsContainer.innerHTML = \`<div class="bg-red-50 border-2 border-red-200 rounded-xl p-8 text-center"><svg class="w-16 h-16 text-red-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><h3 class="text-xl font-semibold text-red-900 mb-2">Failed to Load Posts</h3><p class="text-red-700 mb-6">\${error.message}</p><button onclick="location.reload()" class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition">Reload Page</button></div>\`;
+          }
+        }
       }
-    }
 
     function formatDate(date) {
       if (!date) return '';
@@ -193,7 +237,19 @@ const $$Posts = createComponent(async ($$result, $$props, $$slots) => {
 
       loadPosts();
     });
-  })();<\/script> `], [" ", '<div class="min-h-screen bg-gray-50"> <header class="bg-white shadow-sm border-b border-gray-200"> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> <div class="flex justify-between items-center py-4"> <div> <h1 class="text-2xl font-bold text-gray-900">Posts Management</h1> </div> <div class="flex items-center space-x-4"> <a href="/admin/dashboard" class="text-amber-600 hover:text-amber-700 font-medium text-sm">\n\u2190 Dashboard\n</a> <button id="logoutBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">\nLogout\n</button> </div> </div> </div> </header> <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"> <div class="mb-6 flex justify-between items-center"> <h2 class="text-xl font-semibold text-gray-900">All Posts</h2> <button id="addNewBtn" class="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg font-medium transition">\n+ Add Post\n</button> </div> <div id="postsContainer" class="grid grid-cols-1 gap-6"></div> <!-- Modal --> <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"> <div class="bg-white rounded-xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto"> <div class="p-6"> <div class="flex justify-between items-center mb-6"> <h3 id="modalTitle" class="text-2xl font-bold text-gray-900">Add Post</h3> <button id="closeModal" class="text-gray-400 hover:text-gray-600"> <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path> </svg> </button> </div> <form id="postForm" class="space-y-4"> <input type="hidden" id="itemId"> <div class="grid grid-cols-1 gap-4"> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Title *</label> <input type="text" id="title" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Description *</label> <textarea id="description" required rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"></textarea> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Post URL *</label> <input type="url" id="url" required placeholder="https://example.com/post" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> <p class="text-xs text-gray-500 mt-1">Full URL to the post content</p> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Publication Date *</label> <input type="date" id="pubDate" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Languages</label> <input type="text" id="languages" placeholder="\u0DC3\u0DD2\u0D82\u0DC4\u0DBD, English (comma separated)" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> <p class="text-xs text-gray-500 mt-1">Enter languages separated by commas</p> </div> </div> <div class="flex justify-end space-x-3 pt-4"> <button type="button" id="cancelBtn" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">\nCancel\n</button> <button type="submit" class="px-6 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-medium transition">\nSave Post\n</button> </div> </form> </div> </div> </div> </main> </div> <script>(function(){', `
+  })();<\/script> `], [" ", `<div class="min-h-screen bg-gray-50"> <header class="bg-white shadow-sm border-b border-gray-200"> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> <div class="flex justify-between items-center py-4"> <div> <h1 class="text-2xl font-bold text-gray-900">Posts Management</h1> </div> <div class="flex items-center space-x-4"> <a href="/admin/dashboard" class="text-amber-600 hover:text-amber-700 font-medium text-sm">
+\u2190 Dashboard
+</a> <button id="logoutBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+Logout
+</button> </div> </div> </div> </header> <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"> <div class="mb-6 flex justify-between items-center"> <h2 class="text-xl font-semibold text-gray-900">All Posts</h2> <button id="addNewBtn" class="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg font-medium transition shadow-lg hover:shadow-xl">
++ Add Post
+</button> </div> <!-- Loading State --> <div id="loadingState" class="flex flex-col items-center justify-center py-16"> <div class="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-amber-600 mb-4"></div> <p class="text-gray-600 font-medium">Loading posts...</p> </div> <!-- Empty State --> <div id="emptyState" class="hidden text-center py-16 bg-white rounded-xl border-2 border-dashed border-gray-300"> <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-purple-50 mb-6"> <svg class="w-10 h-10 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path> </svg> </div> <h3 class="text-xl font-semibold text-gray-900 mb-2">No Posts Yet</h3> <p class="text-gray-600 mb-6">Get started by creating your first post.</p> <button onclick="document.getElementById('addNewBtn').click()" class="inline-flex items-center px-6 py-3 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-semibold transition shadow-lg hover:shadow-xl"> <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path> </svg>
+Create First Post
+</button> </div> <div id="postsContainer" class="grid grid-cols-1 gap-6"></div> <!-- Modal --> <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"> <div class="bg-white rounded-xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto"> <div class="p-6"> <div class="flex justify-between items-center mb-6"> <h3 id="modalTitle" class="text-2xl font-bold text-gray-900">Add Post</h3> <button id="closeModal" class="text-gray-400 hover:text-gray-600"> <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path> </svg> </button> </div> <form id="postForm" class="space-y-4"> <input type="hidden" id="itemId"> <div class="grid grid-cols-1 gap-4"> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Title *</label> <input type="text" id="title" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Description *</label> <textarea id="description" required rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"></textarea> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Post URL *</label> <input type="url" id="url" required placeholder="https://example.com/post" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> <p class="text-xs text-gray-500 mt-1">Full URL to the post content</p> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Publication Date *</label> <input type="date" id="pubDate" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Languages</label> <input type="text" id="languages" placeholder="\u0DC3\u0DD2\u0D82\u0DC4\u0DBD, English (comma separated)" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> <p class="text-xs text-gray-500 mt-1">Enter languages separated by commas</p> </div> </div> <div class="flex justify-end space-x-3 pt-4"> <button type="button" id="cancelBtn" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
+Cancel
+</button> <button type="submit" class="px-6 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-medium transition">
+Save Post
+</button> </div> </form> </div> </div> </div> </main> </div> <script>(function(){`, `
     let postsData = [];
     let csrfTokenValue = csrfToken;
 
@@ -249,14 +305,46 @@ const $$Posts = createComponent(async ($$result, $$props, $$slots) => {
       }
 
       async function loadPosts() {
-      try {
-        const response = await fetch('/api/admin/posts');
-        postsData = await response.json();
-        renderPosts();
-      } catch (error) {
-        console.error('Failed to load posts:', error);
+        const loadingState = document.getElementById('loadingState');
+        const emptyState = document.getElementById('emptyState');
+        const postsContainer = document.getElementById('postsContainer');
+        
+        try {
+          if (loadingState) loadingState.style.display = 'flex';
+          if (emptyState) emptyState.style.display = 'none';
+          if (postsContainer) postsContainer.style.display = 'none';
+          
+          const response = await fetch('/api/admin/posts', {
+            headers: { 'Cache-Control': 'no-cache' }
+          });
+          
+          if (!response.ok) {
+            if (response.status === 401) {
+              window.location.href = '/admin/login';
+              return;
+            }
+            throw new Error(\\\`HTTP \\\${response.status}\\\`);
+          }
+          
+          postsData = await response.json();
+          
+          if (loadingState) loadingState.style.display = 'none';
+          
+          if (postsData.length === 0) {
+            if (emptyState) emptyState.style.display = 'block';
+          } else {
+            if (postsContainer) postsContainer.style.display = 'grid';
+            renderPosts();
+          }
+        } catch (error) {
+          console.error('Failed to load posts:', error);
+          if (loadingState) loadingState.style.display = 'none';
+          if (postsContainer) {
+            postsContainer.style.display = 'block';
+            postsContainer.innerHTML = \\\`<div class="bg-red-50 border-2 border-red-200 rounded-xl p-8 text-center"><svg class="w-16 h-16 text-red-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><h3 class="text-xl font-semibold text-red-900 mb-2">Failed to Load Posts</h3><p class="text-red-700 mb-6">\\\${error.message}</p><button onclick="location.reload()" class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition">Reload Page</button></div>\\\`;
+          }
+        }
       }
-    }
 
     function formatDate(date) {
       if (!date) return '';

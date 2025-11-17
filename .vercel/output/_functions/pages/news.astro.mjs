@@ -1,5 +1,5 @@
 import { e as createComponent, r as renderTemplate, l as defineScriptVars, k as renderComponent, m as maybeRenderHead, h as addAttribute } from '../_assets/astro/server.CkAL1Q0G.js';
-import { $ as $$Layout } from '../_assets/Layout.D7moAORm.js';
+import { $ as $$Layout } from '../_assets/Layout.sRuhOru5.js';
 import { n as newsData } from '../_assets/news.CzENSPHZ.js';
 /* empty css                                */
 export { renderers } from '../renderers.mjs';

@@ -1,11 +1,11 @@
 ---
-import Layout from '../../layouts/Layout.astro';
+import AdminLayout from '../../layouts/AdminLayout.astro';
 
 const user = Astro.locals.user;
 const csrfToken = Astro.locals.csrfToken;
 ---
 
-<Layout title="News Management - Admin">
+<AdminLayout title="News Management - Admin">
   <div class="min-h-screen bg-gray-50">
     <header class="bg-white shadow-sm border-b border-gray-200">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -13,7 +13,13 @@ const csrfToken = Astro.locals.csrfToken;
           <div>
             <h1 class="text-2xl font-bold text-gray-900">News Management</h1>
           </div>
-          <div class="flex items-center space-x-4">
+          <div class="flex items-center space-x-3">
+            <a href="/" target="_blank" class="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+              </svg>
+              Website
+            </a>
             <a href="/admin/dashboard" class="text-amber-600 hover:text-amber-700 font-medium text-sm">
               ← Dashboard
             </a>
@@ -28,32 +34,73 @@ const csrfToken = Astro.locals.csrfToken;
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div class="mb-6 flex justify-between items-center">
         <h2 class="text-xl font-semibold text-gray-900">All News Items</h2>
-        <button id="addNewBtn" class="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg font-medium transition">
+        <button id="addNewBtn" class="bg-[#8E050F] hover:bg-[#991b1b] text-white px-6 py-2 rounded-lg font-medium transition shadow-lg hover:shadow-xl">
           + Add News
         </button>
       </div>
 
+      <!-- Loading State -->
+      <div id="loadingState" class="flex items-center justify-center py-12">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600"></div>
+      </div>
+
+      <!-- Empty State -->
+            <!-- Pagination Controls -->
+      <div id="paginationTop" class="hidden mb-4 flex items-center justify-between flex-wrap gap-3">
+        <div class="text-sm text-gray-600">
+          Showing <span id="showingStart">0</span>-<span id="showingEnd">0</span> of <span id="totalItems">0</span> items
+        </div>
+        <div class="flex gap-2">
+          <button id="prevPage" class="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+            Previous
+          </button>
+          <div id="pageNumbers" class="flex gap-1"></div>
+          <button id="nextPage" class="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+            Next
+          </button>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div id="emptyState" class="hidden text-center py-16 bg-white rounded-xl border-2 border-dashed border-gray-300">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
+          <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+          </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">No News Items Yet</h3>
+        <p class="text-gray-600">Click the "+ Add News" button to create your first news article.</p>
+      </div>
+
       <div id="newsContainer" class="grid grid-cols-1 gap-6"></div>
+    </main>
+  </div>
 
-      <!-- Modal -->
-      <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-          <div class="p-6">
-            <div class="flex justify-between items-center mb-6">
-              <h3 id="modalTitle" class="text-2xl font-bold text-gray-900">Add News</h3>
-              <button id="closeModal" class="text-gray-400 hover:text-gray-600">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-              </button>
-            </div>
+  <!-- Modal -->
+  <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-[9999] overflow-y-auto backdrop-blur-sm">
+        <div class="min-h-screen flex items-center justify-center p-2 sm:p-4">
+          <div class="bg-white rounded-lg sm:rounded-xl shadow-2xl w-full max-w-5xl my-2 sm:my-8 transform transition-all duration-300" id="modalContent">
+            <div class="flex flex-col" style="max-height: 95vh;">
+              <!-- Header - Fixed -->
+              <div class="flex-shrink-0 p-4 sm:p-6 border-b border-gray-200">
+                <div class="flex justify-between items-center">
+                  <h3 id="modalTitle" class="text-2xl font-bold text-gray-900">Add News</h3>
+                  <button type="button" id="closeModal" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
 
-            <form id="newsForm" class="space-y-4">
+              <!-- Form Body - Scrollable -->
+              <div class="flex-1 overflow-y-auto p-4 sm:p-6">
+                <form id="newsForm" class="space-y-3 sm:space-y-4">
               <input type="hidden" id="itemId" />
               
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Title (English) *</label>
-                <input type="text" id="title" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" />
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Title (English) *</label>
+                <input type="text" id="title" required class="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" />
               </div>
 
               <div>
@@ -129,26 +176,65 @@ const csrfToken = Astro.locals.csrfToken;
                 </label>
               </div>
 
-              <div class="flex justify-end space-x-3 pt-4">
-                <button type="button" id="cancelBtn" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
-                  Cancel
-                </button>
-                <button type="submit" class="px-6 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-medium transition">
-                  Save
-                </button>
+                  <div class="flex justify-end space-x-3 pt-6">
+                    <button type="button" id="cancelBtn" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
+                      Cancel
+                    </button>
+                    <button type="submit" class="px-6 py-2 bg-[#8E050F] hover:bg-[#991b1b] text-white rounded-lg font-medium shadow-md hover:shadow-lg transition">
+                      Save
+                    </button>
+                  </div>
+                </form>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>
-    </main>
-  </div>
+    </div>
+
+  <style>
+    #modalContent {
+      transform: scale(0.95);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+    
+    /* Mobile-friendly form styles */
+    @media (max-width: 640px) {
+      #newsForm label {
+        font-size: 0.75rem !important;
+        margin-bottom: 0.25rem !important;
+      }
+      
+      #newsForm input,
+      #newsForm textarea,
+      #newsForm select {
+        font-size: 0.875rem !important;
+        padding: 0.5rem 0.75rem !important;
+      }
+      
+      #newsForm button {
+        font-size: 0.875rem !important;
+        padding: 0.5rem 1rem !important;
+      }
+    }
+  </style>
 
   <script is:inline define:vars={{ csrfToken }}>
     let newsData = [];
     let csrfTokenValue = csrfToken;
+    let currentPage = 1;
+    const itemsPerPage = 6;
 
-    window.addEventListener('DOMContentLoaded', () => {
+    // Execute immediately or when DOM is ready
+    (function() {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+      
+      function init() {
       const modal = document.getElementById('modal');
       const newsForm = document.getElementById('newsForm');
       const newsContainer = document.getElementById('newsContainer');
@@ -173,14 +259,21 @@ const csrfToken = Astro.locals.csrfToken;
       // Add new button
       if (addNewBtn) {
         addNewBtn.addEventListener('click', () => {
-          console.log('Add button clicked, showing modal');
           document.getElementById('modalTitle').textContent = 'Add News';
           if (newsForm) newsForm.reset();
           const itemIdInput = document.getElementById('itemId');
           if (itemIdInput) itemIdInput.value = '';
           if (modal) {
-            modal.style.display = 'flex';
             modal.classList.remove('hidden');
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => {
+              const modalContent = document.getElementById('modalContent');
+              if (modalContent) {
+                modalContent.style.transform = 'scale(1)';
+                modalContent.style.opacity = '1';
+              }
+            }, 10);
           }
         });
       }
@@ -189,44 +282,153 @@ const csrfToken = Astro.locals.csrfToken;
       const closeModalBtn = document.getElementById('closeModal');
       const cancelBtn = document.getElementById('cancelBtn');
       
-      if (closeModalBtn) {
-        closeModalBtn.addEventListener('click', () => {
-          if (modal) {
+      function closeModal() {
+        if (modal) {
+          const modalContent = document.getElementById('modalContent');
+          if (modalContent) {
+            modalContent.style.transform = 'scale(0.95)';
+            modalContent.style.opacity = '0';
+          }
+          document.body.style.overflow = '';
+          setTimeout(() => {
             modal.style.display = 'none';
             modal.classList.add('hidden');
-          }
-        });
+            // Reset form
+            if (newsForm) newsForm.reset();
+          }, 200);
+        }
+      }
+      
+      if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeModal);
       }
       
       if (cancelBtn) {
-        cancelBtn.addEventListener('click', () => {
-          if (modal) {
-            modal.style.display = 'none';
-            modal.classList.add('hidden');
-          }
+        cancelBtn.addEventListener('click', closeModal);
+      }
+      
+      // Close modal on escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+          closeModal();
+        }
+      });
+      
+      // Close modal on backdrop click
+      if (modal) {
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) closeModal();
         });
       }
 
-      async function loadNews() {
+      async function loadNews(retryCount = 0) {
+        const loadingState = document.getElementById('loadingState');
+        const emptyState = document.getElementById('emptyState');
+        
         try {
-          const response = await fetch('/api/admin/news');
+          // Show loading
+          if (loadingState) loadingState.style.display = 'flex';
+          if (emptyState) emptyState.style.display = 'none';
+          if (newsContainer) newsContainer.style.display = 'none';
+          
+          const response = await fetch('/api/admin/news', {
+            headers: { 'Cache-Control': 'no-cache' }
+          });
+          
+          // Handle rate limiting with retry
+          if (response.status === 429) {
+            if (retryCount < 2) {
+              console.warn(`Rate limited (429), retrying in ${(retryCount + 1) * 2} seconds...`);
+              await new Promise(resolve => setTimeout(resolve, (retryCount + 1) * 2000));
+              return loadNews(retryCount + 1);
+            }
+            throw new Error('Too Many Requests - Please wait a moment and refresh the page');
+          }
+          
           if (!response.ok) {
             console.error('API Error:', response.status, response.statusText);
             if (response.status === 401) {
               window.location.href = '/admin/login';
               return;
             }
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
           }
+          
           newsData = await response.json();
-          renderNews();
+          
+          // Hide loading
+          if (loadingState) loadingState.style.display = 'none';
+          
+          // Show content or empty state
+          if (newsData.length === 0) {
+            if (emptyState) emptyState.style.display = 'block';
+          } else {
+            if (newsContainer) newsContainer.style.display = 'grid';
+            renderNews();
+          }
         } catch (error) {
           console.error('Failed to load news:', error);
-          newsContainer.innerHTML = '<div class="text-red-600 p-4">Error loading news. Please refresh the page.</div>';
+          if (loadingState) loadingState.style.display = 'none';
+          if (newsContainer) {
+            newsContainer.style.display = 'block';
+            newsContainer.innerHTML = `
+              <div class="bg-red-50 border-2 border-red-200 rounded-xl p-8 text-center">
+                <svg class="w-16 h-16 text-red-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <h3 class="text-xl font-semibold text-red-900 mb-2">Failed to Load News</h3>
+                <p class="text-red-700 mb-6">${error.message}</p>
+                <button onclick="location.reload()" class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition">
+                  Reload Page
+                </button>
+              </div>
+            `;
+          }
         }
       }
 
       function renderNews() {
-        newsContainer.innerHTML = newsData.map(item => `
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const paginatedData = newsData.slice(startIndex, endIndex);
+        const totalPages = Math.ceil(newsData.length / itemsPerPage);
+        
+        // Update pagination info
+        document.getElementById('showingStart').textContent = startIndex + 1;
+        document.getElementById('showingEnd').textContent = Math.min(endIndex, newsData.length);
+        document.getElementById('totalItems').textContent = newsData.length;
+        document.getElementById('paginationTop').classList.remove('hidden');
+        
+        // Update page buttons
+        const prevBtn = document.getElementById('prevPage');
+        const nextBtn = document.getElementById('nextPage');
+        prevBtn.disabled = currentPage === 1;
+        nextBtn.disabled = currentPage === totalPages;
+        
+        // Render page numbers
+        const pageNumbersContainer = document.getElementById('pageNumbers');
+        pageNumbersContainer.innerHTML = '';
+        
+        // Show max 6 page numbers with ellipsis
+        let startPage = Math.max(1, currentPage - 2);
+        let endPage = Math.min(totalPages, startPage + 5);
+        if (endPage - startPage < 5) {
+          startPage = Math.max(1, endPage - 5);
+        }
+        
+        for (let i = startPage; i <= endPage; i++) {
+          const pageBtn = document.createElement('button');
+          pageBtn.textContent = i;
+          pageBtn.className = `px-3 py-1 text-sm border rounded-lg ${i === currentPage ? 'bg-[#8E050F] text-white border-[#8E050F]' : 'border-gray-300 hover:bg-gray-50'}`;
+          pageBtn.onclick = () => {
+            currentPage = i;
+            renderNews();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          };
+          pageNumbersContainer.appendChild(pageBtn);
+        }
+        
+        newsContainer.innerHTML = paginatedData.map(item => `
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
           <div class="flex justify-between items-start">
             <div class="flex-1">
@@ -282,8 +484,16 @@ const csrfToken = Astro.locals.csrfToken;
           document.getElementById('featured').checked = item.featured === true;
           document.getElementById('hidden').checked = item.hidden === true;
           if (modal) {
-            modal.style.display = 'flex';
             modal.classList.remove('hidden');
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => {
+              const modalContent = document.getElementById('modalContent');
+              if (modalContent) {
+                modalContent.style.transform = 'scale(1)';
+                modalContent.style.opacity = '1';
+              }
+            }, 10);
           }
         }
       };
@@ -362,7 +572,27 @@ const csrfToken = Astro.locals.csrfToken;
         });
       }
 
+      // Pagination button listeners
+      document.getElementById('prevPage')?.addEventListener('click', () => {
+        if (currentPage > 1) {
+          currentPage--;
+          renderNews();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+      
+      document.getElementById('nextPage')?.addEventListener('click', () => {
+        const totalPages = Math.ceil(newsData.length / itemsPerPage);
+        if (currentPage < totalPages) {
+          currentPage++;
+          renderNews();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+      
+      // Load news data immediately
       loadNews();
-    });
+      }
+    })();
   </script>
-</Layout>
+</AdminLayout>
