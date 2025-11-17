@@ -2,11 +2,19 @@
 import Layout from '../layouts/Layout.astro';
 import DhammapadaQuote from '../components/DhammapadaQuote.astro';
 import postsData from '../data/posts.json';
+import newsData from '../data/news.json';
 
 // Sort posts by date (newest first)
 const allPosts = [...postsData].sort((a, b) => 
   new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()
 );
+
+// Get latest news (sorted by date, newest first), filter out hidden
+const latestNews = [...newsData]
+  .filter(news => !news.hidden)
+  .sort((a, b) => 
+    new Date(b.date).getTime() - new Date(a.date).getTime()
+  ).slice(0, 8);
 ---
 <Layout>
   <DhammapadaQuote />
@@ -142,6 +150,80 @@ const allPosts = [...postsData].sort((a, b) =>
     </div>
   </div>
 
+  <!-- Latest Notices Section -->
+  <div class="mb-8 md:mb-12">
+    <div class="flex items-center justify-between mb-6 md:mb-8 px-4">
+      <div class="flex items-center gap-2 md:gap-4 flex-1">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-gray-900 whitespace-nowrap">
+          Latest Notices
+        </h2>
+        <div class="flex-1 h-px bg-gradient-to-r from-monk-300/40 to-transparent"></div>
+      </div>
+      <a href="/news" class="text-monk-900 font-medium hover:text-monk-700 flex items-center gap-1.5 md:gap-2 text-sm md:text-base whitespace-nowrap ml-2">
+        View All
+        <svg class="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+      </a>
+    </div>
+    
+    <!-- Notices Carousel -->
+    <div class="relative overflow-hidden">
+      <div class="flex gap-4 md:gap-6 px-4" id="news-carousel">
+        {(latestNews.length > 1 ? latestNews.concat(latestNews) : latestNews).map((news) => (
+          <div class="w-[calc(100vw-3rem)] min-w-[calc(100vw-3rem)] sm:min-w-[300px] md:min-w-[420px] flex-shrink-0 flex">
+            <div class="group flex flex-col w-full bg-white rounded-2xl md:rounded-3xl p-5 sm:p-6 md:p-8 border border-gray-200 hover:border-monk-900 transition-all hover:shadow-xl relative news-card-home" data-news-id={news.id}>
+              <div class="space-y-4 flex-1 flex flex-col">
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 text-xs font-medium text-monk-900">
+                      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                      </svg>
+                      {new Date(news.date).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                      })}
+                    </div>
+                    <span class="px-2.5 py-1 rounded-full text-xs font-semibold shadow-sm bg-monk-100 text-monk-900">
+                      {news.category}
+                    </span>
+                  </div>
+                </div>
+                
+                <h3 class="text-lg sm:text-xl md:text-2xl font-display font-semibold text-gray-900 group-hover:text-monk-900 transition-colors line-clamp-2">
+                  {news.language === 'සිංහල' ? news.titleSinhala : news.title}
+                </h3>
+                
+                <p class="text-sm sm:text-base text-gray-600 line-clamp-2 flex-1">
+                  {news.language === 'සිංහල' ? news.excerptSinhala : news.excerpt}
+                </p>
+                
+                <div class="flex items-center justify-between pt-2 mt-auto">
+                  <span class="text-xs text-gray-500">
+                    {news.source}
+                  </span>
+                  <button class="flex items-center gap-2 text-monk-900 font-medium text-sm">
+                    <span>Read more</span>
+                    <svg class="w-4 h-4 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Pause on Hover Indicator -->
+    <div class="flex justify-center gap-2 mt-4 md:mt-6 px-4">
+      <p class="text-xs sm:text-sm text-gray-500">Hover to pause</p>
+    </div>
+  </div>
+
   <script>
     function initHomePage() {
       // Reset and play background video
@@ -155,43 +237,90 @@ const allPosts = [...postsData].sort((a, b) =>
         });
       }
 
-      // Initialize carousel
+      // Initialize writings carousel
       const carousel = document.getElementById('carousel') as HTMLElement | null;
-      if (!carousel) return;
+      if (carousel) {
+        const itemCount = carousel.children.length;
+        
+        // Only animate if there are duplicated items (more than 1 unique post)
+        if (itemCount > 1) {
+          let scrollPosition = 0;
+          let animationId: number;
+          let isPaused = false;
+          const speed = 0.5;
 
-      const itemCount = carousel.children.length;
-      
-      // Only animate if there are duplicated items (more than 1 unique post)
-      if (itemCount <= 1) return;
-
-      let scrollPosition = 0;
-      let animationId: number;
-      let isPaused = false;
-      const speed = 0.5;
-
-      function animate() {
-        if (!isPaused && carousel) {
-          scrollPosition += speed;
-          const maxScroll = carousel.scrollWidth / 2;
-          
-          if (scrollPosition >= maxScroll) {
-            scrollPosition = 0;
+          function animate() {
+            if (!isPaused && carousel) {
+              scrollPosition += speed;
+              const maxScroll = carousel.scrollWidth / 2;
+              
+              if (scrollPosition >= maxScroll) {
+                scrollPosition = 0;
+              }
+              
+              carousel.style.transform = `translateX(-${scrollPosition}px)`;
+            }
+            animationId = requestAnimationFrame(animate);
           }
-          
-          carousel.style.transform = `translateX(-${scrollPosition}px)`;
+
+          carousel.addEventListener('mouseenter', () => {
+            isPaused = true;
+          });
+
+          carousel.addEventListener('mouseleave', () => {
+            isPaused = false;
+          });
+
+          animate();
         }
-        animationId = requestAnimationFrame(animate);
       }
 
-      carousel.addEventListener('mouseenter', () => {
-        isPaused = true;
-      });
+      // Initialize news carousel
+      const newsCarousel = document.getElementById('news-carousel') as HTMLElement | null;
+      if (newsCarousel) {
+        const itemCount = newsCarousel.children.length;
+        
+        if (itemCount > 1) {
+          let scrollPosition = 0;
+          let animationId: number;
+          let isPaused = false;
+          const speed = 0.5;
 
-      carousel.addEventListener('mouseleave', () => {
-        isPaused = false;
-      });
+          function animate() {
+            if (!isPaused && newsCarousel) {
+              scrollPosition += speed;
+              const maxScroll = newsCarousel.scrollWidth / 2;
+              
+              if (scrollPosition >= maxScroll) {
+                scrollPosition = 0;
+              }
+              
+              newsCarousel.style.transform = `translateX(-${scrollPosition}px)`;
+            }
+            animationId = requestAnimationFrame(animate);
+          }
 
-      animate();
+          newsCarousel.addEventListener('mouseenter', () => {
+            isPaused = true;
+          });
+
+          newsCarousel.addEventListener('mouseleave', () => {
+            isPaused = false;
+          });
+
+          animate();
+        }
+      }
+
+      // Add click handlers for news cards
+      document.querySelectorAll('.news-card-home').forEach(card => {
+        card.addEventListener('click', () => {
+          const newsId = (card as HTMLElement).dataset.newsId;
+          if (newsId) {
+            window.location.href = `/news#news-${newsId}`;
+          }
+        });
+      });
     }
 
     // Run on initial load
