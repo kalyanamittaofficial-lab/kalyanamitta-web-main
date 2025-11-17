@@ -1,0 +1,368 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const user = Astro.locals.user;
+const csrfToken = Astro.locals.csrfToken;
+---
+
+<Layout title="News Management - Admin">
+  <div class="min-h-screen bg-gray-50">
+    <header class="bg-white shadow-sm border-b border-gray-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center py-4">
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900">News Management</h1>
+          </div>
+          <div class="flex items-center space-x-4">
+            <a href="/admin/dashboard" class="text-amber-600 hover:text-amber-700 font-medium text-sm">
+              ← Dashboard
+            </a>
+            <button id="logoutBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="mb-6 flex justify-between items-center">
+        <h2 class="text-xl font-semibold text-gray-900">All News Items</h2>
+        <button id="addNewBtn" class="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg font-medium transition">
+          + Add News
+        </button>
+      </div>
+
+      <div id="newsContainer" class="grid grid-cols-1 gap-6"></div>
+
+      <!-- Modal -->
+      <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+              <h3 id="modalTitle" class="text-2xl font-bold text-gray-900">Add News</h3>
+              <button id="closeModal" class="text-gray-400 hover:text-gray-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
+
+            <form id="newsForm" class="space-y-4">
+              <input type="hidden" id="itemId" />
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Title (English) *</label>
+                <input type="text" id="title" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Title (Sinhala)</label>
+                <input type="text" id="titleSinhala" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Excerpt (English) *</label>
+                <textarea id="excerpt" required rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"></textarea>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Excerpt (Sinhala)</label>
+                <textarea id="excerptSinhala" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"></textarea>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Full Content (English) *</label>
+                <textarea id="content" required rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"></textarea>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Full Content (Sinhala)</label>
+                <textarea id="contentSinhala" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"></textarea>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Date *</label>
+                  <input type="date" id="date" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                  <input type="text" id="category" placeholder="e.g., Events, Education" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" />
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Source</label>
+                <input type="text" id="source" placeholder="e.g., Buddhist Times" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Author</label>
+                <input type="text" id="author" placeholder="e.g., John Doe" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">URL</label>
+                <input type="url" id="url" placeholder="https://example.com" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Image URL</label>
+                <input type="url" id="image" placeholder="https://example.com/image.jpg" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Tags (comma separated)</label>
+                <input type="text" id="tags" placeholder="Vesak, UN, Celebration" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" />
+              </div>
+
+              <div class="flex items-center space-x-6">
+                <label class="flex items-center">
+                  <input type="checkbox" id="featured" class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-amber-500" />
+                  <span class="ml-2 text-sm text-gray-700">Featured</span>
+                </label>
+                <label class="flex items-center">
+                  <input type="checkbox" id="hidden" class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-amber-500" />
+                  <span class="ml-2 text-sm text-gray-700">Hidden</span>
+                </label>
+              </div>
+
+              <div class="flex justify-end space-x-3 pt-4">
+                <button type="button" id="cancelBtn" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
+                  Cancel
+                </button>
+                <button type="submit" class="px-6 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-medium transition">
+                  Save
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script is:inline define:vars={{ csrfToken }}>
+    let newsData = [];
+    let csrfTokenValue = csrfToken;
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const modal = document.getElementById('modal');
+      const newsForm = document.getElementById('newsForm');
+      const newsContainer = document.getElementById('newsContainer');
+      const addNewBtn = document.getElementById('addNewBtn');
+
+      console.log('Script loaded, elements:', {
+        modal: !!modal,
+        newsForm: !!newsForm,
+        newsContainer: !!newsContainer,
+        addNewBtn: !!addNewBtn
+      });
+
+      // Logout button
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+          await fetch('/api/auth/logout', { method: 'POST', headers: { 'X-CSRF-Token': csrfTokenValue } });
+          window.location.href = '/admin/login';
+        });
+      }
+
+      // Add new button
+      if (addNewBtn) {
+        addNewBtn.addEventListener('click', () => {
+          console.log('Add button clicked, showing modal');
+          document.getElementById('modalTitle').textContent = 'Add News';
+          if (newsForm) newsForm.reset();
+          const itemIdInput = document.getElementById('itemId');
+          if (itemIdInput) itemIdInput.value = '';
+          if (modal) {
+            modal.style.display = 'flex';
+            modal.classList.remove('hidden');
+          }
+        });
+      }
+
+      // Close modal buttons
+      const closeModalBtn = document.getElementById('closeModal');
+      const cancelBtn = document.getElementById('cancelBtn');
+      
+      if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', () => {
+          if (modal) {
+            modal.style.display = 'none';
+            modal.classList.add('hidden');
+          }
+        });
+      }
+      
+      if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+          if (modal) {
+            modal.style.display = 'none';
+            modal.classList.add('hidden');
+          }
+        });
+      }
+
+      async function loadNews() {
+        try {
+          const response = await fetch('/api/admin/news');
+          if (!response.ok) {
+            console.error('API Error:', response.status, response.statusText);
+            if (response.status === 401) {
+              window.location.href = '/admin/login';
+              return;
+            }
+          }
+          newsData = await response.json();
+          renderNews();
+        } catch (error) {
+          console.error('Failed to load news:', error);
+          newsContainer.innerHTML = '<div class="text-red-600 p-4">Error loading news. Please refresh the page.</div>';
+        }
+      }
+
+      function renderNews() {
+        newsContainer.innerHTML = newsData.map(item => `
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+          <div class="flex justify-between items-start">
+            <div class="flex-1">
+              <div class="flex items-start gap-2 mb-2">
+                <h3 class="text-lg font-semibold text-gray-900">${item.title || ''}</h3>
+                ${item.featured ? '<span class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded">Featured</span>' : ''}
+                ${item.hidden ? '<span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded">Hidden</span>' : ''}
+              </div>
+              <p class="text-gray-600 text-sm mb-3">${item.excerpt || ''}</p>
+              <div class="space-y-1 text-xs text-gray-500">
+                <p>📅 ${item.date || ''}</p>
+                ${item.category ? `<p>🏷️ ${item.category}</p>` : ''}
+                ${item.author ? `<p>✍️ ${item.author}</p>` : ''}
+                ${item.source ? `<p>📰 ${item.source}</p>` : ''}
+                ${item.tags && item.tags.length ? `<p>🔖 ${Array.isArray(item.tags) ? item.tags.join(', ') : item.tags}</p>` : ''}
+              </div>
+            </div>
+            <div class="flex space-x-2 ml-4">
+              <button onclick="editItem('${item.id}')" class="text-blue-600 hover:text-blue-700 p-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                </svg>
+              </button>
+              <button onclick="deleteItem('${item.id}')" class="text-red-600 hover:text-red-700 p-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      }
+
+      window.editItem = (id) => {
+        const item = newsData.find(n => n.id == id);
+        if (item) {
+          document.getElementById('modalTitle').textContent = 'Edit News';
+          document.getElementById('itemId').value = item.id;
+          document.getElementById('title').value = item.title || '';
+          document.getElementById('titleSinhala').value = item.titleSinhala || '';
+          document.getElementById('excerpt').value = item.excerpt || '';
+          document.getElementById('excerptSinhala').value = item.excerptSinhala || '';
+          document.getElementById('content').value = item.content || '';
+          document.getElementById('contentSinhala').value = item.contentSinhala || '';
+          document.getElementById('source').value = item.source || '';
+          document.getElementById('author').value = item.author || '';
+          document.getElementById('date').value = item.date || '';
+          document.getElementById('category').value = item.category || '';
+          document.getElementById('url').value = item.url || '';
+          document.getElementById('image').value = item.image || '';
+          document.getElementById('tags').value = Array.isArray(item.tags) ? item.tags.join(', ') : '';
+          document.getElementById('featured').checked = item.featured === true;
+          document.getElementById('hidden').checked = item.hidden === true;
+          if (modal) {
+            modal.style.display = 'flex';
+            modal.classList.remove('hidden');
+          }
+        }
+      };
+
+      window.deleteItem = async (id) => {
+        if (!confirm('Are you sure you want to delete this news item?')) return;
+        
+        try {
+          const response = await fetch(`/api/admin/news?id=${id}`, {
+            method: 'DELETE',
+            headers: { 'X-CSRF-Token': csrfTokenValue }
+          });
+          
+          if (response.ok) {
+            await loadNews();
+          } else {
+            alert('Failed to delete news item');
+          }
+        } catch (error) {
+          alert('Error deleting news item');
+        }
+      };
+
+      if (newsForm) {
+        newsForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          
+          const id = document.getElementById('itemId').value;
+          const tagsInput = document.getElementById('tags').value;
+          const tagsArray = tagsInput ? tagsInput.split(',').map(t => t.trim()).filter(t => t) : [];
+          
+          const data = {
+            id: id || undefined,
+            title: document.getElementById('title').value,
+            titleSinhala: document.getElementById('titleSinhala').value || '',
+            excerpt: document.getElementById('excerpt').value,
+            excerptSinhala: document.getElementById('excerptSinhala').value || '',
+            content: document.getElementById('content').value,
+            contentSinhala: document.getElementById('contentSinhala').value || '',
+            source: document.getElementById('source').value || '',
+            author: document.getElementById('author').value || '',
+            date: document.getElementById('date').value,
+            category: document.getElementById('category').value || '',
+            tags: tagsArray,
+            image: document.getElementById('image').value || '/logo.png',
+            url: document.getElementById('url').value || '',
+            featured: document.getElementById('featured').checked,
+            language: 'English',
+            hidden: document.getElementById('hidden').checked
+          };
+
+          try {
+            const response = await fetch('/api/admin/news', {
+              method: id ? 'PUT' : 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': csrfTokenValue
+              },
+              body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+              if (modal) {
+                modal.style.display = 'none';
+                modal.classList.add('hidden');
+              }
+              await loadNews();
+            } else {
+              const errorData = await response.json();
+              alert('Failed to save news item: ' + (errorData.error || 'Unknown error'));
+            }
+          } catch (error) {
+            console.error('Save error:', error);
+            alert('Error saving news item: ' + error.message);
+          }
+        });
+      }
+
+      loadNews();
+    });
+  </script>
+</Layout>

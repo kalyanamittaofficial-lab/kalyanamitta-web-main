@@ -1,0 +1,23 @@
+const postsData = [
+	{
+		title: "අඩක් ද? සම්පූර්ණයම ද?",
+		pubDate: "2025-11-14",
+		description: "ආනන්ද හිමියන් සහ බුදුරජාණන් වහන්සේ අතර කල්‍යාණ මිත්‍රත්වය පිළිබඳ සංවාදය",
+		url: "https://25-nov-posts.vercel.app/posts/day-1/post.html",
+		languages: [
+			"සිංහල",
+			"English"
+		]
+	},
+	{
+		title: "අඩක් ද? සම්පූර්ණයම ද?",
+		pubDate: "2025-10-14",
+		description: "ආනන්ද හිමියන් සහ බුදුරජාණන් වහන්සේ අතර කල්‍යාණ මිත්‍රත්වය පිළිබඳ සංවාදය",
+		url: "https://25-nov-posts.vercel.app/posts/day-1/post.html",
+		languages: [
+			"සිංහල"
+		]
+	}
+];
+
+export { postsData as p };
