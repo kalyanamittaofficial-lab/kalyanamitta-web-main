@@ -2,16 +2,16 @@
   "resources": [
     {
       "id": "1",
-      "title": "Access to Insight",
-      "url": "https://www.accesstoinsight.org/",
-      "description": "A comprehensive collection of Theravada Buddhist texts and teachings, including the Pali Canon and commentaries.",
-      "teacher": "Various Masters",
-      "language": "English",
-      "sourceType": "website",
-      "topics": ["Suttas", "Dhamma", "Meditation", "Buddhist Canon"],
+      "title": "Thripitaka Online",
+      "url": "https://tripitaka.online/",
+      "description": "An online portal to the Sutta Piṭaka (Discourses of the Buddha) as translated into Sinhala by Ven. Kiribathgoda Gnanananda Thero.",
+      "teacher": "Ven. Kiribathgoda Gnanananda Thero (Translator)",
+      "language": "Multilingual",
+      "sourceType": "Website",
+      "topics": ["Buddhist Canon", "Pali Canon", "Tipiṭaka", "Suttas", "Dhamma", "Sinhala", "Pali"],
       "verifiedDate": "2025-11-17",
       "featured": true,
-      "hidden": true
+      "hidden": false
     },
     {
       "id": "2",
