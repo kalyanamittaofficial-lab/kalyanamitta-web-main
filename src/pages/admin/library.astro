@@ -13,15 +13,21 @@ if (!user) {
   <div class="min-h-screen bg-gray-50">
     <header class="bg-white shadow-sm border-b border-gray-200">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center py-4">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center py-4 gap-3">
           <div>
-            <h1 class="text-2xl font-bold text-gray-900">Library Management</h1>
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Library Management</h1>
           </div>
-          <div class="flex items-center space-x-4">
-            <a href="/admin/dashboard" class="text-amber-600 hover:text-amber-700 font-medium text-sm">
-              ← Dashboard
+          <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+            <a href="/" target="_blank" class="text-blue-600 hover:text-blue-700 font-medium text-xs sm:text-sm flex items-center gap-1 px-3 py-1.5 border border-blue-600 rounded-lg">
+              <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+              </svg>
+              <span>Website</span>
             </a>
-            <button id="logoutBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+            <a href="/admin/dashboard" class="text-amber-600 hover:text-amber-700 font-medium text-xs sm:text-sm px-3 py-1.5 border border-amber-600 rounded-lg flex items-center gap-1">
+              <span>← Dashboard</span>
+            </a>
+            <button id="logoutBtn" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition">
               Logout
             </button>
           </div>
