@@ -19,18 +19,25 @@ const pastEvents = sortedEvents.filter(event => new Date(event.startDate) < toda
     <!-- Page Header -->
     <div class="mb-8 md:mb-12 pt-6 md:pt-8">
       <div class="flex items-center gap-3 mb-3 md:mb-4">
-        <div class="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-monk-900 to-monk-700 rounded-2xl flex items-center justify-center shadow-lg">
-          <svg class="w-7 h-7 md:w-9 md:h-9 text-white" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V9h14v10zm0-12H5V5h14v2z"/>
-            <circle cx="12" cy="14" r="2.5" fill="#FFF"/>
+        <div class="relative w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-purple-500 via-monk-900 to-monk-700 rounded-2xl flex items-center justify-center shadow-xl">
+          <div class="absolute inset-0 bg-gradient-to-br from-purple-400/20 to-transparent rounded-2xl"></div>
+          <svg class="w-7 h-7 md:w-9 md:h-9 text-white relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            <circle cx="9" cy="14" r="1.5" fill="currentColor"/>
+            <circle cx="15" cy="14" r="1.5" fill="currentColor"/>
+            <circle cx="12" cy="17" r="1.5" fill="currentColor"/>
           </svg>
+          <span class="absolute -top-1 -right-1 flex h-3 w-3">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-purple-500"></span>
+          </span>
         </div>
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-gray-900">
-          Buddhist Events
+          Events
         </h1>
       </div>
       <p class="text-base sm:text-lg text-gray-600 mb-4">
-        Discover and join Buddhist events, ceremonies, and gatherings
+        Discover and join events, ceremonies, and gatherings
       </p>
     </div>
 
