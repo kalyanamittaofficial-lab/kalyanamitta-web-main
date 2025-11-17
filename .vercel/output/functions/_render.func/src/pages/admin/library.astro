@@ -1,5 +1,5 @@
 ---
-import Layout from '../../layouts/Layout.astro';
+import AdminLayout from '../../layouts/AdminLayout.astro';
 
 const user = Astro.locals.user;
 const csrfToken = Astro.locals.csrfToken;
@@ -9,7 +9,7 @@ if (!user) {
 }
 ---
 
-<Layout title="Library Management - Admin">
+<AdminLayout title="Library Management - Admin">
   <div class="min-h-screen bg-gray-50">
     <header class="bg-white shadow-sm border-b border-gray-200">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -32,7 +32,7 @@ if (!user) {
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div class="mb-6 flex justify-between items-center">
         <h2 class="text-xl font-semibold text-gray-900">All Library Resources</h2>
-        <button id="addNewBtn" class="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg font-medium transition shadow-lg hover:shadow-xl">
+        <button id="addNewBtn" class="bg-[#8E050F] hover:bg-[#991b1b] text-white px-6 py-2 rounded-lg font-medium transition shadow-lg hover:shadow-xl">
           + Add Resource
         </button>
       </div>
@@ -43,7 +43,23 @@ if (!user) {
         <p class="text-gray-600 font-medium">Loading library resources...</p>
       </div>
 
-      <!-- Empty State -->
+      <!-- Pagination Controls -->
+      <div id="paginationTop" class="hidden mb-4 flex items-center justify-between flex-wrap gap-3">
+        <div class="text-sm text-gray-600">
+          Showing <span id="showingStart">0</span>-<span id="showingEnd">0</span> of <span id="totalItems">0</span> items
+        </div>
+        <div class="flex gap-2">
+          <button id="prevPage" class="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+            Previous
+          </button>
+          <div id="pageNumbers" class="flex gap-1"></div>
+          <button id="nextPage" class="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+            Next
+          </button>
+        </div>
+      </div>
+
+    <!-- Empty State -->
       <div id="emptyState" class="hidden text-center py-16 bg-white rounded-xl border-2 border-dashed border-gray-300">
         <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-amber-50 mb-6">
           <svg class="w-10 h-10 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -63,19 +79,23 @@ if (!user) {
       <div id="libraryContainer" class="grid grid-cols-1 gap-6"></div>
 
       <!-- Modal -->
-      <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-          <div class="p-6">
-            <div class="flex justify-between items-center mb-6">
-              <h3 id="modalTitle" class="text-2xl font-bold text-gray-900">Add Resource</h3>
-              <button id="closeModal" class="text-gray-400 hover:text-gray-600">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-              </button>
+    <!-- Modal -->
+    <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-[9999] overflow-y-auto backdrop-blur-sm">
+      <div class="min-h-screen flex items-center justify-center p-2 sm:p-4">
+        <div class="bg-white rounded-lg sm:rounded-xl shadow-2xl w-full max-w-5xl my-2 sm:my-8 transform transition-all duration-300" id="modalContent">
+          <div class="flex flex-col" style="max-height: 95vh;">
+            <div class="flex-shrink-0 p-4 sm:p-6 border-b border-gray-200">
+              <div class="flex justify-between items-center">
+                <h3 id="modalTitle" class="text-2xl font-bold text-gray-900">Add Resource</h3>
+                <button type="button" id="closeModal" class="text-gray-400 hover:text-gray-600 transition-colors">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
+              </div>
             </div>
-
-            <form id="libraryForm" class="space-y-4">
+            <div class="flex-1 overflow-y-auto p-4 sm:p-6">
+            <form id="libraryForm" class="space-y-3 sm:space-y-4">
               <input type="hidden" id="itemId" />
               
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -138,26 +158,61 @@ if (!user) {
                 </div>
               </div>
 
-              <div class="flex justify-end space-x-3 pt-4">
+              <div class="flex justify-end space-x-3 pt-6">
                 <button type="button" id="cancelBtn" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
                   Cancel
                 </button>
-                <button type="submit" class="px-6 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-medium transition">
+                <button type="submit" class="px-6 py-2 bg-[#8E050F] hover:bg-[#991b1b] text-white rounded-lg font-medium shadow-md hover:shadow-lg transition">
                   Save Resource
                 </button>
               </div>
             </form>
+            </div>
           </div>
         </div>
       </div>
-    </main>
-  </div>
+    </div>
+
+  <style>
+    #modalContent {
+      transform: scale(0.95);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+    
+    @media (max-width: 640px) {
+      #libraryForm label {
+        font-size: 0.75rem !important;
+        margin-bottom: 0.25rem !important;
+      }
+      #libraryForm input,
+      #libraryForm textarea,
+      #libraryForm select {
+        font-size: 0.875rem !important;
+        padding: 0.5rem 0.75rem !important;
+      }
+      #libraryForm button {
+        font-size: 0.875rem !important;
+        padding: 0.5rem 1rem !important;
+      }
+    }
+  </style>
 
   <script is:inline define:vars={{ csrfToken }}>
     let libraryData = [];
     let csrfTokenValue = csrfToken;
+    let currentPage = 1;
+    const itemsPerPage = 6;
 
-    window.addEventListener('DOMContentLoaded', () => {
+    // Execute immediately or when DOM is ready
+    (function() {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+      
+      function init() {
       const modal = document.getElementById('modal');
       const libraryForm = document.getElementById('libraryForm');
       const libraryContainer = document.getElementById('libraryContainer');
@@ -181,8 +236,16 @@ if (!user) {
           const itemIdInput = document.getElementById('itemId');
           if (itemIdInput) itemIdInput.value = '';
           if (modal) {
-            modal.style.display = 'flex';
             modal.classList.remove('hidden');
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => {
+              const modalContent = document.getElementById('modalContent');
+              if (modalContent) {
+                modalContent.style.transform = 'scale(1)';
+                modalContent.style.opacity = '1';
+              }
+            }, 10);
           }
         });
       }
@@ -190,37 +253,67 @@ if (!user) {
       const closeModalBtn = document.getElementById('closeModal');
       const cancelBtn = document.getElementById('cancelBtn');
       
-      if (closeModalBtn) {
-        closeModalBtn.addEventListener('click', () => {
-          if (modal) {
+      function closeModal() {
+        if (modal) {
+          const modalContent = document.getElementById('modalContent');
+          if (modalContent) {
+            modalContent.style.transform = 'scale(0.95)';
+            modalContent.style.opacity = '0';
+          }
+          document.body.style.overflow = '';
+          setTimeout(() => {
             modal.style.display = 'none';
             modal.classList.add('hidden');
-          }
-        });
+            if (libraryForm) libraryForm.reset();
+          }, 200);
+        }
+      }
+      
+      if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeModal);
       }
       
       if (cancelBtn) {
-        cancelBtn.addEventListener('click', () => {
-          if (modal) {
-            modal.style.display = 'none';
-            modal.classList.add('hidden');
-          }
-        });
+        cancelBtn.addEventListener('click', closeModal);
       }
+      
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+          closeModal();
+        }
+      });
 
-      async function loadLibrary() {
+      async function loadLibrary(retryCount = 0) {
         const loadingState = document.getElementById('loadingState');
         const emptyState = document.getElementById('emptyState');
         const libraryContainer = document.getElementById('libraryContainer');
         
         try {
+          console.log('Loading library...');
           if (loadingState) loadingState.style.display = 'flex';
           if (emptyState) emptyState.style.display = 'none';
           if (libraryContainer) libraryContainer.style.display = 'none';
           
           const response = await fetch('/api/admin/library', {
-            headers: { 'Cache-Control': 'no-cache' }
+            method: 'GET',
+            headers: { 
+              'Cache-Control': 'no-cache',
+              'Pragma': 'no-cache'
+            },
+            cache: 'no-store'
           });
+          
+          console.log('Library response:', response.status);
+          
+          // Handle rate limiting with retry
+          if (response.status === 429) {
+            if (retryCount < 2) {
+              console.warn(`Rate limited (429), retrying in ${(retryCount + 1) * 2} seconds...`);
+              await new Promise(resolve => setTimeout(resolve, (retryCount + 1) * 2000));
+              return loadLibrary(retryCount + 1);
+            }
+            throw new Error('Too Many Requests - Please wait a moment and refresh the page');
+          }
           
           if (!response.ok) {
             if (response.status === 401) {
@@ -230,14 +323,20 @@ if (!user) {
             throw new Error(`HTTP ${response.status}`);
           }
           
-          libraryData = await response.json();
-          console.log('Library data loaded:', libraryData);
+          const rawData = await response.json();
+          console.log('Raw library data:', rawData);
+          
+          // Handle both array and {resources: []} format
+          libraryData = Array.isArray(rawData) ? rawData : (rawData.resources || []);
+          console.log('Processed library count:', libraryData.length);
           
           if (loadingState) loadingState.style.display = 'none';
           
           if (!libraryData || libraryData.length === 0) {
+            console.log('No data, showing empty');
             if (emptyState) emptyState.style.display = 'block';
           } else {
+            console.log('Rendering', libraryData.length, 'items');
             if (libraryContainer) libraryContainer.style.display = 'grid';
             renderLibrary();
           }
@@ -252,7 +351,43 @@ if (!user) {
       }
 
     function renderLibrary() {
-      libraryContainer.innerHTML = libraryData.map(item => `
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      const paginatedData = libraryData.slice(startIndex, endIndex);
+      const totalPages = Math.ceil(libraryData.length / itemsPerPage);
+      
+      document.getElementById('showingStart').textContent = startIndex + 1;
+      document.getElementById('showingEnd').textContent = Math.min(endIndex, libraryData.length);
+      document.getElementById('totalItems').textContent = libraryData.length;
+      document.getElementById('paginationTop').classList.remove('hidden');
+      
+      const prevBtn = document.getElementById('prevPage');
+      const nextBtn = document.getElementById('nextPage');
+      prevBtn.disabled = currentPage === 1;
+      nextBtn.disabled = currentPage === totalPages;
+      
+      const pageNumbersContainer = document.getElementById('pageNumbers');
+      pageNumbersContainer.innerHTML = '';
+      
+      let startPage = Math.max(1, currentPage - 2);
+      let endPage = Math.min(totalPages, startPage + 5);
+      if (endPage - startPage < 5) {
+        startPage = Math.max(1, endPage - 5);
+      }
+      
+      for (let i = startPage; i <= endPage; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.textContent = i;
+        pageBtn.className = `px-3 py-1 text-sm border rounded-lg ${i === currentPage ? 'bg-[#8E050F] text-white border-[#8E050F]' : 'border-gray-300 hover:bg-gray-50'}`;
+        pageBtn.onclick = () => {
+          currentPage = i;
+          renderLibrary();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+        pageNumbersContainer.appendChild(pageBtn);
+      }
+      
+      libraryContainer.innerHTML = paginatedData.map(item => `
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
           <div class="flex justify-between items-start">
             <div class="flex-1">
@@ -306,6 +441,15 @@ if (!user) {
         document.getElementById('featured').checked = item.featured || false;
         document.getElementById('hidden').checked = item.hidden || false;
         modal.classList.remove('hidden');
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => {
+          const modalContent = document.getElementById('modalContent');
+          if (modalContent) {
+            modalContent.style.transform = 'scale(1)';
+            modalContent.style.opacity = '1';
+          }
+        }, 10);
       }
     };
 
@@ -376,7 +520,27 @@ if (!user) {
         });
       }
 
+      document.getElementById('prevPage')?.addEventListener('click', () => {
+        if (currentPage > 1) {
+          currentPage--;
+          renderLibrary();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+      
+      document.getElementById('nextPage')?.addEventListener('click', () => {
+        const totalPages = Math.ceil(libraryData.length / itemsPerPage);
+        if (currentPage < totalPages) {
+          currentPage++;
+          renderLibrary();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+      
+      // Load library immediately
+      console.log('Library page initialized, loading data...');
       loadLibrary();
-    });
+      }
+    })();
   </script>
-</Layout>
+</AdminLayout>

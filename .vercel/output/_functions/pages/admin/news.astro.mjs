@@ -1,5 +1,6 @@
-import { e as createComponent, f as createAstro, k as renderComponent, r as renderTemplate, l as defineScriptVars, m as maybeRenderHead } from '../../_assets/astro/server.CkAL1Q0G.js';
-import { $ as $$Layout } from '../../_assets/Layout.sRuhOru5.js';
+import { e as createComponent, f as createAstro, k as renderComponent, r as renderTemplate, n as defineScriptVars, m as maybeRenderHead } from '../../_assets/astro/server.CrvHwmaT.js';
+import { $ as $$AdminLayout } from '../../_assets/AdminLayout.2ZbTGf_w.js';
+/* empty css                                   */
 export { renderers } from '../../renderers.mjs';
 
 var __freeze = Object.freeze;
@@ -12,11 +13,21 @@ const $$News = createComponent(async ($$result, $$props, $$slots) => {
   Astro2.self = $$News;
   Astro2.locals.user;
   const csrfToken = Astro2.locals.csrfToken;
-  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "News Management - Admin" }, { "default": async ($$result2) => renderTemplate(_a || (_a = __template([" ", '<div class="min-h-screen bg-gray-50"> <header class="bg-white shadow-sm border-b border-gray-200"> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> <div class="flex justify-between items-center py-4"> <div> <h1 class="text-2xl font-bold text-gray-900">News Management</h1> </div> <div class="flex items-center space-x-4"> <a href="/admin/dashboard" class="text-amber-600 hover:text-amber-700 font-medium text-sm">\n\u2190 Dashboard\n</a> <button id="logoutBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">\nLogout\n</button> </div> </div> </div> </header> <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"> <div class="mb-6 flex justify-between items-center"> <h2 class="text-xl font-semibold text-gray-900">All News Items</h2> <button id="addNewBtn" class="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg font-medium transition">\n+ Add News\n</button> </div> <!-- Loading State --> <div id="loadingState" class="flex items-center justify-center py-12"> <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600"></div> </div> <!-- Empty State --> <div id="emptyState" class="hidden text-center py-12"> <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4"> <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path> </svg> </div> <h3 class="text-lg font-semibold text-gray-900 mb-2">No News Items Yet</h3> <p class="text-gray-600">Click the "+ Add News" button to create your first news article.</p> </div> <div id="newsContainer" class="grid grid-cols-1 gap-6"></div> <!-- Modal --> <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 backdrop-blur-sm transition-opacity duration-300"> <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95" id="modalContent"> <div class="p-6"> <div class="flex justify-between items-center mb-6"> <h3 id="modalTitle" class="text-2xl font-bold text-gray-900">Add News</h3> <button id="closeModal" class="text-gray-400 hover:text-gray-600"> <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path> </svg> </button> </div> <form id="newsForm" class="space-y-4"> <input type="hidden" id="itemId"> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Title (English) *</label> <input type="text" id="title" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Title (Sinhala)</label> <input type="text" id="titleSinhala" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Excerpt (English) *</label> <textarea id="excerpt" required rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"></textarea> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Excerpt (Sinhala)</label> <textarea id="excerptSinhala" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"></textarea> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Full Content (English) *</label> <textarea id="content" required rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"></textarea> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Full Content (Sinhala)</label> <textarea id="contentSinhala" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"></textarea> </div> <div class="grid grid-cols-2 gap-4"> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Date *</label> <input type="date" id="date" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Category</label> <input type="text" id="category" placeholder="e.g., Events, Education" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> </div> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Source</label> <input type="text" id="source" placeholder="e.g., Buddhist Times" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Author</label> <input type="text" id="author" placeholder="e.g., John Doe" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">URL</label> <input type="url" id="url" placeholder="https://example.com" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Image URL</label> <input type="url" id="image" placeholder="https://example.com/image.jpg" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Tags (comma separated)</label> <input type="text" id="tags" placeholder="Vesak, UN, Celebration" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> </div> <div class="flex items-center space-x-6"> <label class="flex items-center"> <input type="checkbox" id="featured" class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-amber-500"> <span class="ml-2 text-sm text-gray-700">Featured</span> </label> <label class="flex items-center"> <input type="checkbox" id="hidden" class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-amber-500"> <span class="ml-2 text-sm text-gray-700">Hidden</span> </label> </div> <div class="flex justify-end space-x-3 pt-4"> <button type="button" id="cancelBtn" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">\nCancel\n</button> <button type="submit" class="px-6 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-medium transition">\nSave\n</button> </div> </form> </div> </div> </div> </main> </div> <script>(function(){', `
+  return renderTemplate`${renderComponent($$result, "AdminLayout", $$AdminLayout, { "title": "News Management - Admin", "data-astro-cid-klr5elzh": true }, { "default": async ($$result2) => renderTemplate(_a || (_a = __template([" ", '<div class="min-h-screen bg-gray-50" data-astro-cid-klr5elzh> <header class="bg-white shadow-sm border-b border-gray-200" data-astro-cid-klr5elzh> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" data-astro-cid-klr5elzh> <div class="flex justify-between items-center py-4" data-astro-cid-klr5elzh> <div data-astro-cid-klr5elzh> <h1 class="text-2xl font-bold text-gray-900" data-astro-cid-klr5elzh>News Management</h1> </div> <div class="flex items-center space-x-3" data-astro-cid-klr5elzh> <a href="/" target="_blank" class="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center gap-1" data-astro-cid-klr5elzh> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-klr5elzh> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" data-astro-cid-klr5elzh></path> </svg>\nWebsite\n</a> <a href="/admin/dashboard" class="text-amber-600 hover:text-amber-700 font-medium text-sm" data-astro-cid-klr5elzh>\n\u2190 Dashboard\n</a> <button id="logoutBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition" data-astro-cid-klr5elzh>\nLogout\n</button> </div> </div> </div> </header> <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" data-astro-cid-klr5elzh> <div class="mb-6 flex justify-between items-center" data-astro-cid-klr5elzh> <h2 class="text-xl font-semibold text-gray-900" data-astro-cid-klr5elzh>All News Items</h2> <button id="addNewBtn" class="bg-[#8E050F] hover:bg-[#991b1b] text-white px-6 py-2 rounded-lg font-medium transition shadow-lg hover:shadow-xl" data-astro-cid-klr5elzh>\n+ Add News\n</button> </div> <!-- Loading State --> <div id="loadingState" class="flex items-center justify-center py-12" data-astro-cid-klr5elzh> <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600" data-astro-cid-klr5elzh></div> </div> <!-- Empty State --> <!-- Pagination Controls --> <div id="paginationTop" class="hidden mb-4 flex items-center justify-between flex-wrap gap-3" data-astro-cid-klr5elzh> <div class="text-sm text-gray-600" data-astro-cid-klr5elzh>\nShowing <span id="showingStart" data-astro-cid-klr5elzh>0</span>-<span id="showingEnd" data-astro-cid-klr5elzh>0</span> of <span id="totalItems" data-astro-cid-klr5elzh>0</span> items\n</div> <div class="flex gap-2" data-astro-cid-klr5elzh> <button id="prevPage" class="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed" data-astro-cid-klr5elzh>\nPrevious\n</button> <div id="pageNumbers" class="flex gap-1" data-astro-cid-klr5elzh></div> <button id="nextPage" class="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed" data-astro-cid-klr5elzh>\nNext\n</button> </div> </div> <!-- Empty State --> <div id="emptyState" class="hidden text-center py-16 bg-white rounded-xl border-2 border-dashed border-gray-300" data-astro-cid-klr5elzh> <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4" data-astro-cid-klr5elzh> <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-klr5elzh> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" data-astro-cid-klr5elzh></path> </svg> </div> <h3 class="text-lg font-semibold text-gray-900 mb-2" data-astro-cid-klr5elzh>No News Items Yet</h3> <p class="text-gray-600" data-astro-cid-klr5elzh>Click the "+ Add News" button to create your first news article.</p> </div> <div id="newsContainer" class="grid grid-cols-1 gap-6" data-astro-cid-klr5elzh></div> </main> </div>  <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-[9999] overflow-y-auto backdrop-blur-sm" data-astro-cid-klr5elzh> <div class="min-h-screen flex items-center justify-center p-2 sm:p-4" data-astro-cid-klr5elzh> <div class="bg-white rounded-lg sm:rounded-xl shadow-2xl w-full max-w-5xl my-2 sm:my-8 transform transition-all duration-300" id="modalContent" data-astro-cid-klr5elzh> <div class="flex flex-col" style="max-height: 95vh;" data-astro-cid-klr5elzh> <!-- Header - Fixed --> <div class="flex-shrink-0 p-4 sm:p-6 border-b border-gray-200" data-astro-cid-klr5elzh> <div class="flex justify-between items-center" data-astro-cid-klr5elzh> <h3 id="modalTitle" class="text-2xl font-bold text-gray-900" data-astro-cid-klr5elzh>Add News</h3> <button type="button" id="closeModal" class="text-gray-400 hover:text-gray-600 transition-colors" data-astro-cid-klr5elzh> <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-klr5elzh> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" data-astro-cid-klr5elzh></path> </svg> </button> </div> </div> <!-- Form Body - Scrollable --> <div class="flex-1 overflow-y-auto p-4 sm:p-6" data-astro-cid-klr5elzh> <form id="newsForm" class="space-y-3 sm:space-y-4" data-astro-cid-klr5elzh> <input type="hidden" id="itemId" data-astro-cid-klr5elzh> <div data-astro-cid-klr5elzh> <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2" data-astro-cid-klr5elzh>Title (English) *</label> <input type="text" id="title" required class="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" data-astro-cid-klr5elzh> </div> <div data-astro-cid-klr5elzh> <label class="block text-sm font-medium text-gray-700 mb-2" data-astro-cid-klr5elzh>Title (Sinhala)</label> <input type="text" id="titleSinhala" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" data-astro-cid-klr5elzh> </div> <div data-astro-cid-klr5elzh> <label class="block text-sm font-medium text-gray-700 mb-2" data-astro-cid-klr5elzh>Excerpt (English) *</label> <textarea id="excerpt" required rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" data-astro-cid-klr5elzh></textarea> </div> <div data-astro-cid-klr5elzh> <label class="block text-sm font-medium text-gray-700 mb-2" data-astro-cid-klr5elzh>Excerpt (Sinhala)</label> <textarea id="excerptSinhala" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" data-astro-cid-klr5elzh></textarea> </div> <div data-astro-cid-klr5elzh> <label class="block text-sm font-medium text-gray-700 mb-2" data-astro-cid-klr5elzh>Full Content (English) *</label> <textarea id="content" required rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" data-astro-cid-klr5elzh></textarea> </div> <div data-astro-cid-klr5elzh> <label class="block text-sm font-medium text-gray-700 mb-2" data-astro-cid-klr5elzh>Full Content (Sinhala)</label> <textarea id="contentSinhala" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" data-astro-cid-klr5elzh></textarea> </div> <div class="grid grid-cols-2 gap-4" data-astro-cid-klr5elzh> <div data-astro-cid-klr5elzh> <label class="block text-sm font-medium text-gray-700 mb-2" data-astro-cid-klr5elzh>Date *</label> <input type="date" id="date" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" data-astro-cid-klr5elzh> </div> <div data-astro-cid-klr5elzh> <label class="block text-sm font-medium text-gray-700 mb-2" data-astro-cid-klr5elzh>Category</label> <input type="text" id="category" placeholder="e.g., Events, Education" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" data-astro-cid-klr5elzh> </div> </div> <div data-astro-cid-klr5elzh> <label class="block text-sm font-medium text-gray-700 mb-2" data-astro-cid-klr5elzh>Source</label> <input type="text" id="source" placeholder="e.g., Buddhist Times" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" data-astro-cid-klr5elzh> </div> <div data-astro-cid-klr5elzh> <label class="block text-sm font-medium text-gray-700 mb-2" data-astro-cid-klr5elzh>Author</label> <input type="text" id="author" placeholder="e.g., John Doe" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" data-astro-cid-klr5elzh> </div> <div data-astro-cid-klr5elzh> <label class="block text-sm font-medium text-gray-700 mb-2" data-astro-cid-klr5elzh>URL</label> <input type="url" id="url" placeholder="https://example.com" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" data-astro-cid-klr5elzh> </div> <div data-astro-cid-klr5elzh> <label class="block text-sm font-medium text-gray-700 mb-2" data-astro-cid-klr5elzh>Image URL</label> <input type="url" id="image" placeholder="https://example.com/image.jpg" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" data-astro-cid-klr5elzh> </div> <div data-astro-cid-klr5elzh> <label class="block text-sm font-medium text-gray-700 mb-2" data-astro-cid-klr5elzh>Tags (comma separated)</label> <input type="text" id="tags" placeholder="Vesak, UN, Celebration" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" data-astro-cid-klr5elzh> </div> <div class="flex items-center space-x-6" data-astro-cid-klr5elzh> <label class="flex items-center" data-astro-cid-klr5elzh> <input type="checkbox" id="featured" class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-amber-500" data-astro-cid-klr5elzh> <span class="ml-2 text-sm text-gray-700" data-astro-cid-klr5elzh>Featured</span> </label> <label class="flex items-center" data-astro-cid-klr5elzh> <input type="checkbox" id="hidden" class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-amber-500" data-astro-cid-klr5elzh> <span class="ml-2 text-sm text-gray-700" data-astro-cid-klr5elzh>Hidden</span> </label> </div> <div class="flex justify-end space-x-3 pt-6" data-astro-cid-klr5elzh> <button type="button" id="cancelBtn" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition" data-astro-cid-klr5elzh>\nCancel\n</button> <button type="submit" class="px-6 py-2 bg-[#8E050F] hover:bg-[#991b1b] text-white rounded-lg font-medium shadow-md hover:shadow-lg transition" data-astro-cid-klr5elzh>\nSave\n</button> </div> </form> </div> </div> </div> </div> </div>  <script>(function(){', `
     let newsData = [];
     let csrfTokenValue = csrfToken;
+    let currentPage = 1;
+    const itemsPerPage = 6;
 
-    window.addEventListener('DOMContentLoaded', () => {
+    // Execute immediately or when DOM is ready
+    (function() {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+      
+      function init() {
       const modal = document.getElementById('modal');
       const newsForm = document.getElementById('newsForm');
       const newsContainer = document.getElementById('newsContainer');
@@ -47,12 +58,13 @@ const $$News = createComponent(async ($$result, $$props, $$slots) => {
           if (itemIdInput) itemIdInput.value = '';
           if (modal) {
             modal.classList.remove('hidden');
-            modal.style.display = 'flex';
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
             setTimeout(() => {
-              modal.style.opacity = '1';
               const modalContent = document.getElementById('modalContent');
               if (modalContent) {
                 modalContent.style.transform = 'scale(1)';
+                modalContent.style.opacity = '1';
               }
             }, 10);
           }
@@ -66,11 +78,16 @@ const $$News = createComponent(async ($$result, $$props, $$slots) => {
       function closeModal() {
         if (modal) {
           const modalContent = document.getElementById('modalContent');
-          if (modalContent) modalContent.style.transform = 'scale(0.95)';
-          modal.style.opacity = '0';
+          if (modalContent) {
+            modalContent.style.transform = 'scale(0.95)';
+            modalContent.style.opacity = '0';
+          }
+          document.body.style.overflow = '';
           setTimeout(() => {
             modal.style.display = 'none';
             modal.classList.add('hidden');
+            // Reset form
+            if (newsForm) newsForm.reset();
           }, 200);
         }
       }
@@ -97,7 +114,7 @@ const $$News = createComponent(async ($$result, $$props, $$slots) => {
         });
       }
 
-      async function loadNews() {
+      async function loadNews(retryCount = 0) {
         const loadingState = document.getElementById('loadingState');
         const emptyState = document.getElementById('emptyState');
         
@@ -110,6 +127,16 @@ const $$News = createComponent(async ($$result, $$props, $$slots) => {
           const response = await fetch('/api/admin/news', {
             headers: { 'Cache-Control': 'no-cache' }
           });
+          
+          // Handle rate limiting with retry
+          if (response.status === 429) {
+            if (retryCount < 2) {
+              console.warn(\`Rate limited (429), retrying in \${(retryCount + 1) * 2} seconds...\`);
+              await new Promise(resolve => setTimeout(resolve, (retryCount + 1) * 2000));
+              return loadNews(retryCount + 1);
+            }
+            throw new Error('Too Many Requests - Please wait a moment and refresh the page');
+          }
           
           if (!response.ok) {
             console.error('API Error:', response.status, response.statusText);
@@ -154,7 +181,47 @@ const $$News = createComponent(async ($$result, $$props, $$slots) => {
       }
 
       function renderNews() {
-        newsContainer.innerHTML = newsData.map(item => \`
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const paginatedData = newsData.slice(startIndex, endIndex);
+        const totalPages = Math.ceil(newsData.length / itemsPerPage);
+        
+        // Update pagination info
+        document.getElementById('showingStart').textContent = startIndex + 1;
+        document.getElementById('showingEnd').textContent = Math.min(endIndex, newsData.length);
+        document.getElementById('totalItems').textContent = newsData.length;
+        document.getElementById('paginationTop').classList.remove('hidden');
+        
+        // Update page buttons
+        const prevBtn = document.getElementById('prevPage');
+        const nextBtn = document.getElementById('nextPage');
+        prevBtn.disabled = currentPage === 1;
+        nextBtn.disabled = currentPage === totalPages;
+        
+        // Render page numbers
+        const pageNumbersContainer = document.getElementById('pageNumbers');
+        pageNumbersContainer.innerHTML = '';
+        
+        // Show max 6 page numbers with ellipsis
+        let startPage = Math.max(1, currentPage - 2);
+        let endPage = Math.min(totalPages, startPage + 5);
+        if (endPage - startPage < 5) {
+          startPage = Math.max(1, endPage - 5);
+        }
+        
+        for (let i = startPage; i <= endPage; i++) {
+          const pageBtn = document.createElement('button');
+          pageBtn.textContent = i;
+          pageBtn.className = \`px-3 py-1 text-sm border rounded-lg \${i === currentPage ? 'bg-[#8E050F] text-white border-[#8E050F]' : 'border-gray-300 hover:bg-gray-50'}\`;
+          pageBtn.onclick = () => {
+            currentPage = i;
+            renderNews();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          };
+          pageNumbersContainer.appendChild(pageBtn);
+        }
+        
+        newsContainer.innerHTML = paginatedData.map(item => \`
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
           <div class="flex justify-between items-start">
             <div class="flex-1">
@@ -210,8 +277,16 @@ const $$News = createComponent(async ($$result, $$props, $$slots) => {
           document.getElementById('featured').checked = item.featured === true;
           document.getElementById('hidden').checked = item.hidden === true;
           if (modal) {
-            modal.style.display = 'flex';
             modal.classList.remove('hidden');
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => {
+              const modalContent = document.getElementById('modalContent');
+              if (modalContent) {
+                modalContent.style.transform = 'scale(1)';
+                modalContent.style.opacity = '1';
+              }
+            }, 10);
           }
         }
       };
@@ -290,13 +365,43 @@ const $$News = createComponent(async ($$result, $$props, $$slots) => {
         });
       }
 
+      // Pagination button listeners
+      document.getElementById('prevPage')?.addEventListener('click', () => {
+        if (currentPage > 1) {
+          currentPage--;
+          renderNews();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+      
+      document.getElementById('nextPage')?.addEventListener('click', () => {
+        const totalPages = Math.ceil(newsData.length / itemsPerPage);
+        if (currentPage < totalPages) {
+          currentPage++;
+          renderNews();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+      
+      // Load news data immediately
       loadNews();
-    });
-  })();<\/script> `], [" ", '<div class="min-h-screen bg-gray-50"> <header class="bg-white shadow-sm border-b border-gray-200"> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> <div class="flex justify-between items-center py-4"> <div> <h1 class="text-2xl font-bold text-gray-900">News Management</h1> </div> <div class="flex items-center space-x-4"> <a href="/admin/dashboard" class="text-amber-600 hover:text-amber-700 font-medium text-sm">\n\u2190 Dashboard\n</a> <button id="logoutBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">\nLogout\n</button> </div> </div> </div> </header> <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"> <div class="mb-6 flex justify-between items-center"> <h2 class="text-xl font-semibold text-gray-900">All News Items</h2> <button id="addNewBtn" class="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg font-medium transition">\n+ Add News\n</button> </div> <!-- Loading State --> <div id="loadingState" class="flex items-center justify-center py-12"> <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600"></div> </div> <!-- Empty State --> <div id="emptyState" class="hidden text-center py-12"> <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4"> <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path> </svg> </div> <h3 class="text-lg font-semibold text-gray-900 mb-2">No News Items Yet</h3> <p class="text-gray-600">Click the "+ Add News" button to create your first news article.</p> </div> <div id="newsContainer" class="grid grid-cols-1 gap-6"></div> <!-- Modal --> <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 backdrop-blur-sm transition-opacity duration-300"> <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95" id="modalContent"> <div class="p-6"> <div class="flex justify-between items-center mb-6"> <h3 id="modalTitle" class="text-2xl font-bold text-gray-900">Add News</h3> <button id="closeModal" class="text-gray-400 hover:text-gray-600"> <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path> </svg> </button> </div> <form id="newsForm" class="space-y-4"> <input type="hidden" id="itemId"> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Title (English) *</label> <input type="text" id="title" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Title (Sinhala)</label> <input type="text" id="titleSinhala" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Excerpt (English) *</label> <textarea id="excerpt" required rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"></textarea> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Excerpt (Sinhala)</label> <textarea id="excerptSinhala" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"></textarea> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Full Content (English) *</label> <textarea id="content" required rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"></textarea> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Full Content (Sinhala)</label> <textarea id="contentSinhala" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"></textarea> </div> <div class="grid grid-cols-2 gap-4"> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Date *</label> <input type="date" id="date" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Category</label> <input type="text" id="category" placeholder="e.g., Events, Education" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> </div> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Source</label> <input type="text" id="source" placeholder="e.g., Buddhist Times" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Author</label> <input type="text" id="author" placeholder="e.g., John Doe" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">URL</label> <input type="url" id="url" placeholder="https://example.com" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Image URL</label> <input type="url" id="image" placeholder="https://example.com/image.jpg" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> </div> <div> <label class="block text-sm font-medium text-gray-700 mb-2">Tags (comma separated)</label> <input type="text" id="tags" placeholder="Vesak, UN, Celebration" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"> </div> <div class="flex items-center space-x-6"> <label class="flex items-center"> <input type="checkbox" id="featured" class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-amber-500"> <span class="ml-2 text-sm text-gray-700">Featured</span> </label> <label class="flex items-center"> <input type="checkbox" id="hidden" class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-amber-500"> <span class="ml-2 text-sm text-gray-700">Hidden</span> </label> </div> <div class="flex justify-end space-x-3 pt-4"> <button type="button" id="cancelBtn" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">\nCancel\n</button> <button type="submit" class="px-6 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-medium transition">\nSave\n</button> </div> </form> </div> </div> </div> </main> </div> <script>(function(){', `
+      }
+    })();
+  })();<\/script> `], [" ", '<div class="min-h-screen bg-gray-50" data-astro-cid-klr5elzh> <header class="bg-white shadow-sm border-b border-gray-200" data-astro-cid-klr5elzh> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" data-astro-cid-klr5elzh> <div class="flex justify-between items-center py-4" data-astro-cid-klr5elzh> <div data-astro-cid-klr5elzh> <h1 class="text-2xl font-bold text-gray-900" data-astro-cid-klr5elzh>News Management</h1> </div> <div class="flex items-center space-x-3" data-astro-cid-klr5elzh> <a href="/" target="_blank" class="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center gap-1" data-astro-cid-klr5elzh> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-klr5elzh> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" data-astro-cid-klr5elzh></path> </svg>\nWebsite\n</a> <a href="/admin/dashboard" class="text-amber-600 hover:text-amber-700 font-medium text-sm" data-astro-cid-klr5elzh>\n\u2190 Dashboard\n</a> <button id="logoutBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition" data-astro-cid-klr5elzh>\nLogout\n</button> </div> </div> </div> </header> <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" data-astro-cid-klr5elzh> <div class="mb-6 flex justify-between items-center" data-astro-cid-klr5elzh> <h2 class="text-xl font-semibold text-gray-900" data-astro-cid-klr5elzh>All News Items</h2> <button id="addNewBtn" class="bg-[#8E050F] hover:bg-[#991b1b] text-white px-6 py-2 rounded-lg font-medium transition shadow-lg hover:shadow-xl" data-astro-cid-klr5elzh>\n+ Add News\n</button> </div> <!-- Loading State --> <div id="loadingState" class="flex items-center justify-center py-12" data-astro-cid-klr5elzh> <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600" data-astro-cid-klr5elzh></div> </div> <!-- Empty State --> <!-- Pagination Controls --> <div id="paginationTop" class="hidden mb-4 flex items-center justify-between flex-wrap gap-3" data-astro-cid-klr5elzh> <div class="text-sm text-gray-600" data-astro-cid-klr5elzh>\nShowing <span id="showingStart" data-astro-cid-klr5elzh>0</span>-<span id="showingEnd" data-astro-cid-klr5elzh>0</span> of <span id="totalItems" data-astro-cid-klr5elzh>0</span> items\n</div> <div class="flex gap-2" data-astro-cid-klr5elzh> <button id="prevPage" class="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed" data-astro-cid-klr5elzh>\nPrevious\n</button> <div id="pageNumbers" class="flex gap-1" data-astro-cid-klr5elzh></div> <button id="nextPage" class="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed" data-astro-cid-klr5elzh>\nNext\n</button> </div> </div> <!-- Empty State --> <div id="emptyState" class="hidden text-center py-16 bg-white rounded-xl border-2 border-dashed border-gray-300" data-astro-cid-klr5elzh> <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4" data-astro-cid-klr5elzh> <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-klr5elzh> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" data-astro-cid-klr5elzh></path> </svg> </div> <h3 class="text-lg font-semibold text-gray-900 mb-2" data-astro-cid-klr5elzh>No News Items Yet</h3> <p class="text-gray-600" data-astro-cid-klr5elzh>Click the "+ Add News" button to create your first news article.</p> </div> <div id="newsContainer" class="grid grid-cols-1 gap-6" data-astro-cid-klr5elzh></div> </main> </div>  <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-[9999] overflow-y-auto backdrop-blur-sm" data-astro-cid-klr5elzh> <div class="min-h-screen flex items-center justify-center p-2 sm:p-4" data-astro-cid-klr5elzh> <div class="bg-white rounded-lg sm:rounded-xl shadow-2xl w-full max-w-5xl my-2 sm:my-8 transform transition-all duration-300" id="modalContent" data-astro-cid-klr5elzh> <div class="flex flex-col" style="max-height: 95vh;" data-astro-cid-klr5elzh> <!-- Header - Fixed --> <div class="flex-shrink-0 p-4 sm:p-6 border-b border-gray-200" data-astro-cid-klr5elzh> <div class="flex justify-between items-center" data-astro-cid-klr5elzh> <h3 id="modalTitle" class="text-2xl font-bold text-gray-900" data-astro-cid-klr5elzh>Add News</h3> <button type="button" id="closeModal" class="text-gray-400 hover:text-gray-600 transition-colors" data-astro-cid-klr5elzh> <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-klr5elzh> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" data-astro-cid-klr5elzh></path> </svg> </button> </div> </div> <!-- Form Body - Scrollable --> <div class="flex-1 overflow-y-auto p-4 sm:p-6" data-astro-cid-klr5elzh> <form id="newsForm" class="space-y-3 sm:space-y-4" data-astro-cid-klr5elzh> <input type="hidden" id="itemId" data-astro-cid-klr5elzh> <div data-astro-cid-klr5elzh> <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2" data-astro-cid-klr5elzh>Title (English) *</label> <input type="text" id="title" required class="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" data-astro-cid-klr5elzh> </div> <div data-astro-cid-klr5elzh> <label class="block text-sm font-medium text-gray-700 mb-2" data-astro-cid-klr5elzh>Title (Sinhala)</label> <input type="text" id="titleSinhala" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" data-astro-cid-klr5elzh> </div> <div data-astro-cid-klr5elzh> <label class="block text-sm font-medium text-gray-700 mb-2" data-astro-cid-klr5elzh>Excerpt (English) *</label> <textarea id="excerpt" required rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" data-astro-cid-klr5elzh></textarea> </div> <div data-astro-cid-klr5elzh> <label class="block text-sm font-medium text-gray-700 mb-2" data-astro-cid-klr5elzh>Excerpt (Sinhala)</label> <textarea id="excerptSinhala" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" data-astro-cid-klr5elzh></textarea> </div> <div data-astro-cid-klr5elzh> <label class="block text-sm font-medium text-gray-700 mb-2" data-astro-cid-klr5elzh>Full Content (English) *</label> <textarea id="content" required rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" data-astro-cid-klr5elzh></textarea> </div> <div data-astro-cid-klr5elzh> <label class="block text-sm font-medium text-gray-700 mb-2" data-astro-cid-klr5elzh>Full Content (Sinhala)</label> <textarea id="contentSinhala" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" data-astro-cid-klr5elzh></textarea> </div> <div class="grid grid-cols-2 gap-4" data-astro-cid-klr5elzh> <div data-astro-cid-klr5elzh> <label class="block text-sm font-medium text-gray-700 mb-2" data-astro-cid-klr5elzh>Date *</label> <input type="date" id="date" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" data-astro-cid-klr5elzh> </div> <div data-astro-cid-klr5elzh> <label class="block text-sm font-medium text-gray-700 mb-2" data-astro-cid-klr5elzh>Category</label> <input type="text" id="category" placeholder="e.g., Events, Education" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" data-astro-cid-klr5elzh> </div> </div> <div data-astro-cid-klr5elzh> <label class="block text-sm font-medium text-gray-700 mb-2" data-astro-cid-klr5elzh>Source</label> <input type="text" id="source" placeholder="e.g., Buddhist Times" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" data-astro-cid-klr5elzh> </div> <div data-astro-cid-klr5elzh> <label class="block text-sm font-medium text-gray-700 mb-2" data-astro-cid-klr5elzh>Author</label> <input type="text" id="author" placeholder="e.g., John Doe" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" data-astro-cid-klr5elzh> </div> <div data-astro-cid-klr5elzh> <label class="block text-sm font-medium text-gray-700 mb-2" data-astro-cid-klr5elzh>URL</label> <input type="url" id="url" placeholder="https://example.com" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" data-astro-cid-klr5elzh> </div> <div data-astro-cid-klr5elzh> <label class="block text-sm font-medium text-gray-700 mb-2" data-astro-cid-klr5elzh>Image URL</label> <input type="url" id="image" placeholder="https://example.com/image.jpg" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" data-astro-cid-klr5elzh> </div> <div data-astro-cid-klr5elzh> <label class="block text-sm font-medium text-gray-700 mb-2" data-astro-cid-klr5elzh>Tags (comma separated)</label> <input type="text" id="tags" placeholder="Vesak, UN, Celebration" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" data-astro-cid-klr5elzh> </div> <div class="flex items-center space-x-6" data-astro-cid-klr5elzh> <label class="flex items-center" data-astro-cid-klr5elzh> <input type="checkbox" id="featured" class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-amber-500" data-astro-cid-klr5elzh> <span class="ml-2 text-sm text-gray-700" data-astro-cid-klr5elzh>Featured</span> </label> <label class="flex items-center" data-astro-cid-klr5elzh> <input type="checkbox" id="hidden" class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-amber-500" data-astro-cid-klr5elzh> <span class="ml-2 text-sm text-gray-700" data-astro-cid-klr5elzh>Hidden</span> </label> </div> <div class="flex justify-end space-x-3 pt-6" data-astro-cid-klr5elzh> <button type="button" id="cancelBtn" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition" data-astro-cid-klr5elzh>\nCancel\n</button> <button type="submit" class="px-6 py-2 bg-[#8E050F] hover:bg-[#991b1b] text-white rounded-lg font-medium shadow-md hover:shadow-lg transition" data-astro-cid-klr5elzh>\nSave\n</button> </div> </form> </div> </div> </div> </div> </div>  <script>(function(){', `
     let newsData = [];
     let csrfTokenValue = csrfToken;
+    let currentPage = 1;
+    const itemsPerPage = 6;
 
-    window.addEventListener('DOMContentLoaded', () => {
+    // Execute immediately or when DOM is ready
+    (function() {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+      
+      function init() {
       const modal = document.getElementById('modal');
       const newsForm = document.getElementById('newsForm');
       const newsContainer = document.getElementById('newsContainer');
@@ -327,12 +432,13 @@ const $$News = createComponent(async ($$result, $$props, $$slots) => {
           if (itemIdInput) itemIdInput.value = '';
           if (modal) {
             modal.classList.remove('hidden');
-            modal.style.display = 'flex';
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
             setTimeout(() => {
-              modal.style.opacity = '1';
               const modalContent = document.getElementById('modalContent');
               if (modalContent) {
                 modalContent.style.transform = 'scale(1)';
+                modalContent.style.opacity = '1';
               }
             }, 10);
           }
@@ -346,11 +452,16 @@ const $$News = createComponent(async ($$result, $$props, $$slots) => {
       function closeModal() {
         if (modal) {
           const modalContent = document.getElementById('modalContent');
-          if (modalContent) modalContent.style.transform = 'scale(0.95)';
-          modal.style.opacity = '0';
+          if (modalContent) {
+            modalContent.style.transform = 'scale(0.95)';
+            modalContent.style.opacity = '0';
+          }
+          document.body.style.overflow = '';
           setTimeout(() => {
             modal.style.display = 'none';
             modal.classList.add('hidden');
+            // Reset form
+            if (newsForm) newsForm.reset();
           }, 200);
         }
       }
@@ -377,7 +488,7 @@ const $$News = createComponent(async ($$result, $$props, $$slots) => {
         });
       }
 
-      async function loadNews() {
+      async function loadNews(retryCount = 0) {
         const loadingState = document.getElementById('loadingState');
         const emptyState = document.getElementById('emptyState');
         
@@ -390,6 +501,16 @@ const $$News = createComponent(async ($$result, $$props, $$slots) => {
           const response = await fetch('/api/admin/news', {
             headers: { 'Cache-Control': 'no-cache' }
           });
+          
+          // Handle rate limiting with retry
+          if (response.status === 429) {
+            if (retryCount < 2) {
+              console.warn(\\\`Rate limited (429), retrying in \\\${(retryCount + 1) * 2} seconds...\\\`);
+              await new Promise(resolve => setTimeout(resolve, (retryCount + 1) * 2000));
+              return loadNews(retryCount + 1);
+            }
+            throw new Error('Too Many Requests - Please wait a moment and refresh the page');
+          }
           
           if (!response.ok) {
             console.error('API Error:', response.status, response.statusText);
@@ -434,7 +555,47 @@ const $$News = createComponent(async ($$result, $$props, $$slots) => {
       }
 
       function renderNews() {
-        newsContainer.innerHTML = newsData.map(item => \\\`
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const paginatedData = newsData.slice(startIndex, endIndex);
+        const totalPages = Math.ceil(newsData.length / itemsPerPage);
+        
+        // Update pagination info
+        document.getElementById('showingStart').textContent = startIndex + 1;
+        document.getElementById('showingEnd').textContent = Math.min(endIndex, newsData.length);
+        document.getElementById('totalItems').textContent = newsData.length;
+        document.getElementById('paginationTop').classList.remove('hidden');
+        
+        // Update page buttons
+        const prevBtn = document.getElementById('prevPage');
+        const nextBtn = document.getElementById('nextPage');
+        prevBtn.disabled = currentPage === 1;
+        nextBtn.disabled = currentPage === totalPages;
+        
+        // Render page numbers
+        const pageNumbersContainer = document.getElementById('pageNumbers');
+        pageNumbersContainer.innerHTML = '';
+        
+        // Show max 6 page numbers with ellipsis
+        let startPage = Math.max(1, currentPage - 2);
+        let endPage = Math.min(totalPages, startPage + 5);
+        if (endPage - startPage < 5) {
+          startPage = Math.max(1, endPage - 5);
+        }
+        
+        for (let i = startPage; i <= endPage; i++) {
+          const pageBtn = document.createElement('button');
+          pageBtn.textContent = i;
+          pageBtn.className = \\\`px-3 py-1 text-sm border rounded-lg \\\${i === currentPage ? 'bg-[#8E050F] text-white border-[#8E050F]' : 'border-gray-300 hover:bg-gray-50'}\\\`;
+          pageBtn.onclick = () => {
+            currentPage = i;
+            renderNews();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          };
+          pageNumbersContainer.appendChild(pageBtn);
+        }
+        
+        newsContainer.innerHTML = paginatedData.map(item => \\\`
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
           <div class="flex justify-between items-start">
             <div class="flex-1">
@@ -490,8 +651,16 @@ const $$News = createComponent(async ($$result, $$props, $$slots) => {
           document.getElementById('featured').checked = item.featured === true;
           document.getElementById('hidden').checked = item.hidden === true;
           if (modal) {
-            modal.style.display = 'flex';
             modal.classList.remove('hidden');
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => {
+              const modalContent = document.getElementById('modalContent');
+              if (modalContent) {
+                modalContent.style.transform = 'scale(1)';
+                modalContent.style.opacity = '1';
+              }
+            }, 10);
           }
         }
       };
@@ -570,8 +739,28 @@ const $$News = createComponent(async ($$result, $$props, $$slots) => {
         });
       }
 
+      // Pagination button listeners
+      document.getElementById('prevPage')?.addEventListener('click', () => {
+        if (currentPage > 1) {
+          currentPage--;
+          renderNews();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+      
+      document.getElementById('nextPage')?.addEventListener('click', () => {
+        const totalPages = Math.ceil(newsData.length / itemsPerPage);
+        if (currentPage < totalPages) {
+          currentPage++;
+          renderNews();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+      
+      // Load news data immediately
       loadNews();
-    });
+      }
+    })();
   })();<\/script> `])), maybeRenderHead(), defineScriptVars({ csrfToken })) })}`;
 }, "E:/Kalyanamitta/Kalyanamitta/kalyanamitta-web/src/pages/admin/news.astro", void 0);
 
