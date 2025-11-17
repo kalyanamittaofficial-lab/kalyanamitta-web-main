@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import DhammapadaQuote from '../components/DhammapadaQuote.astro';
 import postsData from '../data/posts.json';
 
 // Sort posts by date (newest first)
@@ -8,6 +9,7 @@ const allPosts = [...postsData].sort((a, b) =>
 );
 ---
 <Layout>
+  <DhammapadaQuote />
   <!-- Background Video -->
   <div class="fixed top-0 left-0 w-full h-screen -z-10 overflow-hidden">
     <video 

@@ -1,0 +1,208 @@
+---
+import dhammapadaQuotes from '../data/dhammapada.json';
+
+// Get a random quote
+const randomQuote = dhammapadaQuotes[Math.floor(Math.random() * dhammapadaQuotes.length)];
+---
+
+<div 
+  id="dhammapada-bar" 
+  class="relative w-full z-10 px-3 sm:px-4 mb-8 opacity-0 scale-95 transition-all duration-700 ease-out"
+  data-sinhala={randomQuote.sinhala}
+  data-english={randomQuote.english}
+>
+  <div class="max-w-6xl mx-auto">
+    <!-- Collapsed State: Modern Tab with Gradient -->
+    <div 
+      id="quote-tab"
+      class="group mx-auto w-fit relative overflow-hidden bg-gradient-to-r from-monk-900 via-monk-800 to-monk-900 hover:from-monk-800 hover:via-monk-700 hover:to-monk-800 rounded-2xl px-6 sm:px-8 py-3 sm:py-3.5 shadow-lg hover:shadow-xl cursor-pointer transition-all duration-500 border border-monk-700/50 hover:border-monk-600"
+    >
+      <!-- Shine effect -->
+      <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+      
+      <div class="relative flex items-center gap-3">
+        <!-- Animated Lotus Icon -->
+        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-monk-50 group-hover:text-white transition-all duration-300 group-hover:scale-110" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+        <span class="text-sm sm:text-base font-bold text-white whitespace-nowrap tracking-wide group-hover:tracking-wider transition-all duration-300">
+          ධම්මපදය
+        </span>
+        <svg id="arrow-icon" class="w-4 h-4 sm:w-5 sm:h-5 text-white transition-all duration-500 group-hover:translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Expanded State: Modern Card with Animation -->
+    <div 
+      id="quote-content"
+      class="mt-4 bg-gradient-to-br from-white via-gray-50/80 to-white backdrop-blur-xl shadow-2xl rounded-3xl border-2 border-gray-100 opacity-0 max-h-0 overflow-hidden transition-all duration-700 ease-out scale-95"
+    >
+      <div class="relative px-5 sm:px-8 py-6 sm:py-8">
+        <!-- Decorative corner accent -->
+        <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-monk-900/5 to-transparent rounded-bl-full"></div>
+        <div class="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-monk-900/5 to-transparent rounded-tr-full"></div>
+        
+        <div class="relative flex items-start gap-4 sm:gap-6">
+          <!-- Animated Quote Mark -->
+          <div class="flex-shrink-0 mt-1 animate-float">
+            <div class="relative">
+              <div class="absolute inset-0 bg-monk-900/10 blur-xl rounded-full"></div>
+              <svg class="relative w-8 h-8 sm:w-10 sm:h-10 text-monk-900 opacity-40" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/>
+              </svg>
+            </div>
+          </div>
+          
+          <!-- Quote Text with Fade In -->
+          <div class="flex-1 min-w-0">
+            <p id="quote-text" class="text-base sm:text-lg md:text-xl text-gray-800 leading-relaxed mb-4 font-medium animate-slide-up">
+              {randomQuote.sinhala}
+            </p>
+            <div class="flex items-center gap-2 text-xs sm:text-sm text-monk-900 font-bold animate-slide-up" style="animation-delay: 0.1s">
+              <div class="flex items-center gap-2 px-3 py-1.5 bg-monk-900/5 rounded-full">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                </svg>
+                <span>ධම්මපදය</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modern Close Button -->
+          <button 
+            id="close-quote"
+            class="flex-shrink-0 p-2 sm:p-2.5 hover:bg-monk-900/10 rounded-xl transition-all duration-300 hover:scale-110 hover:rotate-90 group"
+            aria-label="Close quote"
+          >
+            <svg class="w-5 h-5 text-gray-400 group-hover:text-monk-900 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function initDhammapadaBar() {
+    const bar = document.getElementById('dhammapada-bar');
+    const tab = document.getElementById('quote-tab');
+    const content = document.getElementById('quote-content');
+    const arrow = document.getElementById('arrow-icon');
+    const closeBtn = document.getElementById('close-quote');
+    const quoteText = document.getElementById('quote-text');
+    
+    if (!bar || !tab || !content || !arrow || !closeBtn || !quoteText) return;
+
+    let isExpanded = false;
+    let isVisible = false;
+
+    // Get current language
+    const getCurrentLanguage = () => {
+      return localStorage.getItem('language') || 'sinhala';
+    };
+
+    // Update quote text based on language
+    const updateQuoteLanguage = () => {
+      const lang = getCurrentLanguage();
+      const sinhalaText = bar.dataset.sinhala || '';
+      const englishText = bar.dataset.english || '';
+      quoteText.textContent = lang === 'english' ? englishText : sinhalaText;
+    };
+
+    // Show bar with modern animation
+    const showBar = () => {
+      if (!isVisible) {
+        updateQuoteLanguage();
+        bar.style.opacity = '1';
+        bar.style.transform = 'scale(1)';
+        isVisible = true;
+      }
+    };
+
+    // Toggle expanded state with smooth animation
+    const toggleExpanded = () => {
+      isExpanded = !isExpanded;
+      
+      if (isExpanded) {
+        content.classList.remove('opacity-0', 'max-h-0', 'scale-95');
+        content.classList.add('opacity-100', 'max-h-[500px]', 'scale-100');
+        arrow.style.transform = 'rotate(180deg)';
+      } else {
+        content.classList.remove('opacity-100', 'max-h-[500px]', 'scale-100');
+        content.classList.add('opacity-0', 'max-h-0', 'scale-95');
+        arrow.style.transform = 'rotate(0deg)';
+      }
+    };
+
+    // Close with fade out animation
+    const closeBar = () => {
+      bar.style.opacity = '0';
+      bar.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        bar.style.display = 'none';
+      }, 700);
+      isVisible = false;
+      isExpanded = false;
+      content.classList.remove('opacity-100', 'max-h-[500px]', 'scale-100');
+      content.classList.add('opacity-0', 'max-h-0', 'scale-95');
+      arrow.style.transform = 'rotate(0deg)';
+    };
+
+    // Event listeners
+    tab.addEventListener('click', toggleExpanded);
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeBar();
+    });
+
+    // Listen for language changes
+    window.addEventListener('languageChanged', updateQuoteLanguage);
+
+    // Show bar after page load (only on home page)
+    if (window.location.pathname === '/' || window.location.pathname === '/kalyanamitta-web/' || window.location.pathname === '/index.html') {
+      setTimeout(showBar, 800);
+    }
+  }
+
+  // Initialize on page load
+  document.addEventListener('astro:page-load', initDhammapadaBar);
+</script>
+
+<style>
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.6s ease-out forwards;
+    opacity: 0;
+  }
+
+  #quote-content.opacity-100 .animate-slide-up {
+    opacity: 1;
+  }
+</style>
