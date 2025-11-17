@@ -23,6 +23,9 @@
               <a href="/" class="px-5 py-2.5 text-sm font-medium text-gray-700 hover:text-monk-900 hover:bg-gray-100 rounded-xl transition-colors">
                 Home
               </a>
+              <a href="/finder" class="px-5 py-2.5 text-sm font-medium text-gray-700 hover:text-monk-900 hover:bg-gray-100 rounded-xl transition-colors">
+                Finder
+              </a>
               <a href="/writings" class="px-5 py-2.5 text-sm font-medium text-gray-700 hover:text-monk-900 hover:bg-gray-100 rounded-xl transition-colors">
                 Writings
               </a>
@@ -96,6 +99,15 @@
             Home
           </div>
         </a>
+        <a href="/finder" class="block px-5 py-4 rounded-xl text-base font-medium text-gray-700 hover:text-monk-900 hover:bg-gray-100 transition-colors">
+          <div class="flex items-center gap-3">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-4.35-4.35"/>
+            </svg>
+            Finder
+          </div>
+        </a>
         <a href="/writings" class="block px-5 py-4 rounded-xl text-base font-medium text-gray-700 hover:text-monk-900 hover:bg-gray-100 transition-colors">
           <div class="flex items-center gap-3">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -157,39 +169,65 @@
 
     if (!elements.button) return;
 
-    let isAnimating = false;
+    let isOpen = false;
 
-    const toggleMenu = (open: boolean) => {
-      if (isAnimating) return;
-      isAnimating = true;
+    const openMenu = () => {
+      if (isOpen) return;
+      isOpen = true;
 
-      if (open) {
-        elements.overlay?.classList.remove('hidden');
-        requestAnimationFrame(() => elements.menu?.classList.remove('translate-x-full'));
-        elements.menuIcon?.classList.add('hidden');
-        elements.closeIcon?.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-      } else {
-        elements.menu?.classList.add('translate-x-full');
-        elements.menuIcon?.classList.remove('hidden');
-        elements.closeIcon?.classList.add('hidden');
-        setTimeout(() => {
-          elements.overlay?.classList.add('hidden');
-          document.body.style.overflow = '';
-        }, 300);
-      }
+      elements.overlay?.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      
+      requestAnimationFrame(() => {
+        elements.menu?.classList.remove('translate-x-full');
+        elements.menu?.classList.add('translate-x-0');
+      });
 
-      elements.button?.setAttribute('aria-expanded', open.toString());
-      setTimeout(() => isAnimating = false, open ? 350 : 300);
+      elements.menuIcon?.classList.add('hidden');
+      elements.closeIcon?.classList.remove('hidden');
+      elements.button?.setAttribute('aria-expanded', 'true');
     };
 
-    elements.button.addEventListener('click', () => {
-      const isExpanded = elements.button?.getAttribute('aria-expanded') === 'true';
-      toggleMenu(!isExpanded);
+    const closeMenu = () => {
+      if (!isOpen) return;
+      isOpen = false;
+
+      elements.menu?.classList.remove('translate-x-0');
+      elements.menu?.classList.add('translate-x-full');
+      elements.menuIcon?.classList.remove('hidden');
+      elements.closeIcon?.classList.add('hidden');
+      elements.button?.setAttribute('aria-expanded', 'false');
+
+      setTimeout(() => {
+        elements.overlay?.classList.add('hidden');
+        document.body.style.overflow = '';
+      }, 300);
+    };
+
+    const toggleMenu = () => {
+      if (isOpen) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    };
+
+    elements.button.addEventListener('click', toggleMenu);
+    elements.close?.addEventListener('click', closeMenu);
+    elements.backdrop?.addEventListener('click', closeMenu);
+
+    // Close menu on navigation
+    const navLinks = elements.menu?.querySelectorAll('a');
+    navLinks?.forEach(link => {
+      link.addEventListener('click', closeMenu);
     });
 
-    elements.close?.addEventListener('click', () => toggleMenu(false));
-    elements.backdrop?.addEventListener('click', () => toggleMenu(false));
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isOpen) {
+        closeMenu();
+      }
+    });
   }
 
   document.addEventListener('astro:page-load', setupMobileMenu);
@@ -260,13 +298,13 @@
       setLanguage(newLang);
     };
 
-    // Event listeners
-    toggleDesktop?.addEventListener('click', toggleLanguage);
-    toggleMobile?.addEventListener('click', toggleLanguage);
-    sinDesktop?.addEventListener('click', () => setLanguage('sinhala'));
-    engDesktop?.addEventListener('click', () => setLanguage('english'));
-    sinMobile?.addEventListener('click', () => setLanguage('sinhala'));
-    engMobile?.addEventListener('click', () => setLanguage('english'));
+    // Event listeners with passive for better scroll performance
+    toggleDesktop?.addEventListener('click', toggleLanguage, { passive: true });
+    toggleMobile?.addEventListener('click', toggleLanguage, { passive: true });
+    sinDesktop?.addEventListener('click', () => setLanguage('sinhala'), { passive: true });
+    engDesktop?.addEventListener('click', () => setLanguage('english'), { passive: true });
+    sinMobile?.addEventListener('click', () => setLanguage('sinhala'), { passive: true });
+    engMobile?.addEventListener('click', () => setLanguage('english'), { passive: true });
 
     // Initialize UI
     updateUI(getCurrentLanguage());
