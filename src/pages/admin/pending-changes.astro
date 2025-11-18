@@ -53,7 +53,7 @@ const groupedChanges = {
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" data-pending-changes={encodeURIComponent(JSON.stringify(pendingChanges))}>
       {pendingChanges.length === 0 ? (
         <div class="bg-white rounded-lg shadow p-8 text-center">
           <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -303,7 +303,20 @@ const groupedChanges = {
     </div>
   </div>
 
-  <script define:vars={{ csrfToken, pendingChanges }}>
+  <script define:vars={{ csrfToken }} is:inline>
+    // Parse pending changes from data attribute
+    const container = document.querySelector('main');
+    let pendingChanges = [];
+    try {
+      const dataAttr = container?.dataset.pendingChanges;
+      if (dataAttr) {
+        pendingChanges = JSON.parse(decodeURIComponent(dataAttr));
+      }
+    } catch (e) {
+      console.error('Failed to parse pending changes:', e);
+      pendingChanges = [];
+    }
+    
     const detailsModal = document.getElementById('detailsModal');
     const rejectionModal = document.getElementById('rejectionModal');
     let currentChangeId = null;
@@ -347,11 +360,35 @@ const groupedChanges = {
 
     // Approve change
     document.querySelectorAll('.approve-btn').forEach(btn => {
-      btn.addEventListener('click', async () => {
+      btn.addEventListener('click', async (e) => {
+        e.preventDefault();
         const changeId = btn.dataset.changeId;
+        console.log('Approve button clicked, changeId:', changeId);
+        console.log('Available pending changes:', pendingChanges);
         
-        if (confirm('Are you sure you want to approve this change?')) {
+        const change = pendingChanges.find(c => c.id === changeId);
+        
+        if (!change) {
+          console.error('Change not found for ID:', changeId);
+          alert('Change not found');
+          return;
+        }
+
+        console.log('Found change:', change);
+        const changeTitle = change.data.title || change.data.name || 'this item';
+        
+        if (confirm(`Are you sure you want to approve ${change.action} for "${changeTitle}"?`)) {
+          console.log('User confirmed approval');
+          // Disable button and show loading state
+          const originalText = btn.textContent;
+          btn.disabled = true;
+          btn.textContent = 'Approving...';
+          btn.classList.add('opacity-50', 'cursor-not-allowed');
+          
           try {
+            console.log('Sending approve request with:', { id: changeId, action: 'approve' });
+            console.log('CSRF Token:', csrfToken);
+            
             const response = await fetch('/api/admin/pending-changes', {
               method: 'POST',
               headers: {
@@ -364,15 +401,33 @@ const groupedChanges = {
               })
             });
             
+            console.log('Response status:', response.status);
+            const result = await response.json();
+            console.log('Response data:', result);
+            
             if (response.ok) {
-              window.location.reload();
+              btn.textContent = '✓ Approved';
+              btn.classList.remove('bg-green-600', 'hover:bg-green-700');
+              btn.classList.add('bg-green-800');
+              
+              // Show success message
+              alert('✓ Operation successful! Change has been approved and applied.');
+              
+              setTimeout(() => {
+                window.location.reload();
+              }, 800);
             } else {
-              const error = await response.json();
-              alert(error.error || 'Failed to approve change');
+              alert('❌ Error: ' + (result.error || 'Failed to approve change'));
+              btn.disabled = false;
+              btn.textContent = originalText;
+              btn.classList.remove('opacity-50', 'cursor-not-allowed');
             }
           } catch (error) {
-            console.error('Error:', error);
-            alert('An error occurred');
+            console.error('Error approving change:', error);
+            alert('Network error occurred. Please try again.');
+            btn.disabled = false;
+            btn.textContent = originalText;
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
           }
         }
       });
@@ -380,17 +435,30 @@ const groupedChanges = {
 
     // Reject change
     document.querySelectorAll('.reject-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
         currentChangeId = btn.dataset.changeId;
         rejectionModal.classList.remove('hidden');
+        document.getElementById('rejectionReason').focus();
       });
     });
 
     // Confirm rejection
-    document.getElementById('confirmReject').addEventListener('click', async () => {
-      const reason = document.getElementById('rejectionReason').value;
+    document.getElementById('confirmReject').addEventListener('click', async (e) => {
+      e.preventDefault();
+      const reason = document.getElementById('rejectionReason').value.trim();
+      const confirmBtn = document.getElementById('confirmReject');
+      
+      // Disable button and show loading state
+      const originalText = confirmBtn.textContent;
+      confirmBtn.disabled = true;
+      confirmBtn.textContent = 'Rejecting...';
+      confirmBtn.classList.add('opacity-50', 'cursor-not-allowed');
       
       try {
+        console.log('Sending reject request with:', { id: currentChangeId, action: 'reject', reason });
+        console.log('CSRF Token:', csrfToken);
+        
         const response = await fetch('/api/admin/pending-changes', {
           method: 'POST',
           headers: {
@@ -400,27 +468,65 @@ const groupedChanges = {
           body: JSON.stringify({
             id: currentChangeId,
             action: 'reject',
-            reason
+            reason: reason || undefined
           })
         });
         
+        console.log('Reject response status:', response.status);
+        const result = await response.json();
+        console.log('Reject response data:', result);
+        
         if (response.ok) {
-          window.location.reload();
+          rejectionModal.classList.add('hidden');
+          document.getElementById('rejectionReason').value = '';
+          
+          // Show success message
+          alert('✓ Operation successful! Change has been rejected and submitter notified.');
+          
+          // Visual feedback
+          const changeRow = document.querySelector(`[data-change-id="${currentChangeId}"]`)?.closest('tr');
+          if (changeRow) {
+            changeRow.classList.add('bg-red-50');
+            setTimeout(() => {
+              window.location.reload();
+            }, 800);
+          } else {
+            window.location.reload();
+          }
         } else {
-          const error = await response.json();
-          alert(error.error || 'Failed to reject change');
+          alert('❌ Error: ' + (result.error || 'Failed to reject change'));
+          confirmBtn.disabled = false;
+          confirmBtn.textContent = originalText;
+          confirmBtn.classList.remove('opacity-50', 'cursor-not-allowed');
         }
       } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred');
+        console.error('Error rejecting change:', error);
+        alert('Network error occurred. Please try again.');
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = originalText;
+        confirmBtn.classList.remove('opacity-50', 'cursor-not-allowed');
       }
     });
 
     // Cancel rejection
-    document.getElementById('cancelReject').addEventListener('click', () => {
+    document.getElementById('cancelReject').addEventListener('click', (e) => {
+      e.preventDefault();
       rejectionModal.classList.add('hidden');
       document.getElementById('rejectionReason').value = '';
       currentChangeId = null;
+      
+      // Re-enable confirm button in case it was disabled
+      const confirmBtn = document.getElementById('confirmReject');
+      confirmBtn.disabled = false;
+      confirmBtn.textContent = 'Confirm Rejection';
+      confirmBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+    });
+
+    // Close rejection modal when clicking outside
+    rejectionModal.addEventListener('click', (e) => {
+      if (e.target === rejectionModal) {
+        document.getElementById('cancelReject').click();
+      }
     });
   </script>
 </AdminLayout>

@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "id": "1763461637864sjsbso5cm",
+    "recipientUsername": "yasan",
+    "type": "news",
+    "action": "create",
+    "status": "rejected",
+    "itemTitle": "Dharma Deshana",
+    "approvedBy": "admin",
+    "reason": "this is not well created . Hasindu",
+    "createdAt": "2025-11-18T10:27:17.864Z",
+    "expiresAt": "2025-11-19T10:27:17.864Z"
+  }
+]
