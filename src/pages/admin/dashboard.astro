@@ -10,11 +10,13 @@ import newsData from '../../data/news.json';
 import eventsData from '../../data/events.json';
 import postsData from '../../data/posts.json';
 import libraryData from '../../data/library.json';
+import dhammapadaData from '../../data/dhammapada.json';
 
 const newsCount = newsData.length;
 const eventsCount = eventsData.length;
 const postsCount = postsData.length;
 const libraryCount = libraryData.resources?.length || 0;
+const dhammapadaCount = dhammapadaData.length;
 
 // Check if user can view statistics (admin role OR explicit permission)
 const canViewStatistics = user?.role === 'admin' || user?.permissions?.viewStatistics === true;
@@ -177,6 +179,22 @@ console.log('Section Access:', { news: canAccessNews, events: canAccessEvents, p
           </div>
         </div>
         )}
+
+        {user?.role === 'admin' && (
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-600 mb-1">Dhammapada</p>
+              <p class="text-2xl font-bold text-gray-900" id="dhammapadaCount" data-count={dhammapadaCount}>{dhammapadaCount}</p>
+            </div>
+            <div class="bg-monk-100 p-3 rounded-lg">
+              <svg class="w-6 h-6 text-monk-900" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        )}
       </div>
       )}
 
@@ -318,6 +336,19 @@ console.log('Section Access:', { news: canAccessNews, events: canAccessEvents, p
             </svg>
           </div>
           <p class="text-sm text-gray-600">Manage library resources and materials</p>
+        </a>
+        )}
+
+        <!-- Dhammapada Management (Admin Only) -->
+        {user?.role === 'admin' && (
+        <a href="/admin/dhammapada" class="block bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition group">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-semibold text-gray-900">Dhammapada Management</h2>
+            <svg class="w-5 h-5 text-gray-400 group-hover:text-[#8E050F] transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </div>
+          <p class="text-sm text-gray-600">Manage Dhammapada quotes and verses</p>
         </a>
         )}
       </div>
