@@ -89,8 +89,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
       hidden: hidden === true
     };
 
-    // If user can publish directly, add to news; otherwise, add to pending changes
-    if (canUserPublish(locals.user, 'news')) {
+    // Check if user is main admin (can directly publish)
+    const isMainAdmin = locals.user.role === 'admin' && locals.user.permissions.manageUsers === true;
+    
+    // Main admin can publish directly, others need approval
+    if (isMainAdmin) {
       news.push(newItem);
       await writeDataFile('news.json', news);
 
@@ -105,7 +108,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
         action: 'create',
         data: newItem,
         submittedBy: locals.user.username,
-        reason: body.reason
+        reason: body.approvalNote || body.reason
       });
 
       return new Response(
@@ -132,6 +135,14 @@ export const PUT: APIRoute = async ({ request, locals }) => {
       );
     }
 
+    // Check permission
+    if (!canUserPerformAction(locals.user, 'news', 'edit')) {
+      return new Response(
+        JSON.stringify({ error: 'No permission to edit news' }),
+        { status: 403, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
     const body = await request.json();
     const { id, title, titleSinhala, excerpt, excerptSinhala, content, contentSinhala, source, author, date, category, tags, image, url, featured, language, hidden } = body;
 
@@ -152,7 +163,7 @@ export const PUT: APIRoute = async ({ request, locals }) => {
       );
     }
 
-    news[index] = {
+    const updatedItem = {
       ...news[index],
       title: title || news[index].title,
       titleSinhala: titleSinhala !== undefined ? titleSinhala : news[index].titleSinhala,
@@ -172,12 +183,34 @@ export const PUT: APIRoute = async ({ request, locals }) => {
       hidden: hidden !== undefined ? hidden : news[index].hidden
     };
 
-    await writeDataFile('news.json', news);
+    // Check if user is main admin
+    const isMainAdmin = locals.user.role === 'admin' && locals.user.permissions.manageUsers === true;
+    
+    if (isMainAdmin) {
+      // Direct update
+      news[index] = updatedItem;
+      await writeDataFile('news.json', news);
 
-    return new Response(
-      JSON.stringify({ success: true, item: news[index] }),
-      { status: 200, headers: { 'Content-Type': 'application/json' } }
-    );
+      return new Response(
+        JSON.stringify({ success: true, item: updatedItem }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      );
+    } else {
+      // Submit for approval
+      await addPendingChange({
+        type: 'news',
+        action: 'update',
+        data: updatedItem,
+        originalId: id,
+        submittedBy: locals.user.username,
+        reason: body.approvalNote || body.reason
+      });
+
+      return new Response(
+        JSON.stringify({ success: true, pending: true, message: 'Update submitted for approval' }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
   } catch (error) {
     console.error('Error updating news:', error);
     return new Response(
@@ -197,6 +230,14 @@ export const DELETE: APIRoute = async ({ request, locals }) => {
       );
     }
 
+    // Check permission
+    if (!canUserPerformAction(locals.user, 'news', 'delete')) {
+      return new Response(
+        JSON.stringify({ error: 'No permission to delete news' }),
+        { status: 403, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
     const url = new URL(request.url);
     const id = url.searchParams.get('id');
 
@@ -208,21 +249,43 @@ export const DELETE: APIRoute = async ({ request, locals }) => {
     }
 
     const news = await readDataFile('news.json');
-    const filtered = news.filter((item: any) => item.id !== id);
+    const itemToDelete = news.find((item: any) => item.id == id);
 
-    if (filtered.length === news.length) {
+    if (!itemToDelete) {
       return new Response(
         JSON.stringify({ error: 'News item not found' }),
         { status: 404, headers: { 'Content-Type': 'application/json' } }
       );
     }
 
-    await writeDataFile('news.json', filtered);
+    // Check if user is main admin
+    const isMainAdmin = locals.user.role === 'admin' && locals.user.permissions.manageUsers === true;
+    
+    if (isMainAdmin) {
+      // Direct delete
+      const filtered = news.filter((item: any) => item.id != id);
+      await writeDataFile('news.json', filtered);
 
-    return new Response(
-      JSON.stringify({ success: true }),
-      { status: 200, headers: { 'Content-Type': 'application/json' } }
-    );
+      return new Response(
+        JSON.stringify({ success: true }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      );
+    } else {
+      // Submit for approval
+      await addPendingChange({
+        type: 'news',
+        action: 'delete',
+        data: itemToDelete,
+        originalId: id,
+        submittedBy: locals.user.username,
+        reason: 'Deletion request'
+      });
+
+      return new Response(
+        JSON.stringify({ success: true, pending: true, message: 'Deletion submitted for approval' }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
   } catch (error) {
     console.error('Error deleting news:', error);
     return new Response(

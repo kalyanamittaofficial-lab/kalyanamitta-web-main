@@ -45,7 +45,7 @@
     "url": "https://www.buddhism.org",
     "featured": true,
     "language": "English",
-    "hidden": true
+    "hidden": false
   },
   {
     "id": 3,
@@ -93,7 +93,7 @@
     "url": "https://www.buddhism.org/digital-library",
     "featured": false,
     "language": "English",
-    "hidden": true
+    "hidden": false
   },
   {
     "id": 5,

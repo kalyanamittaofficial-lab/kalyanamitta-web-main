@@ -219,7 +219,7 @@ const users = usersData;
                 <div class="border rounded-lg p-3">
                   <div class="font-medium text-sm text-gray-700 mb-2 capitalize">{content}</div>
                   <div class="grid grid-cols-2 gap-2">
-                    {['create', 'edit', 'delete', 'publish'].map((action) => (
+                    {['create', 'edit', 'delete'].map((action) => (
                       <label class="flex items-center gap-2">
                         <input
                           type="checkbox"
@@ -229,6 +229,15 @@ const users = usersData;
                         <span class="text-sm text-gray-600 capitalize">{action}</span>
                       </label>
                     ))}
+                    <label class="flex items-center gap-2 publish-permission" style="display: none;">
+                      <input
+                        type="checkbox"
+                        name={`permissions.${content}.publish`}
+                        class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 publish-checkbox"
+                        disabled
+                      >
+                      <span class="text-sm text-gray-600">Publish (Direct)</span>
+                    </label>
                   </div>
                 </div>
               ))}
@@ -243,8 +252,9 @@ const users = usersData;
                 name="permissions.approveChanges"
                 class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               >
-              <span class="text-sm font-medium text-gray-700">Can approve pending changes</span>
+              <span class="text-sm font-medium text-gray-700">Can approve pending changes & publish directly</span>
             </label>
+            <p class="text-xs text-gray-500 mt-1 ml-6">Users with this permission can approve changes and publish content directly without approval</p>
           </div>
 
           <div class="flex gap-3 pt-4">
@@ -335,6 +345,29 @@ const users = usersData;
       }
     });
 
+    // Handle approve changes checkbox - show/hide publish permissions
+    const approveChangesCheckbox = document.getElementById('approveChanges');
+    const publishPermissions = document.querySelectorAll('.publish-permission');
+    const publishCheckboxes = document.querySelectorAll('.publish-checkbox');
+    
+    function togglePublishPermissions() {
+      const isChecked = approveChangesCheckbox.checked;
+      publishPermissions.forEach(elem => {
+        elem.style.display = isChecked ? 'flex' : 'none';
+      });
+      publishCheckboxes.forEach(checkbox => {
+        checkbox.disabled = !isChecked;
+        if (!isChecked) {
+          checkbox.checked = false;
+        }
+      });
+    }
+    
+    approveChangesCheckbox.addEventListener('change', togglePublishPermissions);
+    
+    // Initialize on page load
+    togglePublishPermissions();
+
     // Edit User
     document.querySelectorAll('.edit-user').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -374,6 +407,9 @@ const users = usersData;
           });
           
           document.getElementById('approveChanges').checked = user.permissions.approveChanges || false;
+          
+          // Trigger publish permissions visibility
+          togglePublishPermissions();
           
           modal.classList.remove('hidden');
         }
@@ -472,6 +508,8 @@ const users = usersData;
         return;
       }
       
+      const hasApproveChanges = formData.has('permissions.approveChanges');
+      
       const data = {
         id: userId || crypto.randomUUID(),
         username: username.trim(),
@@ -479,30 +517,30 @@ const users = usersData;
         password: password || undefined,
         permissions: {
           manageUsers: role === 'admin',
-          approveChanges: formData.has('permissions.approveChanges'),
+          approveChanges: hasApproveChanges,
           news: {
             create: formData.has('permissions.news.create'),
             edit: formData.has('permissions.news.edit'),
             delete: formData.has('permissions.news.delete'),
-            publish: formData.has('permissions.news.publish')
+            publish: hasApproveChanges && formData.has('permissions.news.publish')
           },
           events: {
             create: formData.has('permissions.events.create'),
             edit: formData.has('permissions.events.edit'),
             delete: formData.has('permissions.events.delete'),
-            publish: formData.has('permissions.events.publish')
+            publish: hasApproveChanges && formData.has('permissions.events.publish')
           },
           posts: {
             create: formData.has('permissions.posts.create'),
             edit: formData.has('permissions.posts.edit'),
             delete: formData.has('permissions.posts.delete'),
-            publish: formData.has('permissions.posts.publish')
+            publish: hasApproveChanges && formData.has('permissions.posts.publish')
           },
           library: {
             create: formData.has('permissions.library.create'),
             edit: formData.has('permissions.library.edit'),
             delete: formData.has('permissions.library.delete'),
-            publish: formData.has('permissions.library.publish')
+            publish: hasApproveChanges && formData.has('permissions.library.publish')
           }
         }
       };

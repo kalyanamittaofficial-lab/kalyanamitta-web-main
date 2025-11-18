@@ -76,3 +76,27 @@ export async function updateLastLogin(userId: string): Promise<void> {
     console.error('Failed to update last login:', error);
   }
 }
+
+export async function cleanupExpiredNotifications(): Promise<number> {
+  try {
+    const fs = await import('fs/promises');
+    const path = await import('path');
+    const notificationsPath = path.join(process.cwd(), 'src', 'data', 'notifications.json');
+    
+    const data = await fs.readFile(notificationsPath, 'utf-8');
+    const notifications = JSON.parse(data);
+    
+    const now = new Date();
+    const validNotifications = notifications.filter((n: any) => new Date(n.expiresAt) > now);
+    const removedCount = notifications.length - validNotifications.length;
+    
+    if (removedCount > 0) {
+      await fs.writeFile(notificationsPath, JSON.stringify(validNotifications, null, 2));
+    }
+    
+    return removedCount;
+  } catch (error) {
+    console.error('Failed to cleanup expired notifications:', error);
+    return 0;
+  }
+}

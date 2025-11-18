@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import fs from 'fs/promises';
 import path from 'path';
+import { canUserPerformAction, addPendingChange } from '../../../lib/permissions';
 
 const DATA_DIR = path.join(process.cwd(), 'src', 'data');
 
@@ -49,6 +50,14 @@ export const POST: APIRoute = async ({ request, locals }) => {
       );
     }
 
+    // Check permission
+    if (!canUserPerformAction(locals.user, 'posts', 'create')) {
+      return new Response(
+        JSON.stringify({ error: 'No permission to create posts' }),
+        { status: 403, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
     const body = await request.json();
     const { title, description, url, pubDate, languages } = body;
 
@@ -68,13 +77,33 @@ export const POST: APIRoute = async ({ request, locals }) => {
       languages: languages || []
     };
 
-    posts.push(newPost);
-    await writeDataFile('posts.json', posts);
+    // Check if user is main admin (can directly publish)
+    const isMainAdmin = locals.user.role === 'admin' && locals.user.permissions.manageUsers === true;
+    
+    // Main admin can publish directly, others need approval
+    if (isMainAdmin) {
+      posts.push(newPost);
+      await writeDataFile('posts.json', posts);
 
-    return new Response(
-      JSON.stringify({ success: true, item: newPost }),
-      { status: 201, headers: { 'Content-Type': 'application/json' } }
-    );
+      return new Response(
+        JSON.stringify({ success: true, item: newPost, published: true }),
+        { status: 201, headers: { 'Content-Type': 'application/json' } }
+      );
+    } else {
+      // Add to pending changes for approval
+      await addPendingChange({
+        type: 'posts',
+        action: 'create',
+        data: newPost,
+        submittedBy: locals.user.username,
+        reason: body.approvalNote || body.reason
+      });
+
+      return new Response(
+        JSON.stringify({ success: true, pending: true, message: 'Submitted for approval' }),
+        { status: 201, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
   } catch (error) {
     console.error('Error creating post:', error);
     return new Response(
@@ -91,6 +120,14 @@ export const PUT: APIRoute = async ({ request, locals }) => {
       return new Response(
         JSON.stringify({ error: 'Unauthorized' }),
         { status: 401, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Check permission
+    if (!canUserPerformAction(locals.user, 'posts', 'edit')) {
+      return new Response(
+        JSON.stringify({ error: 'No permission to edit posts' }),
+        { status: 403, headers: { 'Content-Type': 'application/json' } }
       );
     }
 
@@ -114,7 +151,7 @@ export const PUT: APIRoute = async ({ request, locals }) => {
       );
     }
 
-    posts[index] = {
+    const updatedPost = {
       title: title || posts[index].title,
       description: description || posts[index].description,
       url: url || posts[index].url,
@@ -122,12 +159,34 @@ export const PUT: APIRoute = async ({ request, locals }) => {
       languages: languages || posts[index].languages
     };
 
-    await writeDataFile('posts.json', posts);
+    // Check if user is main admin
+    const isMainAdmin = locals.user.role === 'admin' && locals.user.permissions.manageUsers === true;
+    
+    if (isMainAdmin) {
+      // Direct update
+      posts[index] = updatedPost;
+      await writeDataFile('posts.json', posts);
 
-    return new Response(
-      JSON.stringify({ success: true, item: posts[index] }),
-      { status: 200, headers: { 'Content-Type': 'application/json' } }
-    );
+      return new Response(
+        JSON.stringify({ success: true, item: updatedPost }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      );
+    } else {
+      // Submit for approval
+      await addPendingChange({
+        type: 'posts',
+        action: 'update',
+        data: updatedPost,
+        originalId: id,
+        submittedBy: locals.user.username,
+        reason: body.approvalNote || body.reason
+      });
+
+      return new Response(
+        JSON.stringify({ success: true, pending: true, message: 'Update submitted for approval' }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
   } catch (error) {
     console.error('Error updating post:', error);
     return new Response(
@@ -147,6 +206,14 @@ export const DELETE: APIRoute = async ({ request, locals }) => {
       );
     }
 
+    // Check permission
+    if (!canUserPerformAction(locals.user, 'posts', 'delete')) {
+      return new Response(
+        JSON.stringify({ error: 'No permission to delete posts' }),
+        { status: 403, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
     const url = new URL(request.url);
     const id = url.searchParams.get('id');
 
@@ -158,21 +225,43 @@ export const DELETE: APIRoute = async ({ request, locals }) => {
     }
 
     const posts = await readDataFile('posts.json');
-    const filtered = posts.filter((item: any) => item.title !== id);
+    const itemToDelete = posts.find((item: any) => item.title === id);
 
-    if (filtered.length === posts.length) {
+    if (!itemToDelete) {
       return new Response(
         JSON.stringify({ error: 'Post not found' }),
         { status: 404, headers: { 'Content-Type': 'application/json' } }
       );
     }
 
-    await writeDataFile('posts.json', filtered);
+    // Check if user is main admin
+    const isMainAdmin = locals.user.role === 'admin' && locals.user.permissions.manageUsers === true;
+    
+    if (isMainAdmin) {
+      // Direct delete
+      const filtered = posts.filter((item: any) => item.title !== id);
+      await writeDataFile('posts.json', filtered);
 
-    return new Response(
-      JSON.stringify({ success: true }),
-      { status: 200, headers: { 'Content-Type': 'application/json' } }
-    );
+      return new Response(
+        JSON.stringify({ success: true }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      );
+    } else {
+      // Submit for approval
+      await addPendingChange({
+        type: 'posts',
+        action: 'delete',
+        data: itemToDelete,
+        originalId: id,
+        submittedBy: locals.user.username,
+        reason: 'Deletion request'
+      });
+
+      return new Response(
+        JSON.stringify({ success: true, pending: true, message: 'Deletion submitted for approval' }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
   } catch (error) {
     console.error('Error deleting post:', error);
     return new Response(

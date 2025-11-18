@@ -112,5 +112,43 @@
     "status": "active",
     "createdAt": "2025-11-18T00:18:09.848Z",
     "lastLogin": "2025-11-18T01:16:02.366Z"
+  },
+  {
+    "id": "ee381444-ec77-4a5f-b3b6-84abd23616cf",
+    "username": "Thimani",
+    "passwordHash": "$2b$12$HUEOiUxBcD5IgOUbe60WmezOHnH4X7DurqX0l5xbMZ4.2QuTXKnY2",
+    "role": "moderator",
+    "permissions": {
+      "manageUsers": false,
+      "approveChanges": false,
+      "news": {
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "publish": false
+      },
+      "events": {
+        "create": true,
+        "edit": false,
+        "delete": false,
+        "publish": false
+      },
+      "posts": {
+        "create": false,
+        "edit": false,
+        "delete": true,
+        "publish": false
+      },
+      "library": {
+        "create": true,
+        "edit": true,
+        "delete": false,
+        "publish": false
+      },
+      "viewStatistics": false
+    },
+    "status": "active",
+    "createdAt": "2025-11-18T02:01:00.576Z",
+    "lastLogin": "2025-11-18T02:01:47.957Z"
   }
 ]

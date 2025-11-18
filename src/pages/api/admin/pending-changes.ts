@@ -42,6 +42,40 @@ async function writeDataFile(type: string, data: any): Promise<void> {
   await fs.writeFile(dataPath, JSON.stringify(data, null, 2));
 }
 
+async function createNotification(
+  recipientUsername: string,
+  type: 'news' | 'events' | 'posts' | 'library',
+  action: 'create' | 'update' | 'delete',
+  status: 'approved' | 'rejected',
+  itemTitle: string,
+  approvedBy: string,
+  reason?: string
+): Promise<void> {
+  const fs = await import('fs/promises');
+  const path = await import('path');
+  const notificationsPath = path.join(process.cwd(), 'src', 'data', 'notifications.json');
+  
+  const notifications = JSON.parse(await fs.readFile(notificationsPath, 'utf-8'));
+  
+  const now = new Date();
+  const expiresAt = new Date(now.getTime() + 24 * 60 * 60 * 1000); // 24 hours from now
+  
+  notifications.push({
+    id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+    recipientUsername,
+    type,
+    action,
+    status,
+    itemTitle,
+    approvedBy,
+    reason,
+    createdAt: now.toISOString(),
+    expiresAt: expiresAt.toISOString()
+  });
+  
+  await fs.writeFile(notificationsPath, JSON.stringify(notifications, null, 2));
+}
+
 export const POST: APIRoute = async ({ request, cookies }) => {
   try {
     // Verify authentication
@@ -92,6 +126,14 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 
     const change = pendingChanges[changeIndex];
 
+    // Get item title for notification
+    let itemTitle = 'Unknown';
+    if (change.data.title) {
+      itemTitle = change.data.title;
+    } else if (change.data.name) {
+      itemTitle = change.data.name;
+    }
+
     if (action === 'approve') {
       // Apply the change to the actual data file
       const dataFile = await readDataFile(change.type);
@@ -112,6 +154,17 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 
       await writeDataFile(change.type, dataFile);
     }
+
+    // Create notification for the submitter
+    await createNotification(
+      change.submittedBy,
+      change.type,
+      change.action,
+      action === 'approve' ? 'approved' : 'rejected',
+      itemTitle,
+      session.username,
+      reason
+    );
 
     // Remove from pending changes
     pendingChanges.splice(changeIndex, 1);

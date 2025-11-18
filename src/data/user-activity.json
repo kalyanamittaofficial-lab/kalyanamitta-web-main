@@ -30,5 +30,13 @@
     "userId": "cec0c381-d84e-481a-ac02-ea8a2433af7a",
     "username": "lakmal",
     "details": "Status changed from suspended to active"
+  },
+  {
+    "timestamp": "2025-11-18T02:01:00.587Z",
+    "action": "created",
+    "performedBy": "admin",
+    "userId": "ee381444-ec77-4a5f-b3b6-84abd23616cf",
+    "username": "Thimani",
+    "details": "Created new moderator user"
   }
 ]
