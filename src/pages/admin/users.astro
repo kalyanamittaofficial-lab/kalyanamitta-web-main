@@ -177,14 +177,26 @@ const users = usersData;
           </div>
 
           <div id="passwordField">
-            <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <div class="flex items-center justify-between mb-1">
+              <label class="block text-sm font-medium text-gray-700">Password</label>
+              <label id="changePasswordCheckbox" class="hidden items-center gap-2 text-sm text-blue-600 cursor-pointer">
+                <input
+                  type="checkbox"
+                  id="changePasswordToggle"
+                  class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                >
+                <span>Change Password</span>
+              </label>
+            </div>
             <input
               type="password"
               id="password"
               name="password"
               required
+              placeholder="Enter new password"
               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             >
+            <p id="passwordHelp" class="hidden mt-1 text-xs text-gray-500">Leave blank to keep current password</p>
           </div>
 
           <div>
@@ -291,14 +303,37 @@ const users = usersData;
         document.getElementById('modalTitle').textContent = 'Add New User';
         document.getElementById('userId').value = '';
         userForm.reset();
+        
         const passwordField = document.getElementById('passwordField');
+        const passwordInput = document.getElementById('password');
+        const changePasswordCheckbox = document.getElementById('changePasswordCheckbox');
+        const passwordHelp = document.getElementById('passwordHelp');
+        
         passwordField.classList.remove('hidden');
         passwordField.style.display = 'block';
-        document.getElementById('password').required = true;
+        changePasswordCheckbox.classList.add('hidden');
+        changePasswordCheckbox.classList.remove('flex');
+        passwordHelp.classList.add('hidden');
+        passwordInput.required = true;
+        passwordInput.disabled = false;
+        passwordInput.placeholder = 'Enter password';
+        
         modal.classList.remove('hidden');
         modal.style.display = 'flex';
         console.log('Modal should be visible now');
       });
+
+    // Handle change password toggle
+    document.getElementById('changePasswordToggle').addEventListener('change', (e) => {
+      const passwordInput = document.getElementById('password');
+      if (e.target.checked) {
+        passwordInput.disabled = false;
+        passwordInput.focus();
+      } else {
+        passwordInput.disabled = true;
+        passwordInput.value = '';
+      }
+    });
 
     // Edit User
     document.querySelectorAll('.edit-user').forEach(btn => {
@@ -311,8 +346,22 @@ const users = usersData;
           document.getElementById('userId').value = user.id;
           document.getElementById('username').value = user.username;
           document.getElementById('role').value = user.role;
-          document.getElementById('passwordField').classList.add('hidden');
-          document.getElementById('password').required = false;
+          
+          // Show password field with change password toggle
+          const passwordField = document.getElementById('passwordField');
+          const passwordInput = document.getElementById('password');
+          const changePasswordCheckbox = document.getElementById('changePasswordCheckbox');
+          const changePasswordToggle = document.getElementById('changePasswordToggle');
+          const passwordHelp = document.getElementById('passwordHelp');
+          
+          passwordField.classList.remove('hidden');
+          changePasswordCheckbox.classList.remove('hidden');
+          changePasswordCheckbox.classList.add('flex');
+          passwordHelp.classList.remove('hidden');
+          passwordInput.required = false;
+          passwordInput.value = '';
+          passwordInput.disabled = true;
+          changePasswordToggle.checked = false;
           
           // Set permissions
           ['news', 'events', 'posts', 'library'].forEach(content => {

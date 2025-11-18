@@ -35,17 +35,16 @@
     },
     "status": "active",
     "createdAt": "2025-11-18T00:00:00.000Z",
-    "lastLogin": "2025-11-18T00:34:46.889Z"
+    "lastLogin": "2025-11-18T00:49:31.918Z"
   },
   {
     "id": "c3d7ca5e-3ebd-4307-a65a-c1e5c1237c4f",
     "username": "yasan",
-    "passwordHash": "$2b$12$5G2JNRvDxJ37LSZcd3NnaeScALVHVK6uPMUafYIzPuzY9feOP2ZwC",
+    "passwordHash": "$2b$12$5Ca3rLr85jPNel9yOLyPouaPWEmPzIdKOhRfbsNBhVwOfTLIwYVXK",
     "role": "moderator",
     "permissions": {
       "manageUsers": false,
       "approveChanges": false,
-      "viewStatistics": false,
       "news": {
         "create": false,
         "edit": false,
@@ -53,7 +52,7 @@
         "publish": false
       },
       "events": {
-        "create": true,
+        "create": false,
         "edit": false,
         "delete": false,
         "publish": false
@@ -69,11 +68,12 @@
         "edit": false,
         "delete": false,
         "publish": false
-      }
+      },
+      "viewStatistics": false
     },
-    "status": "suspended",
+    "status": "active",
     "createdAt": "2025-11-18T00:14:55.678Z",
-    "lastLogin": null
+    "lastLogin": "2025-11-18T00:48:37.282Z"
   },
   {
     "id": "cec0c381-d84e-481a-ac02-ea8a2433af7a",
@@ -111,6 +111,6 @@
     },
     "status": "active",
     "createdAt": "2025-11-18T00:18:09.848Z",
-    "lastLogin": "2025-11-18T00:36:24.175Z"
+    "lastLogin": "2025-11-18T00:47:48.697Z"
   }
 ]

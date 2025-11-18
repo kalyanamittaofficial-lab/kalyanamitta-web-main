@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "timestamp": "2025-11-18T00:46:26.949Z",
+    "action": "updated",
+    "performedBy": "admin",
+    "userId": "c3d7ca5e-3ebd-4307-a65a-c1e5c1237c4f",
+    "username": "yasan",
+    "details": "password updated, permissions updated"
+  },
+  {
+    "timestamp": "2025-11-18T00:48:20.355Z",
+    "action": "activated",
+    "performedBy": "admin",
+    "userId": "c3d7ca5e-3ebd-4307-a65a-c1e5c1237c4f",
+    "username": "yasan",
+    "details": "Status changed from suspended to active"
+  }
+]
