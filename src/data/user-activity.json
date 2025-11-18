@@ -14,5 +14,21 @@
     "userId": "c3d7ca5e-3ebd-4307-a65a-c1e5c1237c4f",
     "username": "yasan",
     "details": "Status changed from suspended to active"
+  },
+  {
+    "timestamp": "2025-11-18T00:58:13.892Z",
+    "action": "suspended",
+    "performedBy": "admin",
+    "userId": "cec0c381-d84e-481a-ac02-ea8a2433af7a",
+    "username": "lakmal",
+    "details": "Status changed from active to suspended"
+  },
+  {
+    "timestamp": "2025-11-18T00:58:29.306Z",
+    "action": "activated",
+    "performedBy": "admin",
+    "userId": "cec0c381-d84e-481a-ac02-ea8a2433af7a",
+    "username": "lakmal",
+    "details": "Status changed from suspended to active"
   }
 ]

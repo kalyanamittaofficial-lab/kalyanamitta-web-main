@@ -155,7 +155,7 @@ const users = usersData;
       <div class="p-6">
         <div class="flex justify-between items-center mb-4">
           <h2 id="modalTitle" class="text-xl font-bold">Add New User</h2>
-          <button id="closeModal" class="text-gray-500 hover:text-gray-700">
+          <button id="closeModal" type="button" class="text-gray-500 hover:text-gray-700 p-2 -mr-2 touch-manipulation z-10">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
@@ -257,7 +257,7 @@ const users = usersData;
             <button
               type="button"
               id="cancelBtn"
-              class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+              class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition touch-manipulation"
             >
               Cancel
             </button>
@@ -273,7 +273,7 @@ const users = usersData;
       <div class="p-6">
         <div class="flex justify-between items-center mb-4">
           <h2 class="text-xl font-bold">User Permissions</h2>
-          <button id="closePermissionsModal" class="text-gray-500 hover:text-gray-700">
+          <button id="closePermissionsModal" type="button" class="text-gray-500 hover:text-gray-700 p-2 -mr-2 touch-manipulation z-10">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
@@ -418,10 +418,33 @@ const users = usersData;
       });
     });
 
-    // Close modals
-    document.getElementById('closeModal').addEventListener('click', () => modal.classList.add('hidden'));
-    document.getElementById('cancelBtn').addEventListener('click', () => modal.classList.add('hidden'));
-    document.getElementById('closePermissionsModal').addEventListener('click', () => permissionsModal.classList.add('hidden'));
+    // Close modals - improved for mobile
+    const closeUserModal = (e) => {
+      if (e) e.preventDefault();
+      modal.classList.add('hidden');
+      modal.style.display = 'none';
+    };
+    
+    const closePermModal = (e) => {
+      if (e) e.preventDefault();
+      permissionsModal.classList.add('hidden');
+    };
+    
+    document.getElementById('closeModal').addEventListener('click', closeUserModal);
+    document.getElementById('closeModal').addEventListener('touchend', closeUserModal);
+    document.getElementById('cancelBtn').addEventListener('click', closeUserModal);
+    document.getElementById('cancelBtn').addEventListener('touchend', closeUserModal);
+    document.getElementById('closePermissionsModal').addEventListener('click', closePermModal);
+    document.getElementById('closePermissionsModal').addEventListener('touchend', closePermModal);
+    
+    // Close modal when clicking backdrop
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeUserModal();
+    });
+    
+    permissionsModal.addEventListener('click', (e) => {
+      if (e.target === permissionsModal) closePermModal();
+    });
 
     // Submit form
     userForm.addEventListener('submit', async (e) => {
@@ -550,19 +573,19 @@ const users = usersData;
     const tableRows = document.querySelectorAll('tbody tr');
     
     function filterTable() {
-      const searchTerm = searchInput.value.toLowerCase();
+      const searchTerm = searchInput.value.toLowerCase().trim();
       const roleValue = roleFilter.value;
       const statusValue = statusFilter.value;
       
       let visibleCount = 0;
       
       tableRows.forEach(row => {
-        const username = row.querySelector('td:first-child .font-medium')?.textContent.toLowerCase() || '';
-        const userId = row.querySelector('td:first-child .text-xs')?.textContent.toLowerCase() || '';
-        const role = row.querySelector('td:nth-child(2) span')?.textContent.toLowerCase() || '';
-        const status = row.querySelector('td:nth-child(3) span')?.textContent.toLowerCase() || '';
+        const username = row.querySelector('td:first-child .font-medium')?.textContent.toLowerCase().trim() || '';
+        const userId = row.querySelector('td:first-child .text-xs')?.textContent.toLowerCase().trim() || '';
+        const role = row.querySelector('td:nth-child(2) span')?.textContent.toLowerCase().trim() || '';
+        const status = row.querySelector('td:nth-child(3) span')?.textContent.toLowerCase().trim() || '';
         
-        const matchesSearch = username.includes(searchTerm) || userId.includes(searchTerm);
+        const matchesSearch = searchTerm === '' || username.includes(searchTerm) || userId.includes(searchTerm);
         const matchesRole = roleValue === 'all' || role === roleValue;
         const matchesStatus = statusValue === 'all' || status === statusValue;
         
