@@ -125,6 +125,57 @@ const libraryCount = libraryData.resources?.length || 0;
         </div>
       </div>
 
+      <!-- System Management Section (Admin Only) -->
+      {user?.role === 'admin' && user?.permissions?.manageUsers && (
+        <div class="mb-8">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">System Management</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <a href="/admin/users" class="block bg-gradient-to-br from-purple-500 to-purple-700 p-6 rounded-xl shadow-md hover:shadow-lg transition group text-white">
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-lg font-semibold">User Management</h3>
+                <svg class="w-5 h-5 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </div>
+              <p class="text-sm text-purple-100">Manage moderators and permissions</p>
+            </a>
+
+            <a href="/admin/pending-changes" class="block bg-gradient-to-br from-orange-500 to-orange-700 p-6 rounded-xl shadow-md hover:shadow-lg transition group text-white">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                  <h3 class="text-lg font-semibold">Pending Changes</h3>
+                  {import('../../data/pending-changes.json').then(data => data.default.length > 0 && (
+                    <span class="bg-white text-orange-700 text-xs font-bold px-2 py-1 rounded-full">
+                      {data.default.length}
+                    </span>
+                  ))}
+                </div>
+                <svg class="w-5 h-5 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </div>
+              <p class="text-sm text-orange-100">Review and approve submissions</p>
+            </a>
+          </div>
+        </div>
+      )}
+
+      {user?.permissions?.approveChanges && user?.role !== 'admin' && (
+        <div class="mb-8">
+          <a href="/admin/pending-changes" class="block bg-gradient-to-br from-orange-500 to-orange-700 p-6 rounded-xl shadow-md hover:shadow-lg transition group text-white">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-2">
+                <h3 class="text-lg font-semibold">Pending Changes</h3>
+              </div>
+              <svg class="w-5 h-5 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </div>
+            <p class="text-sm text-orange-100">Review and approve submissions</p>
+          </a>
+        </div>
+      )}
+
       <!-- Content Management Sections -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- News Management -->

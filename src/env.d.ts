@@ -15,7 +15,35 @@ declare namespace App {
     user?: {
       id: string;
       username: string;
-      role: 'admin';
+      role: 'admin' | 'moderator';
+      permissions: {
+        manageUsers?: boolean;
+        approveChanges?: boolean;
+        news?: {
+          create?: boolean;
+          edit?: boolean;
+          delete?: boolean;
+          publish?: boolean;
+        };
+        events?: {
+          create?: boolean;
+          edit?: boolean;
+          delete?: boolean;
+          publish?: boolean;
+        };
+        posts?: {
+          create?: boolean;
+          edit?: boolean;
+          delete?: boolean;
+          publish?: boolean;
+        };
+        library?: {
+          create?: boolean;
+          edit?: boolean;
+          delete?: boolean;
+          publish?: boolean;
+        };
+      };
     };
     csrfToken?: string;
   }

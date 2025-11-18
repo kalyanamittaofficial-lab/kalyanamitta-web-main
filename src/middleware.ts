@@ -100,11 +100,12 @@ export const onRequest = defineMiddleware(async (context, next) => {
         }
       }
 
-      // Attach user to context
+      // Attach user to context with permissions
       context.locals.user = {
         id: session.id,
         username: session.username,
-        role: session.role
+        role: session.role,
+        permissions: session.permissions
       };
       context.locals.csrfToken = session.csrfToken;
     }

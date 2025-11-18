@@ -7,10 +7,51 @@ const JWT_SECRET = new TextEncoder().encode(
 
 const SESSION_DURATION = 8 * 60 * 60; // 8 hours in seconds
 
+export interface Permissions {
+  manageUsers?: boolean;
+  approveChanges?: boolean;
+  news?: {
+    create?: boolean;
+    edit?: boolean;
+    delete?: boolean;
+    publish?: boolean;
+  };
+  events?: {
+    create?: boolean;
+    edit?: boolean;
+    delete?: boolean;
+    publish?: boolean;
+  };
+  posts?: {
+    create?: boolean;
+    edit?: boolean;
+    delete?: boolean;
+    publish?: boolean;
+  };
+  library?: {
+    create?: boolean;
+    edit?: boolean;
+    delete?: boolean;
+    publish?: boolean;
+  };
+}
+
+export interface User {
+  id: string;
+  username: string;
+  passwordHash: string;
+  role: 'admin' | 'moderator';
+  permissions: Permissions;
+  status: 'active' | 'suspended';
+  createdAt: string;
+  lastLogin: string | null;
+}
+
 export interface AdminUser {
   id: string;
   username: string;
-  role: 'admin';
+  role: 'admin' | 'moderator';
+  permissions: Permissions;
 }
 
 export interface SessionPayload extends AdminUser {
@@ -80,9 +121,62 @@ export function generateCSRFToken(): string {
 }
 
 /**
+ * Get user from users.json by username
+ */
+export async function getUserByUsername(username: string): Promise<User | null> {
+  try {
+    const fs = await import('fs/promises');
+    const path = await import('path');
+    const usersPath = path.join(process.cwd(), 'src', 'data', 'users.json');
+    const usersData = await fs.readFile(usersPath, 'utf-8');
+    const users: User[] = JSON.parse(usersData);
+    
+    return users.find(u => u.username === username && u.status === 'active') || null;
+  } catch (error) {
+    console.error('Error reading users:', error);
+    return null;
+  }
+}
+
+/**
+ * Get user by ID
+ */
+export async function getUserById(id: string): Promise<User | null> {
+  try {
+    const fs = await import('fs/promises');
+    const path = await import('path');
+    const usersPath = path.join(process.cwd(), 'src', 'data', 'users.json');
+    const usersData = await fs.readFile(usersPath, 'utf-8');
+    const users: User[] = JSON.parse(usersData);
+    
+    return users.find(u => u.id === id && u.status === 'active') || null;
+  } catch (error) {
+    console.error('Error reading users:', error);
+    return null;
+  }
+}
+
+/**
  * Verify admin credentials against environment variables
  */
 export async function verifyAdminCredentials(username: string, password: string): Promise<AdminUser | null> {
+  // Check users.json for multi-user support
+  const user = await getUserByUsername(username);
+  
+  if (user) {
+    const isValid = await verifyPassword(password, user.passwordHash);
+    if (isValid) {
+      return {
+        id: user.id,
+        username: user.username,
+        role: user.role,
+        permissions: user.permissions
+      };
+    }
+    return null;
+  }
+
+  // Fallback to environment variables for backward compatibility
   const adminUsername = import.meta.env.ADMIN_USERNAME;
   const adminPasswordHash = import.meta.env.ADMIN_PASSWORD_HASH;
 
@@ -104,7 +198,15 @@ export async function verifyAdminCredentials(username: string, password: string)
   return {
     id: 'admin',
     username: adminUsername,
-    role: 'admin'
+    role: 'admin',
+    permissions: {
+      manageUsers: true,
+      approveChanges: true,
+      news: { create: true, edit: true, delete: true, publish: true },
+      events: { create: true, edit: true, delete: true, publish: true },
+      posts: { create: true, edit: true, delete: true, publish: true },
+      library: { create: true, edit: true, delete: true, publish: true }
+    }
   };
 }
 

@@ -1,0 +1,427 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+
+// This page is protected by middleware
+const user = Astro.locals.user;
+const csrfToken = Astro.locals.csrfToken;
+
+// Only admins can manage users
+if (user?.role !== 'admin' || !user?.permissions?.manageUsers) {
+  return Astro.redirect('/admin/dashboard');
+}
+
+// Read users data
+import usersData from '../../data/users.json';
+const users = usersData;
+---
+
+<AdminLayout title="User Management - Kalyanamitta Admin">
+  <div class="min-h-screen bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center py-4">
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900">User Management</h1>
+            <p class="text-sm text-gray-600">Manage moderators and their permissions</p>
+          </div>
+          <a href="/admin/dashboard" class="text-blue-600 hover:text-blue-700 font-medium">
+            ← Back to Dashboard
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Add User Button -->
+      <div class="mb-6">
+        <button
+          id="addUserBtn"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition flex items-center gap-2"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          Add New User
+        </button>
+      </div>
+
+      <!-- Users Table -->
+      <div class="bg-white rounded-lg shadow overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Permissions</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Login</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              {users.map((u) => (
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div>
+                      <div class="text-sm font-medium text-gray-900">{u.username}</div>
+                      <div class="text-xs text-gray-500">{u.id}</div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class={`px-2 py-1 text-xs font-semibold rounded-full ${u.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}`}>
+                      {u.role}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class={`px-2 py-1 text-xs font-semibold rounded-full ${u.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                      {u.status}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4">
+                    <button 
+                      class="text-blue-600 hover:text-blue-700 text-sm view-permissions"
+                      data-user-id={u.id}
+                    >
+                      View Permissions
+                    </button>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {u.lastLogin ? new Date(u.lastLogin).toLocaleDateString() : 'Never'}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm">
+                    <div class="flex gap-2">
+                      {u.role !== 'admin' && (
+                        <>
+                          <button 
+                            class="text-blue-600 hover:text-blue-700 edit-user"
+                            data-user-id={u.id}
+                          >
+                            Edit
+                          </button>
+                          <button 
+                            class="text-red-600 hover:text-red-700 delete-user"
+                            data-user-id={u.id}
+                          >
+                            {u.status === 'active' ? 'Suspend' : 'Activate'}
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add/Edit User Modal -->
+  <div id="userModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 id="modalTitle" class="text-xl font-bold">Add New User</h2>
+          <button id="closeModal" class="text-gray-500 hover:text-gray-700">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+
+        <form id="userForm" class="space-y-4">
+          <input type="hidden" id="userId" name="userId">
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              required
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            >
+          </div>
+
+          <div id="passwordField">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            >
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
+            <select
+              id="role"
+              name="role"
+              required
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="moderator">Moderator</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-3">Content Permissions</label>
+            <div class="space-y-3">
+              {['news', 'events', 'posts', 'library'].map((content) => (
+                <div class="border rounded-lg p-3">
+                  <div class="font-medium text-sm text-gray-700 mb-2 capitalize">{content}</div>
+                  <div class="grid grid-cols-2 gap-2">
+                    {['create', 'edit', 'delete', 'publish'].map((action) => (
+                      <label class="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          name={`permissions.${content}.${action}`}
+                          class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        >
+                        <span class="text-sm text-gray-600 capitalize">{action}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div class="border-t pt-4 mt-4">
+            <label class="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="approveChanges"
+                name="permissions.approveChanges"
+                class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              >
+              <span class="text-sm font-medium text-gray-700">Can approve pending changes</span>
+            </label>
+          </div>
+
+          <div class="flex gap-3 pt-4">
+            <button
+              type="submit"
+              class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition"
+            >
+              Save User
+            </button>
+            <button
+              type="button"
+              id="cancelBtn"
+              class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Permissions View Modal -->
+  <div id="permissionsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-lg max-w-lg w-full">
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold">User Permissions</h2>
+          <button id="closePermissionsModal" class="text-gray-500 hover:text-gray-700">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        <div id="permissionsContent" class="space-y-3"></div>
+      </div>
+    </div>
+  </div>
+
+  <script define:vars={{ csrfToken, users }}>
+    const modal = document.getElementById('userModal');
+    const permissionsModal = document.getElementById('permissionsModal');
+    const userForm = document.getElementById('userForm');
+
+    // Add User
+    document.getElementById('addUserBtn').addEventListener('click', () => {
+      document.getElementById('modalTitle').textContent = 'Add New User';
+      document.getElementById('userId').value = '';
+      userForm.reset();
+      document.getElementById('passwordField').classList.remove('hidden');
+      document.getElementById('password').required = true;
+      modal.classList.remove('hidden');
+    });
+
+    // Edit User
+    document.querySelectorAll('.edit-user').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const userId = btn.dataset.userId;
+        const user = users.find(u => u.id === userId);
+        
+        if (user) {
+          document.getElementById('modalTitle').textContent = 'Edit User';
+          document.getElementById('userId').value = user.id;
+          document.getElementById('username').value = user.username;
+          document.getElementById('role').value = user.role;
+          document.getElementById('passwordField').classList.add('hidden');
+          document.getElementById('password').required = false;
+          
+          // Set permissions
+          ['news', 'events', 'posts', 'library'].forEach(content => {
+            ['create', 'edit', 'delete', 'publish'].forEach(action => {
+              const checkbox = document.querySelector(`input[name="permissions.${content}.${action}"]`);
+              if (checkbox && user.permissions[content]) {
+                checkbox.checked = user.permissions[content][action] || false;
+              }
+            });
+          });
+          
+          document.getElementById('approveChanges').checked = user.permissions.approveChanges || false;
+          
+          modal.classList.remove('hidden');
+        }
+      });
+    });
+
+    // View Permissions
+    document.querySelectorAll('.view-permissions').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const userId = btn.dataset.userId;
+        const user = users.find(u => u.id === userId);
+        
+        if (user) {
+          let html = '';
+          
+          if (user.permissions.approveChanges) {
+            html += '<div class="p-3 bg-blue-50 rounded-lg"><span class="font-medium">✓ Can approve changes</span></div>';
+          }
+          
+          if (user.permissions.manageUsers) {
+            html += '<div class="p-3 bg-purple-50 rounded-lg"><span class="font-medium">✓ Can manage users</span></div>';
+          }
+          
+          ['news', 'events', 'posts', 'library'].forEach(content => {
+            if (user.permissions[content]) {
+              const actions = Object.entries(user.permissions[content])
+                .filter(([_, value]) => value)
+                .map(([key]) => key);
+              
+              if (actions.length > 0) {
+                html += `<div class="p-3 bg-gray-50 rounded-lg">
+                  <div class="font-medium capitalize">${content}</div>
+                  <div class="text-sm text-gray-600">${actions.join(', ')}</div>
+                </div>`;
+              }
+            }
+          });
+          
+          document.getElementById('permissionsContent').innerHTML = html;
+          permissionsModal.classList.remove('hidden');
+        }
+      });
+    });
+
+    // Close modals
+    document.getElementById('closeModal').addEventListener('click', () => modal.classList.add('hidden'));
+    document.getElementById('cancelBtn').addEventListener('click', () => modal.classList.add('hidden'));
+    document.getElementById('closePermissionsModal').addEventListener('click', () => permissionsModal.classList.add('hidden'));
+
+    // Submit form
+    userForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(userForm);
+      const userId = formData.get('userId');
+      const data = {
+        id: userId || crypto.randomUUID(),
+        username: formData.get('username'),
+        role: formData.get('role'),
+        password: formData.get('password'),
+        permissions: {
+          manageUsers: formData.get('role') === 'admin',
+          approveChanges: formData.has('permissions.approveChanges'),
+          news: {
+            create: formData.has('permissions.news.create'),
+            edit: formData.has('permissions.news.edit'),
+            delete: formData.has('permissions.news.delete'),
+            publish: formData.has('permissions.news.publish')
+          },
+          events: {
+            create: formData.has('permissions.events.create'),
+            edit: formData.has('permissions.events.edit'),
+            delete: formData.has('permissions.events.delete'),
+            publish: formData.has('permissions.events.publish')
+          },
+          posts: {
+            create: formData.has('permissions.posts.create'),
+            edit: formData.has('permissions.posts.edit'),
+            delete: formData.has('permissions.posts.delete'),
+            publish: formData.has('permissions.posts.publish')
+          },
+          library: {
+            create: formData.has('permissions.library.create'),
+            edit: formData.has('permissions.library.edit'),
+            delete: formData.has('permissions.library.delete'),
+            publish: formData.has('permissions.library.publish')
+          }
+        }
+      };
+      
+      try {
+        const response = await fetch('/api/admin/users', {
+          method: userId ? 'PUT' : 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': csrfToken
+          },
+          body: JSON.stringify(data)
+        });
+        
+        if (response.ok) {
+          window.location.reload();
+        } else {
+          const error = await response.json();
+          alert(error.error || 'Failed to save user');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred');
+      }
+    });
+
+    // Toggle user status
+    document.querySelectorAll('.delete-user').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const userId = btn.dataset.userId;
+        
+        if (confirm('Are you sure you want to change this user\'s status?')) {
+          try {
+            const response = await fetch('/api/admin/users', {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': csrfToken
+              },
+              body: JSON.stringify({ id: userId })
+            });
+            
+            if (response.ok) {
+              window.location.reload();
+            } else {
+              alert('Failed to update user status');
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred');
+          }
+        }
+      });
+    });
+  </script>
+</AdminLayout>

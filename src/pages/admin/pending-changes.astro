@@ -1,0 +1,323 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+
+// This page is protected by middleware
+const user = Astro.locals.user;
+const csrfToken = Astro.locals.csrfToken;
+
+// Only users with approveChanges permission can access
+if (!user?.permissions?.approveChanges) {
+  return Astro.redirect('/admin/dashboard');
+}
+
+// Read pending changes data
+import pendingChangesData from '../../data/pending-changes.json';
+const pendingChanges = pendingChangesData;
+
+// Group by type
+const groupedChanges = {
+  news: pendingChanges.filter(c => c.type === 'news'),
+  events: pendingChanges.filter(c => c.type === 'events'),
+  posts: pendingChanges.filter(c => c.type === 'posts'),
+  library: pendingChanges.filter(c => c.type === 'library')
+};
+---
+
+<AdminLayout title="Pending Changes - Kalyanamitta Admin">
+  <div class="min-h-screen bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center py-4">
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900">Pending Changes</h1>
+            <p class="text-sm text-gray-600">Review and approve moderator submissions</p>
+          </div>
+          <a href="/admin/dashboard" class="text-blue-600 hover:text-blue-700 font-medium">
+            ← Back to Dashboard
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {pendingChanges.length === 0 ? (
+        <div class="bg-white rounded-lg shadow p-8 text-center">
+          <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <h3 class="text-lg font-medium text-gray-900 mb-2">No Pending Changes</h3>
+          <p class="text-gray-600">All submissions have been reviewed</p>
+        </div>
+      ) : (
+        <div class="space-y-6">
+          {Object.entries(groupedChanges).map(([type, changes]) => (
+            changes.length > 0 && (
+              <div class="bg-white rounded-lg shadow">
+                <div class="px-6 py-4 border-b border-gray-200">
+                  <h2 class="text-lg font-semibold text-gray-900 capitalize flex items-center gap-2">
+                    {type}
+                    <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full">
+                      {changes.length}
+                    </span>
+                  </h2>
+                </div>
+                <div class="divide-y divide-gray-200">
+                  {changes.map((change) => (
+                    <div class="p-6">
+                      <div class="flex justify-between items-start mb-4">
+                        <div class="flex-1">
+                          <div class="flex items-center gap-3 mb-2">
+                            <span class={`px-2 py-1 text-xs font-semibold rounded-full ${
+                              change.action === 'create' ? 'bg-green-100 text-green-800' :
+                              change.action === 'update' ? 'bg-blue-100 text-blue-800' :
+                              'bg-red-100 text-red-800'
+                            }`}>
+                              {change.action}
+                            </span>
+                            <span class="text-sm text-gray-600">
+                              by <span class="font-medium">{change.submittedBy}</span>
+                            </span>
+                            <span class="text-sm text-gray-400">
+                              {new Date(change.submittedAt).toLocaleString()}
+                            </span>
+                          </div>
+                          {change.reason && (
+                            <p class="text-sm text-gray-600 mb-2">
+                              <span class="font-medium">Reason:</span> {change.reason}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      <!-- Content Preview -->
+                      <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                        <h3 class="font-medium text-gray-900 mb-2">Content Preview</h3>
+                        <div class="space-y-2 text-sm">
+                          {change.data.title && (
+                            <div>
+                              <span class="font-medium text-gray-700">Title:</span>
+                              <span class="text-gray-600 ml-2">{change.data.title}</span>
+                            </div>
+                          )}
+                          {change.data.name && (
+                            <div>
+                              <span class="font-medium text-gray-700">Name:</span>
+                              <span class="text-gray-600 ml-2">{change.data.name}</span>
+                            </div>
+                          )}
+                          {change.data.description && (
+                            <div>
+                              <span class="font-medium text-gray-700">Description:</span>
+                              <p class="text-gray-600 mt-1">{change.data.description.substring(0, 200)}...</p>
+                            </div>
+                          )}
+                          {change.data.content && (
+                            <div>
+                              <span class="font-medium text-gray-700">Content:</span>
+                              <p class="text-gray-600 mt-1">{change.data.content.substring(0, 200)}...</p>
+                            </div>
+                          )}
+                        </div>
+                        <button 
+                          class="mt-3 text-blue-600 hover:text-blue-700 text-sm font-medium view-full"
+                          data-change-id={change.id}
+                        >
+                          View Full Details →
+                        </button>
+                      </div>
+
+                      <!-- Actions -->
+                      <div class="flex gap-3">
+                        <button
+                          class="approve-btn flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition"
+                          data-change-id={change.id}
+                        >
+                          Approve
+                        </button>
+                        <button
+                          class="reject-btn flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition"
+                          data-change-id={change.id}
+                        >
+                          Reject
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )
+          ))}
+        </div>
+      )}
+    </main>
+  </div>
+
+  <!-- Full Details Modal -->
+  <div id="detailsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold">Change Details</h2>
+          <button id="closeDetailsModal" class="text-gray-500 hover:text-gray-700">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        <div id="detailsContent"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rejection Reason Modal -->
+  <div id="rejectionModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-lg max-w-md w-full">
+      <div class="p-6">
+        <h2 class="text-xl font-bold mb-4">Rejection Reason</h2>
+        <textarea
+          id="rejectionReason"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 mb-4"
+          rows="4"
+          placeholder="Provide a reason for rejection (optional)"
+        ></textarea>
+        <div class="flex gap-3">
+          <button
+            id="confirmReject"
+            class="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition"
+          >
+            Confirm Rejection
+          </button>
+          <button
+            id="cancelReject"
+            class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script define:vars={{ csrfToken, pendingChanges }}>
+    const detailsModal = document.getElementById('detailsModal');
+    const rejectionModal = document.getElementById('rejectionModal');
+    let currentChangeId = null;
+
+    // View full details
+    document.querySelectorAll('.view-full').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const changeId = btn.dataset.changeId;
+        const change = pendingChanges.find(c => c.id === changeId);
+        
+        if (change) {
+          const html = `
+            <div class="space-y-4">
+              <div class="bg-gray-50 rounded-lg p-4">
+                <h3 class="font-semibold mb-2">Metadata</h3>
+                <div class="space-y-1 text-sm">
+                  <div><span class="font-medium">Action:</span> ${change.action}</div>
+                  <div><span class="font-medium">Type:</span> ${change.type}</div>
+                  <div><span class="font-medium">Submitted by:</span> ${change.submittedBy}</div>
+                  <div><span class="font-medium">Submitted at:</span> ${new Date(change.submittedAt).toLocaleString()}</div>
+                  ${change.reason ? `<div><span class="font-medium">Reason:</span> ${change.reason}</div>` : ''}
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded-lg p-4">
+                <h3 class="font-semibold mb-2">Data</h3>
+                <pre class="text-xs bg-white p-3 rounded border overflow-x-auto">${JSON.stringify(change.data, null, 2)}</pre>
+              </div>
+            </div>
+          `;
+          
+          document.getElementById('detailsContent').innerHTML = html;
+          detailsModal.classList.remove('hidden');
+        }
+      });
+    });
+
+    // Close details modal
+    document.getElementById('closeDetailsModal').addEventListener('click', () => {
+      detailsModal.classList.add('hidden');
+    });
+
+    // Approve change
+    document.querySelectorAll('.approve-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const changeId = btn.dataset.changeId;
+        
+        if (confirm('Are you sure you want to approve this change?')) {
+          try {
+            const response = await fetch('/api/admin/pending-changes', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': csrfToken
+              },
+              body: JSON.stringify({
+                id: changeId,
+                action: 'approve'
+              })
+            });
+            
+            if (response.ok) {
+              window.location.reload();
+            } else {
+              const error = await response.json();
+              alert(error.error || 'Failed to approve change');
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred');
+          }
+        }
+      });
+    });
+
+    // Reject change
+    document.querySelectorAll('.reject-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentChangeId = btn.dataset.changeId;
+        rejectionModal.classList.remove('hidden');
+      });
+    });
+
+    // Confirm rejection
+    document.getElementById('confirmReject').addEventListener('click', async () => {
+      const reason = document.getElementById('rejectionReason').value;
+      
+      try {
+        const response = await fetch('/api/admin/pending-changes', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': csrfToken
+          },
+          body: JSON.stringify({
+            id: currentChangeId,
+            action: 'reject',
+            reason
+          })
+        });
+        
+        if (response.ok) {
+          window.location.reload();
+        } else {
+          const error = await response.json();
+          alert(error.error || 'Failed to reject change');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred');
+      }
+    });
+
+    // Cancel rejection
+    document.getElementById('cancelReject').addEventListener('click', () => {
+      rejectionModal.classList.add('hidden');
+      document.getElementById('rejectionReason').value = '';
+      currentChangeId = null;
+    });
+  </script>
+</AdminLayout>

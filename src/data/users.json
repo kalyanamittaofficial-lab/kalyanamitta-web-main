@@ -1,0 +1,39 @@
+[
+  {
+    "id": "admin",
+    "username": "admin",
+    "passwordHash": "$2b$12$GAIfFJbGGlmG2OQv.gxfQ.eemlq3fAPNX7rcsm7pgmQe1nhJaXA9K",
+    "role": "admin",
+    "permissions": {
+      "manageUsers": true,
+      "approveChanges": true,
+      "news": {
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "publish": true
+      },
+      "events": {
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "publish": true
+      },
+      "posts": {
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "publish": true
+      },
+      "library": {
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "publish": true
+      }
+    },
+    "status": "active",
+    "createdAt": "2025-11-18T00:00:00.000Z",
+    "lastLogin": "2025-11-18T00:02:42.237Z"
+  }
+]

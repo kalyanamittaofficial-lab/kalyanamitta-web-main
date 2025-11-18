@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import fs from 'fs/promises';
 import path from 'path';
+import { canUserPerformAction, canUserPublish, addPendingChange } from '../../../lib/permissions';
 
 const DATA_DIR = path.join(process.cwd(), 'src', 'data');
 
@@ -49,6 +50,14 @@ export const POST: APIRoute = async ({ request, locals }) => {
       );
     }
 
+    // Check permission
+    if (!canUserPerformAction(locals.user, 'news', 'create')) {
+      return new Response(
+        JSON.stringify({ error: 'No permission to create news' }),
+        { status: 403, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
     const body = await request.json();
     const { title, titleSinhala, excerpt, excerptSinhala, content, contentSinhala, source, author, date, category, tags, image, url, featured, language, hidden } = body;
 
@@ -80,13 +89,30 @@ export const POST: APIRoute = async ({ request, locals }) => {
       hidden: hidden === true
     };
 
-    news.push(newItem);
-    await writeDataFile('news.json', news);
+    // If user can publish directly, add to news; otherwise, add to pending changes
+    if (canUserPublish(locals.user, 'news')) {
+      news.push(newItem);
+      await writeDataFile('news.json', news);
 
-    return new Response(
-      JSON.stringify({ success: true, item: newItem }),
-      { status: 201, headers: { 'Content-Type': 'application/json' } }
-    );
+      return new Response(
+        JSON.stringify({ success: true, item: newItem, published: true }),
+        { status: 201, headers: { 'Content-Type': 'application/json' } }
+      );
+    } else {
+      // Add to pending changes for approval
+      await addPendingChange({
+        type: 'news',
+        action: 'create',
+        data: newItem,
+        submittedBy: locals.user.username,
+        reason: body.reason
+      });
+
+      return new Response(
+        JSON.stringify({ success: true, pending: true, message: 'Submitted for approval' }),
+        { status: 201, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
   } catch (error) {
     console.error('Error creating news:', error);
     return new Response(

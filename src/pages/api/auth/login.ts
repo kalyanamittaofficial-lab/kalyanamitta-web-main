@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { verifyAdminCredentials, createSession, generateCSRFToken } from '../../../lib/auth';
+import { updateLastLogin } from '../../../lib/permissions';
 
 export const POST: APIRoute = async ({ request, cookies }) => {
   try {
@@ -25,6 +26,9 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       );
     }
 
+    // Update last login time
+    await updateLastLogin(user.id);
+
     // Generate CSRF token and create session
     const csrfToken = generateCSRFToken();
     const token = await createSession(user, csrfToken);
@@ -32,7 +36,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     // Set secure HTTP-only cookie
     cookies.set('auth_token', token, {
       httpOnly: true,
-      secure: true,
+      secure: import.meta.env.PROD, // Only secure in production
       sameSite: 'strict',
       maxAge: 8 * 60 * 60, // 8 hours
       path: '/'
