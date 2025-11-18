@@ -43,6 +43,21 @@ export function canUserPerformAction(
   return perms?.[action] === true;
 }
 
+export function canUserAccessSection(
+  user: AdminUser,
+  contentType: 'news' | 'events' | 'posts' | 'library'
+): boolean {
+  const perms = user.permissions[contentType];
+  if (!perms) return false;
+  // User can access section if they have ANY permission for it
+  return perms.create === true || perms.edit === true || perms.delete === true || perms.publish === true;
+}
+
+export function getUserAccessibleSections(user: AdminUser): Array<'news' | 'events' | 'posts' | 'library'> {
+  const sections: Array<'news' | 'events' | 'posts' | 'library'> = ['news', 'events', 'posts', 'library'];
+  return sections.filter(section => canUserAccessSection(user, section));
+}
+
 export async function updateLastLogin(userId: string): Promise<void> {
   try {
     const fs = await import('fs/promises');

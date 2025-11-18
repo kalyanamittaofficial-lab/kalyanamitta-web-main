@@ -12,7 +12,19 @@ if (!user?.permissions?.approveChanges) {
 
 // Read pending changes data
 import pendingChangesData from '../../data/pending-changes.json';
-const pendingChanges = pendingChangesData;
+
+// Helper function to check section access
+const canAccessSection = (section: 'news' | 'events' | 'posts' | 'library') => {
+  if (!user?.permissions) return false;
+  const perms = user.permissions[section];
+  if (!perms) return false;
+  return perms.create || perms.edit || perms.delete || perms.publish;
+};
+
+// Filter pending changes based on user's accessible sections
+const pendingChanges = pendingChangesData.filter(change => {
+  return canAccessSection(change.type as 'news' | 'events' | 'posts' | 'library');
+});
 
 // Group by type
 const groupedChanges = {

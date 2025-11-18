@@ -19,8 +19,23 @@ const libraryCount = libraryData.resources?.length || 0;
 // Check if user can view statistics (admin role OR explicit permission)
 const canViewStatistics = user?.role === 'admin' || user?.permissions?.viewStatistics === true;
 
+// Helper function to check section access
+const canAccessSection = (section: 'news' | 'events' | 'posts' | 'library') => {
+  if (!user?.permissions) return false;
+  const perms = user.permissions[section];
+  if (!perms) return false;
+  return perms.create || perms.edit || perms.delete || perms.publish;
+};
+
+// Check which sections user can access
+const canAccessNews = canAccessSection('news');
+const canAccessEvents = canAccessSection('events');
+const canAccessPosts = canAccessSection('posts');
+const canAccessLibrary = canAccessSection('library');
+
 // Debug log (remove after testing)
-console.log('Dashboard User:', user?.username, 'Role:', user?.role, 'viewStatistics:', user?.permissions?.viewStatistics, 'canViewStatistics:', canViewStatistics);
+console.log('Dashboard User:', user?.username, 'Role:', user?.role, 'canViewStatistics:', canViewStatistics);
+console.log('Section Access:', { news: canAccessNews, events: canAccessEvents, posts: canAccessPosts, library: canAccessLibrary });
 ---
 
 <AdminLayout title="Admin Dashboard - Kalyanamitta">
@@ -55,7 +70,8 @@ console.log('Dashboard User:', user?.username, 'Role:', user?.role, 'viewStatist
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <!-- Stats Cards (Admin Only with viewStatistics permission) -->
       {canViewStatistics && (
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {canAccessNews && (
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
           <div class="flex items-center justify-between">
             <div>
@@ -69,7 +85,9 @@ console.log('Dashboard User:', user?.username, 'Role:', user?.role, 'viewStatist
             </div>
           </div>
         </div>
+        )}
 
+        {canAccessEvents && (
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
           <div class="flex items-center justify-between">
             <div>
@@ -83,7 +101,9 @@ console.log('Dashboard User:', user?.username, 'Role:', user?.role, 'viewStatist
             </div>
           </div>
         </div>
+        )}
 
+        {canAccessPosts && (
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
           <div class="flex items-center justify-between">
             <div>
@@ -97,7 +117,9 @@ console.log('Dashboard User:', user?.username, 'Role:', user?.role, 'viewStatist
             </div>
           </div>
         </div>
+        )}
 
+        {canAccessLibrary && (
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
           <div class="flex items-center justify-between">
             <div>
@@ -111,6 +133,7 @@ console.log('Dashboard User:', user?.username, 'Role:', user?.role, 'viewStatist
             </div>
           </div>
         </div>
+        )}
       </div>
       )}
 
@@ -204,6 +227,7 @@ console.log('Dashboard User:', user?.username, 'Role:', user?.role, 'viewStatist
       <!-- Content Management Sections -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- News Management -->
+        {canAccessNews && (
         <a href="/admin/news" class="block bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition group">
           <div class="flex items-center justify-between mb-4">
             <h2 class="text-lg font-semibold text-gray-900">News Management</h2>
@@ -213,8 +237,10 @@ console.log('Dashboard User:', user?.username, 'Role:', user?.role, 'viewStatist
           </div>
           <p class="text-sm text-gray-600">Create, edit, and manage news articles</p>
         </a>
+        )}
 
         <!-- Events Management -->
+        {canAccessEvents && (
         <a href="/admin/events" class="block bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition group">
           <div class="flex items-center justify-between mb-4">
             <h2 class="text-lg font-semibold text-gray-900">Events Management</h2>
@@ -224,8 +250,10 @@ console.log('Dashboard User:', user?.username, 'Role:', user?.role, 'viewStatist
           </div>
           <p class="text-sm text-gray-600">Manage upcoming and past events</p>
         </a>
+        )}
 
         <!-- Posts Management -->
+        {canAccessPosts && (
         <a href="/admin/posts" class="block bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition group">
           <div class="flex items-center justify-between mb-4">
             <h2 class="text-lg font-semibold text-gray-900">Posts Management</h2>
@@ -235,8 +263,10 @@ console.log('Dashboard User:', user?.username, 'Role:', user?.role, 'viewStatist
           </div>
           <p class="text-sm text-gray-600">Write and publish blog posts</p>
         </a>
+        )}
 
         <!-- Library Management -->
+        {canAccessLibrary && (
         <a href="/admin/library" class="block bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition group">
           <div class="flex items-center justify-between mb-4">
             <h2 class="text-lg font-semibold text-gray-900">Library Management</h2>
@@ -246,6 +276,7 @@ console.log('Dashboard User:', user?.username, 'Role:', user?.role, 'viewStatist
           </div>
           <p class="text-sm text-gray-600">Manage library resources and materials</p>
         </a>
+        )}
       </div>
     </main>
   </div>
