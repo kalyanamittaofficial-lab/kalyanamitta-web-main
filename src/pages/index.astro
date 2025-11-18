@@ -38,29 +38,46 @@ const latestNews = [...newsData]
 
   <!-- Hero Section -->
   <div class="mb-12 md:mb-20 pt-8 md:pt-12 pb-12 md:pb-16 text-center relative">
-    <div class="space-y-4 md:space-y-6">
-      <div class="mb-2 md:mb-4 h-10 md:h-14"></div>
-      
-      <h1 class="text-4xl sm:text-5xl md:text-7xl font-display font-bold mb-4 md:mb-6 leading-tight px-4">
-        <span class="block text-gray-900 mb-2">Kalyanamitta</span>
-      </h1>
-      
-      <p class="text-lg sm:text-xl md:text-2xl text-gray-600 max-w-2xl mx-auto leading-relaxed px-4">
-        A collection of teachings, reflections, and insights on the path to enlightenment
-      </p>
-      
-      <div class="flex flex-wrap justify-center gap-3 md:gap-4 pt-4 md:pt-6 px-4">
-        <a href="/writings" class="group px-6 sm:px-8 py-3 md:py-4 bg-monk-900 hover:bg-monk-800 text-white rounded-xl md:rounded-2xl font-medium shadow-lg transition-all text-sm sm:text-base">
-          <span class="flex items-center gap-2">
-            Explore Writings
-            <svg class="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-            </svg>
-          </span>
-        </a>
-        <a href="/connect" class="px-6 sm:px-8 py-3 md:py-4 bg-white border border-gray-300 hover:border-monk-900 text-gray-700 rounded-xl md:rounded-2xl font-medium hover:shadow-lg transition-all text-sm sm:text-base">
-          Connect With Us
-        </a>
+    <div class="max-w-5xl mx-auto">
+      <div class="relative bg-gradient-to-br from-white/60 via-monk-50/40 to-amber-50/30 backdrop-blur-sm rounded-3xl p-8 md:p-12 shadow-2xl border border-white/50">
+        <!-- Decorative elements -->
+        <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-monk-900/5 to-transparent rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-amber-900/5 to-transparent rounded-full blur-3xl"></div>
+        
+        <div class="relative space-y-4 md:space-y-6">
+          <div class="mb-2 md:mb-4 h-4 md:h-6"></div>
+          
+          <!-- Lotus Icon -->
+          <div class="flex justify-center mb-4">
+            <div class="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-monk-900 to-monk-700 rounded-3xl flex items-center justify-center shadow-xl">
+              <svg class="w-8 h-8 md:w-10 md:h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+              </svg>
+            </div>
+          </div>
+          
+          <h1 class="text-4xl sm:text-5xl md:text-7xl font-display font-bold mb-4 md:mb-6 leading-tight px-4">
+            <span class="block bg-gradient-to-r from-monk-900 via-monk-800 to-monk-900 bg-clip-text text-transparent mb-2">Kalyanamitta</span>
+          </h1>
+          
+          <p class="text-lg sm:text-xl md:text-2xl text-gray-700 max-w-2xl mx-auto leading-relaxed px-4 font-medium">
+            A collection of teachings, reflections, and insights on the path to enlightenment
+          </p>
+          
+          <div class="flex flex-wrap justify-center gap-3 md:gap-4 pt-6 md:pt-8 px-4">
+            <a href="/writings" class="group px-6 sm:px-8 py-3 md:py-4 bg-gradient-to-r from-monk-900 to-monk-800 hover:from-monk-800 hover:to-monk-700 text-white rounded-xl md:rounded-2xl font-bold shadow-xl hover:shadow-2xl transition-all duration-300 text-sm sm:text-base md:hover:-translate-y-1">
+              <span class="flex items-center gap-2">
+                Explore Writings
+                <svg class="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
+              </span>
+            </a>
+            <a href="/connect" class="px-6 sm:px-8 py-3 md:py-4 bg-white border-2 border-gray-300 hover:border-monk-900 text-gray-700 hover:text-monk-900 rounded-xl md:rounded-2xl font-bold hover:shadow-xl transition-all duration-300 text-sm sm:text-base md:hover:-translate-y-1">
+              Connect With Us
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -68,16 +85,21 @@ const latestNews = [...newsData]
   <!-- Writings Section -->
   <div class="mb-8 md:mb-12">
     <div class="flex items-center justify-between mb-6 md:mb-8 px-4">
-      <div class="flex items-center gap-2 md:gap-4 flex-1">
+      <div class="flex items-center gap-3 md:gap-4 flex-1">
+        <div class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-monk-900 to-monk-700 rounded-2xl flex items-center justify-center shadow-lg">
+          <svg class="w-5 h-5 md:w-6 md:h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/>
+          </svg>
+        </div>
         <h2 class="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-gray-900 whitespace-nowrap">
           Writings
         </h2>
-        <div class="flex-1 h-px bg-gradient-to-r from-monk-300/40 to-transparent"></div>
+        <div class="flex-1 h-0.5 bg-gradient-to-r from-monk-300/60 via-monk-200/40 to-transparent rounded-full"></div>
       </div>
-      <a href="/writings" class="text-monk-900 font-medium hover:text-monk-700 flex items-center gap-1.5 md:gap-2 text-sm md:text-base whitespace-nowrap ml-2">
+      <a href="/writings" class="group text-monk-900 font-bold hover:text-monk-700 flex items-center gap-1.5 md:gap-2 text-sm md:text-base whitespace-nowrap ml-2 px-4 py-2 rounded-xl hover:bg-monk-50 transition-all">
         View All
-        <svg class="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        <svg class="w-3.5 h-3.5 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
         </svg>
       </a>
     </div>
@@ -91,7 +113,7 @@ const latestNews = [...newsData]
                 href={post.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="group flex flex-col w-full bg-white rounded-2xl md:rounded-3xl p-5 sm:p-6 md:p-8 border border-gray-200 hover:border-monk-900 transition-all hover:shadow-xl relative"
+                class="group flex flex-col w-full bg-white rounded-2xl md:rounded-3xl p-5 sm:p-6 md:p-8 border-2 border-gray-200 hover:border-monk-700 transition-all duration-300 hover:shadow-2xl relative md:hover:-translate-y-1"
               >
                 <div class="space-y-4 flex-1 flex flex-col">
                   <div class="flex items-start justify-between gap-2">
@@ -153,16 +175,21 @@ const latestNews = [...newsData]
   <!-- Latest Notices Section -->
   <div class="mb-8 md:mb-12">
     <div class="flex items-center justify-between mb-6 md:mb-8 px-4">
-      <div class="flex items-center gap-2 md:gap-4 flex-1">
+      <div class="flex items-center gap-3 md:gap-4 flex-1">
+        <div class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-amber-600 to-amber-700 rounded-2xl flex items-center justify-center shadow-lg">
+          <svg class="w-5 h-5 md:w-6 md:h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+          </svg>
+        </div>
         <h2 class="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-gray-900 whitespace-nowrap">
           Latest Notices
         </h2>
-        <div class="flex-1 h-px bg-gradient-to-r from-monk-300/40 to-transparent"></div>
+        <div class="flex-1 h-0.5 bg-gradient-to-r from-amber-300/60 via-amber-200/40 to-transparent rounded-full"></div>
       </div>
-      <a href="/news" class="text-monk-900 font-medium hover:text-monk-700 flex items-center gap-1.5 md:gap-2 text-sm md:text-base whitespace-nowrap ml-2">
+      <a href="/news" class="group text-monk-900 font-bold hover:text-monk-700 flex items-center gap-1.5 md:gap-2 text-sm md:text-base whitespace-nowrap ml-2 px-4 py-2 rounded-xl hover:bg-monk-50 transition-all">
         View All
-        <svg class="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        <svg class="w-3.5 h-3.5 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
         </svg>
       </a>
     </div>
@@ -172,7 +199,7 @@ const latestNews = [...newsData]
       <div class="flex gap-4 md:gap-6 px-4" id="news-carousel">
         {(latestNews.length > 1 ? latestNews.concat(latestNews) : latestNews).map((news) => (
           <div class="w-[calc(100vw-3rem)] min-w-[calc(100vw-3rem)] sm:min-w-[300px] md:min-w-[420px] flex-shrink-0 flex">
-            <div class="group flex flex-col w-full bg-white rounded-2xl md:rounded-3xl p-5 sm:p-6 md:p-8 border border-gray-200 hover:border-monk-900 transition-all hover:shadow-xl relative news-card-home" data-news-id={news.id}>
+            <div class="group flex flex-col w-full bg-white rounded-2xl md:rounded-3xl p-5 sm:p-6 md:p-8 border-2 border-gray-200 hover:border-amber-600 transition-all duration-300 hover:shadow-2xl relative news-card-home cursor-pointer md:hover:-translate-y-1" data-news-id={news.id}>
               <div class="space-y-4 flex-1 flex flex-col">
                 <div class="flex items-start justify-between gap-2">
                   <div class="flex flex-wrap items-center gap-2">

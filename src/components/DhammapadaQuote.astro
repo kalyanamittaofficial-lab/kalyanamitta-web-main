@@ -8,22 +8,19 @@ import dhammapadaQuotes from '../data/dhammapada.json';
   data-quotes={JSON.stringify(dhammapadaQuotes)}
 >
   <div class="max-w-6xl mx-auto">
-    <!-- Collapsed State: Modern Tab with Gradient -->
+    <!-- Collapsed State: Icon with Colored Box -->
     <div 
       id="quote-tab"
-      class="group mx-auto w-fit relative overflow-hidden bg-gradient-to-r from-monk-900 via-monk-800 to-monk-900 hover:from-monk-800 hover:via-monk-700 hover:to-monk-800 rounded-2xl px-6 sm:px-8 py-3 sm:py-3.5 shadow-lg hover:shadow-xl cursor-pointer transition-all duration-500 border border-monk-700/50 hover:border-monk-600"
+      class="group mx-auto w-fit relative overflow-hidden bg-gradient-to-r from-monk-900 via-monk-800 to-monk-900 hover:from-monk-800 hover:via-monk-700 hover:to-monk-800 rounded-2xl px-5 sm:px-6 py-3 sm:py-3.5 shadow-lg hover:shadow-xl cursor-pointer transition-all duration-500 border border-monk-700/50 hover:border-monk-600"
     >
       <!-- Shine effect -->
       <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
       
-      <div class="relative flex items-center gap-3">
+      <div class="relative flex items-center gap-2">
         <!-- Animated Lotus Icon -->
         <svg class="w-5 h-5 sm:w-6 sm:h-6 text-monk-50 group-hover:text-white transition-all duration-300 group-hover:scale-110" fill="currentColor" viewBox="0 0 24 24">
           <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
         </svg>
-        <span class="text-sm sm:text-base font-bold text-white whitespace-nowrap tracking-wide group-hover:tracking-wider transition-all duration-300">
-          ධම්මපදය
-        </span>
         <svg id="arrow-icon" class="w-4 h-4 sm:w-5 sm:h-5 text-white transition-all duration-500 group-hover:translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>
         </svg>
