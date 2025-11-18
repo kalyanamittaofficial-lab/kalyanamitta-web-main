@@ -1,14 +1,22 @@
 [
   {
-    "id": "1763461637864sjsbso5cm",
+    "id": "176346188878275zt7x4pc",
+    "recipientUsername": "Thimani",
+    "type": "news",
+    "action": "delete",
+    "status": "approved",
+    "itemTitle": "International Vesak Day Celebrations Announced",
+    "approvedBy": "yasan",
+    "createdAt": "2025-11-18T10:31:28.782Z"
+  },
+  {
+    "id": "1763462332791h5s9x1s1o",
     "recipientUsername": "yasan",
     "type": "news",
     "action": "create",
-    "status": "rejected",
-    "itemTitle": "Dharma Deshana",
-    "approvedBy": "admin",
-    "reason": "this is not well created . Hasindu",
-    "createdAt": "2025-11-18T10:27:17.864Z",
-    "expiresAt": "2025-11-19T10:27:17.864Z"
+    "status": "approved",
+    "itemTitle": "rgrg",
+    "approvedBy": "yasan",
+    "createdAt": "2025-11-18T10:38:52.791Z"
   }
 ]

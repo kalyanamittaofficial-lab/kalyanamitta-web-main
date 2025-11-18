@@ -58,7 +58,6 @@ async function createNotification(
   const notifications = JSON.parse(await fs.readFile(notificationsPath, 'utf-8'));
   
   const now = new Date();
-  const expiresAt = new Date(now.getTime() + 24 * 60 * 60 * 1000); // 24 hours from now
   
   notifications.push({
     id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
@@ -69,8 +68,7 @@ async function createNotification(
     itemTitle,
     approvedBy,
     reason,
-    createdAt: now.toISOString(),
-    expiresAt: expiresAt.toISOString()
+    createdAt: now.toISOString()
   });
   
   await fs.writeFile(notificationsPath, JSON.stringify(notifications, null, 2));

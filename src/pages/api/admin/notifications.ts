@@ -14,7 +14,6 @@ interface Notification {
   approvedBy: string;
   reason?: string;
   createdAt: string;
-  expiresAt: string;
 }
 
 async function readNotifications(): Promise<Notification[]> {
@@ -38,12 +37,7 @@ export const GET: APIRoute = async ({ locals }) => {
       );
     }
 
-    let notifications = await readNotifications();
-    
-    // Clean up expired notifications
-    const now = new Date();
-    notifications = notifications.filter(n => new Date(n.expiresAt) > now);
-    await writeNotifications(notifications);
+    const notifications = await readNotifications();
     
     // Filter notifications for current user
     const userNotifications = notifications.filter(
@@ -70,6 +64,15 @@ export const DELETE: APIRoute = async ({ request, locals }) => {
       return new Response(
         JSON.stringify({ error: 'Unauthorized' }),
         { status: 401, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Verify CSRF token
+    const csrfToken = request.headers.get('X-CSRF-Token');
+    if (!csrfToken || csrfToken !== locals.csrfToken) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid CSRF token' }),
+        { status: 403, headers: { 'Content-Type': 'application/json' } }
       );
     }
 

@@ -357,7 +357,10 @@ const users = usersData;
       });
       publishCheckboxes.forEach(checkbox => {
         checkbox.disabled = !isChecked;
-        if (!isChecked) {
+        if (isChecked) {
+          // Automatically check all publish permissions when approveChanges is enabled
+          checkbox.checked = true;
+        } else {
           checkbox.checked = false;
         }
       });

@@ -1,29 +1,5 @@
 [
   {
-    "id": 1,
-    "title": "International Vesak Day Celebrations Announced",
-    "titleSinhala": "ජාත්‍යන්තර වෙසක් දින සැමරුම් ප්‍රකාශයට පත් කරයි",
-    "excerpt": "The United Nations announces global Vesak Day celebrations to commemorate the birth, enlightenment, and passing of the Buddha.",
-    "excerptSinhala": "බුදුන්ගේ උපත, බුද්ධත්වය සහ මහා පරිනිර්වාණය සැමරීම සඳහා එක්සත් ජාතීන්ගේ සංවිධානය ලොව පුරා වෙසක් දින සැමරීම් ප්‍රකාශයට පත් කරයි.",
-    "content": "The United Nations has announced that Vesak Day will be celebrated globally with special ceremonies and events. Buddhist leaders from around the world will gather to commemorate this sacred day. The celebration will include meditation sessions, Dharma talks, and cultural programs showcasing Buddhist traditions from various countries.",
-    "contentSinhala": "එක්සත් ජාතීන්ගේ සංවිධානය විසින් වෙසක් දිනය විශේෂ උත්සව හා සිදුවීම් සමඟ ලොව පුරා සමරනු ලබන බව ප්‍රකාශ කර ඇත. මෙම පූජනීය දිනය සැමරීම සඳහා ලොව පුරා සිට බෞද්ධ නායකයින් එක්රැස් වනු ඇත.",
-    "source": "Buddhist International",
-    "author": "Dharma News Network",
-    "date": "2025-11-15",
-    "category": "Events",
-    "tags": [
-      "Vesak",
-      "UN",
-      "Celebration",
-      "Global"
-    ],
-    "image": "/logo.png",
-    "url": "https://www.un.org/en/observances/vesak-day",
-    "featured": true,
-    "language": "English",
-    "hidden": true
-  },
-  {
     "id": 2,
     "title": "New Buddhist University Opens in Sri Lanka",
     "titleSinhala": "ශ්‍රී ලංකාවේ නව බෞද්ධ විශ්වවිද්‍යාලයක් විවෘත වේ",
@@ -190,5 +166,43 @@
     "featured": false,
     "language": "English",
     "hidden": true
+  },
+  {
+    "id": 9,
+    "title": "efuefe",
+    "titleSinhala": "",
+    "excerpt": "jefe",
+    "excerptSinhala": "",
+    "content": "kefoe",
+    "contentSinhala": "",
+    "source": "",
+    "author": "",
+    "date": "2025-11-29",
+    "category": "Meditation",
+    "tags": [],
+    "image": "/logo.png",
+    "url": "",
+    "featured": false,
+    "language": "English",
+    "hidden": false
+  },
+  {
+    "id": 10,
+    "title": "rgrg",
+    "titleSinhala": "",
+    "excerpt": "efre",
+    "excerptSinhala": "",
+    "content": "4e",
+    "contentSinhala": "",
+    "source": "",
+    "author": "",
+    "date": "2025-11-28",
+    "category": "",
+    "tags": [],
+    "image": "/logo.png",
+    "url": "",
+    "featured": false,
+    "language": "English",
+    "hidden": false
   }
 ]

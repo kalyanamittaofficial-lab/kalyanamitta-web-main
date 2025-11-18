@@ -54,5 +54,13 @@
     "userId": "c3d7ca5e-3ebd-4307-a65a-c1e5c1237c4f",
     "username": "yasan",
     "details": "permissions updated"
+  },
+  {
+    "timestamp": "2025-11-18T10:42:51.206Z",
+    "action": "updated",
+    "performedBy": "admin",
+    "userId": "c3d7ca5e-3ebd-4307-a65a-c1e5c1237c4f",
+    "username": "yasan",
+    "details": "permissions updated"
   }
 ]

@@ -395,13 +395,21 @@ console.log('Section Access:', { news: canAccessNews, events: canAccessEvents, p
           <td class="px-6 py-4 text-sm text-gray-500">${notif.reason || '-'}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${timeAgo}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm">
-            <button onclick="dismissNotification('${notif.id}')" class="text-red-600 hover:text-red-800 font-medium">
+            <button data-notification-id="${notif.id}" class="dismiss-notification-btn text-red-600 hover:text-red-800 font-medium transition-colors">
               Dismiss
             </button>
           </td>
         `;
         
         tbody.appendChild(row);
+      });
+      
+      // Attach event listeners to dismiss buttons
+      document.querySelectorAll('.dismiss-notification-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const id = this.dataset.notificationId;
+          dismissNotification(id);
+        });
       });
       
       // Update count and pagination
@@ -427,13 +435,31 @@ console.log('Section Access:', { news: canAccessNews, events: canAccessEvents, p
       return `${days}d ago`;
     }
 
-    window.dismissNotification = async function(id) {
+    async function dismissNotification(id) {
+      // Find and disable the button
+      const btn = document.querySelector(`[data-notification-id="${id}"]`);
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Dismissing...';
+        btn.classList.add('opacity-50', 'cursor-not-allowed');
+      }
+      
       try {
+        console.log('Dismissing notification:', id);
         const response = await fetch(`/api/admin/notifications?id=${id}`, {
-          method: 'DELETE'
+          method: 'DELETE',
+          headers: {
+            'X-CSRF-Token': csrfToken
+          }
         });
         
-        if (response.ok) {
+        console.log('Response status:', response.status);
+        const result = await response.json();
+        console.log('Response data:', result);
+        
+        if (response.ok && result.success) {
+          console.log('Notification dismissed successfully');
+          // Remove from local array
           notifications = notifications.filter(n => n.id !== id);
           
           // Adjust current page if needed
@@ -447,11 +473,25 @@ console.log('Section Access:', { news: canAccessNews, events: canAccessEvents, p
           } else {
             renderNotifications();
           }
+        } else {
+          console.error('Failed to dismiss notification:', result);
+          alert('Failed to dismiss notification: ' + (result.error || 'Unknown error'));
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = 'Dismiss';
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+          }
         }
       } catch (error) {
         console.error('Error dismissing notification:', error);
+        alert('Error dismissing notification. Please check console for details.');
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = 'Dismiss';
+          btn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
       }
-    };
+    }
 
     // Pagination handlers
     document.getElementById('prevPage')?.addEventListener('click', () => {
