@@ -1,4 +1,4 @@
-[
+﻿[
   {
     "id": "admin",
     "username": "admin",
@@ -35,6 +35,6 @@
     },
     "status": "active",
     "createdAt": "2025-11-18T00:00:00.000Z",
-    "lastLogin": "2025-11-18T10:42:25.275Z"
+    "lastLogin": null
   }
 ]

@@ -1,4 +1,4 @@
-[
+﻿[
   {
     "id": 1,
     "sinhala": "ජීවිතයේ හැම දේකටම සිතයි මුල්වෙන්නේ. සිතම තමයි ශ්‍රේෂ්ඨ වෙන්නේ. සිතින්මයි හටගන්නේ. යම් හෙයකින් සිත නරක් කරගෙන යමක් කිව්වොත් හරි, යමක් කෙරුවොත් හරි, ඒකෙන් ලැබෙන දුක් විපාක ඔහුගේ පස්සෙන් ලුහුබඳිනවා. කරත්තේ බැඳලා ඉන්න ගොනාගෙ පස්සෙන් එන රෝදයක් වගෙයි",
@@ -11,13 +11,13 @@
   },
   {
     "id": 3,
-    "sinhala": "අසවල් කෙනා මට බැන්නා, මට පහර දුන්නා. මාව පරාජය කළා, මගේ දේ පැහැරගත්තා” කිය කියා හිතන්ට ගිහින්, යම් කෙනෙක් ක්‍රෝධයෙන් බැඳිල ගියොත්, ඒ උදවියගේ වෛරය නම් සංසිඳෙන්නේ නෑ.",
-    "english": "He abused me, he struck me, he defeated me, he robbed me’ ,in those who harbor such thoughts, hatred is not appeased."
+    "sinhala": "අසවල් කෙනා මට බැන්නා, මට පහර දුන්නා. මාව පරාජය කළා, මගේ දේ පැහැරගත්තා කිය කියා හිතන්ට ගිහින්, යම් කෙනෙක් ක්‍රෝධයෙන් බැඳිල ගියොත්, ඒ උදවියගේ වෛරය නම් සංසිඳෙන්නේ නෑ.",
+    "english": "He abused me, he struck me, he defeated me, he robbed me, in those who harbor such thoughts, hatred is not appeased."
   },
   {
     "id": 4,
-    "sinhala": "අසවල් කෙනා මට බැන්නා, මට පහර දුන්නා. මාව පරාජය කළා, මගේ දේ පැහැරගත්තා” කිය කියා නොසිතා, යම් කෙනෙක් ක්‍රෝධයක් ඇතිකරගන්නෙ නැත්නම්, ඒ උදවියගේ වෛරය සංසිඳිලා යනවා.",
-    "english": "He abused me, he struck me, he defeated me, he robbed me’ ,in those who do not harbor such thoughts, hatred is appeased."
+    "sinhala": "අසවල් කෙනා මට බැන්නා, මට පහර දුන්නා. මාව පරාජය කළා, මගේ දේ පැහැරගත්තා කිය කියා නොසිතා, යම් කෙනෙක් ක්‍රෝධයක් ඇතිකරගන්නෙ නැත්නම්, ඒ උදවියගේ වෛරය සංසිඳිලා යනවා.",
+    "english": "He abused me, he struck me, he defeated me, he robbed me, in those who do not harbor such thoughts, hatred is appeased."
   },
   {
     "id": 5,
@@ -26,7 +26,7 @@
   },
   {
     "id": 6,
-    "sinhala": "මේ විදිහට කෝලාහල කරගන්ට ගියොත්, අපි ම යි විනාශ වෙන්නේ” කියල මේ කෝලාහල කරන උදවිය දන්නෙ නෑ. නමුත් මේ කෝලාහල වලින් වැනසෙන්නෙ අපි ම යි කියල යම් කෙනෙක් දන්නවා නම්, ඒ තුළින් ම යි කෝලාහල සංසිඳෙන්නේ.",
+    "sinhala": "මේ විදිහට කෝලාහල කරගන්ට ගියොත්, අපි ම යි විනාශ වෙන්නේ කියල මේ කෝලාහල කරන උදවිය දන්නෙ නෑ. නමුත් මේ කෝලාහල වලින් වැනසෙන්නෙ අපි ම යි කියල යම් කෙනෙක් දන්නවා නම්, ඒ තුළින් ම යි කෝලාහල සංසිඳෙන්නේ.",
     "english": "Others do not understand that we must perish here; but those who understand this, their quarrels cease at once"
   }
 ]
