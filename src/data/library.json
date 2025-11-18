@@ -8,7 +8,15 @@
       "teacher": "Ven. Kiribathgoda Gnanananda Thero (Translator)",
       "language": "Multilingual",
       "sourceType": "Website",
-      "topics": ["Buddhist Canon", "Pali Canon", "Tipiṭaka", "Suttas", "Dhamma", "Sinhala", "Pali"],
+      "topics": [
+        "Buddhist Canon",
+        "Pali Canon",
+        "Tipiṭaka",
+        "Suttas",
+        "Dhamma",
+        "Sinhala",
+        "Pali"
+      ],
       "verifiedDate": "2025-11-17",
       "featured": true,
       "hidden": false
@@ -21,7 +29,12 @@
       "teacher": "Ajahn Chah",
       "language": "English",
       "sourceType": "youtube",
-      "topics": ["Forest Tradition", "Meditation", "Monastic Life", "Practice"],
+      "topics": [
+        "Forest Tradition",
+        "Meditation",
+        "Monastic Life",
+        "Practice"
+      ],
       "verifiedDate": "2025-11-17",
       "featured": true,
       "hidden": true
@@ -34,7 +47,12 @@
       "teacher": "Various Teachers",
       "language": "English",
       "sourceType": "website",
-      "topics": ["Education", "Suttas", "Meditation", "Buddhist Studies"],
+      "topics": [
+        "Education",
+        "Suttas",
+        "Meditation",
+        "Buddhist Studies"
+      ],
       "verifiedDate": "2025-11-17",
       "featured": false,
       "hidden": true
@@ -47,7 +65,12 @@
       "teacher": "S.N. Goenka",
       "language": "Multilingual",
       "sourceType": "website",
-      "topics": ["Vipassana", "Meditation", "Retreats", "Practice"],
+      "topics": [
+        "Vipassana",
+        "Meditation",
+        "Retreats",
+        "Practice"
+      ],
       "verifiedDate": "2025-11-17",
       "featured": true,
       "hidden": true
@@ -60,7 +83,12 @@
       "teacher": "Bhikkhu Bodhi",
       "language": "English",
       "sourceType": "youtube",
-      "topics": ["Suttas", "Buddhist Philosophy", "Translation", "Study"],
+      "topics": [
+        "Suttas",
+        "Buddhist Philosophy",
+        "Translation",
+        "Study"
+      ],
       "verifiedDate": "2025-11-17",
       "featured": true,
       "hidden": true
@@ -73,7 +101,12 @@
       "teacher": "Collaborative Project",
       "language": "Multilingual",
       "sourceType": "website",
-      "topics": ["Suttas", "Pali Canon", "Translation", "Buddhist Canon"],
+      "topics": [
+        "Suttas",
+        "Pali Canon",
+        "Translation",
+        "Buddhist Canon"
+      ],
       "verifiedDate": "2025-11-17",
       "featured": true,
       "hidden": true
@@ -86,7 +119,12 @@
       "teacher": "Yuttadhammo Bhikkhu",
       "language": "English",
       "sourceType": "youtube",
-      "topics": ["Meditation", "Practice", "Q&A", "Daily Life"],
+      "topics": [
+        "Meditation",
+        "Practice",
+        "Q&A",
+        "Daily Life"
+      ],
       "verifiedDate": "2025-11-17",
       "featured": false,
       "hidden": true
@@ -99,7 +137,12 @@
       "teacher": "Various Teachers",
       "language": "English",
       "sourceType": "website",
-      "topics": ["Contemporary Buddhism", "Articles", "Teachings", "Culture"],
+      "topics": [
+        "Contemporary Buddhism",
+        "Articles",
+        "Teachings",
+        "Culture"
+      ],
       "verifiedDate": "2025-11-17",
       "featured": false,
       "hidden": true
@@ -112,7 +155,12 @@
       "teacher": "ත්‍රිපිටක ව්‍යාපෘතිය",
       "language": "Sinhala",
       "sourceType": "website",
-      "topics": ["Suttas", "Tripitaka", "Sinhala", "Buddhist Canon"],
+      "topics": [
+        "Suttas",
+        "Tripitaka",
+        "Sinhala",
+        "Buddhist Canon"
+      ],
       "verifiedDate": "2025-11-17",
       "featured": true,
       "hidden": true
@@ -125,7 +173,12 @@
       "teacher": "කිරිබත්ගොඩ ඤාණානන්ද හිමි",
       "language": "Sinhala",
       "sourceType": "youtube",
-      "topics": ["Dhamma", "Meditation", "Sinhala", "Practice"],
+      "topics": [
+        "Dhamma",
+        "Meditation",
+        "Sinhala",
+        "Practice"
+      ],
       "verifiedDate": "2025-11-17",
       "featured": true,
       "hidden": true
@@ -138,7 +191,12 @@
       "teacher": "විවිධ මහණ හිමිවරු",
       "language": "Sinhala",
       "sourceType": "website",
-      "topics": ["Books", "Dhamma", "Sinhala", "Education"],
+      "topics": [
+        "Books",
+        "Dhamma",
+        "Sinhala",
+        "Education"
+      ],
       "verifiedDate": "2025-11-17",
       "featured": false,
       "hidden": true
@@ -151,15 +209,15 @@
       "teacher": "විවිධ භාවනාචාර්යවරු",
       "language": "Sinhala",
       "sourceType": "youtube",
-      "topics": ["Meditation", "Vipassana", "Practice", "Sinhala"],
+      "topics": [
+        "Meditation",
+        "Vipassana",
+        "Practice",
+        "Sinhala"
+      ],
       "verifiedDate": "2025-11-17",
       "featured": false,
       "hidden": true
     }
-  ],
-  "metadata": {
-    "lastUpdated": "2025-11-17",
-    "totalResources": 12,
-    "maintainedBy": "Kalyanamitta Team"
-  }
+  ]
 }

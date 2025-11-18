@@ -1,1 +1,63 @@
-[]
+[
+  {
+    "id": "change-001",
+    "type": "news",
+    "action": "create",
+    "data": {
+      "id": "news-new-001",
+      "title": "New Dhamma Talk Series Starting",
+      "description": "Join us for a new series of dhamma talks focusing on mindfulness meditation practices.",
+      "date": "2025-12-01",
+      "author": "Bhante Sujato"
+    },
+    "submittedBy": "moderator1",
+    "submittedAt": "2025-11-18T10:30:00.000Z",
+    "reason": "Announcing new series for December"
+  },
+  {
+    "id": "change-002",
+    "type": "events",
+    "action": "update",
+    "data": {
+      "id": "event-003",
+      "title": "Weekly Meditation Session - Updated Time",
+      "description": "Weekly meditation session now starts at 7:00 PM instead of 6:30 PM",
+      "date": "2025-11-25",
+      "location": "Main Hall"
+    },
+    "originalId": "event-003",
+    "submittedBy": "moderator2",
+    "submittedAt": "2025-11-18T14:15:00.000Z",
+    "reason": "Correcting the time due to schedule change"
+  },
+  {
+    "id": "change-003",
+    "type": "posts",
+    "action": "create",
+    "data": {
+      "id": "post-new-001",
+      "title": "The Four Noble Truths Explained",
+      "content": "This post explores the fundamental teachings of Buddhism - the Four Noble Truths...",
+      "author": "Bhante Ananda",
+      "date": "2025-11-18"
+    },
+    "submittedBy": "moderator1",
+    "submittedAt": "2025-11-18T09:00:00.000Z",
+    "reason": "Educational content for new practitioners"
+  },
+  {
+    "id": "change-004",
+    "type": "library",
+    "action": "create",
+    "data": {
+      "id": "lib-new-001",
+      "name": "Introduction to Buddhist Meditation",
+      "author": "Ajahn Chah",
+      "type": "book",
+      "description": "A comprehensive guide to meditation practices in the Theravada tradition"
+    },
+    "submittedBy": "moderator3",
+    "submittedAt": "2025-11-17T16:45:00.000Z",
+    "reason": "Adding important meditation resource"
+  }
+]

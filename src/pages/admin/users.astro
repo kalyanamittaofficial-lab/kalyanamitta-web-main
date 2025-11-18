@@ -34,11 +34,40 @@ const users = usersData;
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <!-- Add User Button -->
-      <div class="mb-6">
+      <!-- Controls Bar -->
+      <div class="mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+        <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+          <!-- Search -->
+          <div class="relative flex-1 sm:flex-initial">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Search users..."
+              class="w-full sm:w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            >
+            <svg class="absolute left-3 top-2.5 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </div>
+
+          <!-- Filter by Role -->
+          <select id="roleFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+            <option value="all">All Roles</option>
+            <option value="admin">Admin</option>
+            <option value="moderator">Moderator</option>
+          </select>
+
+          <!-- Filter by Status -->
+          <select id="statusFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+            <option value="all">All Status</option>
+            <option value="active">Active</option>
+            <option value="suspended">Suspended</option>
+          </select>
+        </div>
+
         <button
           id="addUserBtn"
-          class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition flex items-center gap-2"
+          class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition flex items-center justify-center gap-2"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -244,19 +273,32 @@ const users = usersData;
   </div>
 
   <script define:vars={{ csrfToken, users }}>
-    const modal = document.getElementById('userModal');
-    const permissionsModal = document.getElementById('permissionsModal');
-    const userForm = document.getElementById('userForm');
+    document.addEventListener('DOMContentLoaded', () => {
+      const modal = document.getElementById('userModal');
+      const permissionsModal = document.getElementById('permissionsModal');
+      const userForm = document.getElementById('userForm');
+      const addUserBtn = document.getElementById('addUserBtn');
 
-    // Add User
-    document.getElementById('addUserBtn').addEventListener('click', () => {
-      document.getElementById('modalTitle').textContent = 'Add New User';
-      document.getElementById('userId').value = '';
-      userForm.reset();
-      document.getElementById('passwordField').classList.remove('hidden');
-      document.getElementById('password').required = true;
-      modal.classList.remove('hidden');
-    });
+      if (!addUserBtn) {
+        console.error('Add User button not found!');
+        return;
+      }
+
+      // Add User
+      addUserBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log('Add User button clicked');
+        document.getElementById('modalTitle').textContent = 'Add New User';
+        document.getElementById('userId').value = '';
+        userForm.reset();
+        const passwordField = document.getElementById('passwordField');
+        passwordField.classList.remove('hidden');
+        passwordField.style.display = 'block';
+        document.getElementById('password').required = true;
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+        console.log('Modal should be visible now');
+      });
 
     // Edit User
     document.querySelectorAll('.edit-user').forEach(btn => {
@@ -338,13 +380,33 @@ const users = usersData;
       
       const formData = new FormData(userForm);
       const userId = formData.get('userId');
+      const username = formData.get('username');
+      const password = formData.get('password');
+      const role = formData.get('role');
+      
+      // Validation
+      if (!username || username.trim() === '') {
+        alert('Username is required');
+        return;
+      }
+      
+      if (!userId && (!password || password.trim() === '')) {
+        alert('Password is required for new users');
+        return;
+      }
+      
+      if (!role) {
+        alert('Role is required');
+        return;
+      }
+      
       const data = {
         id: userId || crypto.randomUUID(),
-        username: formData.get('username'),
-        role: formData.get('role'),
-        password: formData.get('password'),
+        username: username.trim(),
+        role: role,
+        password: password || undefined,
         permissions: {
-          manageUsers: formData.get('role') === 'admin',
+          manageUsers: role === 'admin',
           approveChanges: formData.has('permissions.approveChanges'),
           news: {
             create: formData.has('permissions.news.create'),
@@ -373,6 +435,8 @@ const users = usersData;
         }
       };
       
+      console.log('Submitting user data:', { ...data, password: data.password ? '***' : undefined });
+      
       try {
         const response = await fetch('/api/admin/users', {
           method: userId ? 'PUT' : 'POST',
@@ -383,15 +447,18 @@ const users = usersData;
           body: JSON.stringify(data)
         });
         
+        const result = await response.json();
+        
         if (response.ok) {
+          alert('User saved successfully!');
           window.location.reload();
         } else {
-          const error = await response.json();
-          alert(error.error || 'Failed to save user');
+          console.error('Error response:', result);
+          alert(result.error || 'Failed to save user');
         }
       } catch (error) {
         console.error('Error:', error);
-        alert('An error occurred');
+        alert('An error occurred: ' + error.message);
       }
     });
 
@@ -411,10 +478,13 @@ const users = usersData;
               body: JSON.stringify({ id: userId })
             });
             
+            const result = await response.json();
+            
             if (response.ok) {
+              alert(result.message || 'User status updated successfully');
               window.location.reload();
             } else {
-              alert('Failed to update user status');
+              alert(result.error || 'Failed to update user status');
             }
           } catch (error) {
             console.error('Error:', error);
@@ -423,5 +493,46 @@ const users = usersData;
         }
       });
     });
+    
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+    const roleFilter = document.getElementById('roleFilter');
+    const statusFilter = document.getElementById('statusFilter');
+    const tableRows = document.querySelectorAll('tbody tr');
+    
+    function filterTable() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const roleValue = roleFilter.value;
+      const statusValue = statusFilter.value;
+      
+      let visibleCount = 0;
+      
+      tableRows.forEach(row => {
+        const username = row.querySelector('td:first-child .font-medium')?.textContent.toLowerCase() || '';
+        const userId = row.querySelector('td:first-child .text-xs')?.textContent.toLowerCase() || '';
+        const role = row.querySelector('td:nth-child(2) span')?.textContent.toLowerCase() || '';
+        const status = row.querySelector('td:nth-child(3) span')?.textContent.toLowerCase() || '';
+        
+        const matchesSearch = username.includes(searchTerm) || userId.includes(searchTerm);
+        const matchesRole = roleValue === 'all' || role === roleValue;
+        const matchesStatus = statusValue === 'all' || status === statusValue;
+        
+        if (matchesSearch && matchesRole && matchesStatus) {
+          row.style.display = '';
+          visibleCount++;
+        } else {
+          row.style.display = 'none';
+        }
+      });
+      
+      console.log(`Filtered: ${visibleCount} of ${tableRows.length} users visible`);
+    }
+    
+    searchInput.addEventListener('input', filterTable);
+    roleFilter.addEventListener('change', filterTable);
+    statusFilter.addEventListener('change', filterTable);
+    
+    console.log('User management script loaded successfully');
+  }); // End DOMContentLoaded
   </script>
 </AdminLayout>

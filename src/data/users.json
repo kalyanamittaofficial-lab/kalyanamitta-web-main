@@ -7,6 +7,7 @@
     "permissions": {
       "manageUsers": true,
       "approveChanges": true,
+      "viewStatistics": true,
       "news": {
         "create": true,
         "edit": true,
@@ -34,6 +35,82 @@
     },
     "status": "active",
     "createdAt": "2025-11-18T00:00:00.000Z",
-    "lastLogin": "2025-11-18T00:02:42.237Z"
+    "lastLogin": "2025-11-18T00:34:46.889Z"
+  },
+  {
+    "id": "c3d7ca5e-3ebd-4307-a65a-c1e5c1237c4f",
+    "username": "yasan",
+    "passwordHash": "$2b$12$5G2JNRvDxJ37LSZcd3NnaeScALVHVK6uPMUafYIzPuzY9feOP2ZwC",
+    "role": "moderator",
+    "permissions": {
+      "manageUsers": false,
+      "approveChanges": false,
+      "viewStatistics": false,
+      "news": {
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "publish": false
+      },
+      "events": {
+        "create": true,
+        "edit": false,
+        "delete": false,
+        "publish": false
+      },
+      "posts": {
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "publish": false
+      },
+      "library": {
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "publish": false
+      }
+    },
+    "status": "suspended",
+    "createdAt": "2025-11-18T00:14:55.678Z",
+    "lastLogin": null
+  },
+  {
+    "id": "cec0c381-d84e-481a-ac02-ea8a2433af7a",
+    "username": "lakmal",
+    "passwordHash": "$2b$12$ksxiU3zZSq383Y1qIT1KR.S8F9DygMPIQg0lByqotTHUA99/riXvq",
+    "role": "moderator",
+    "permissions": {
+      "manageUsers": false,
+      "approveChanges": false,
+      "viewStatistics": false,
+      "news": {
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "publish": false
+      },
+      "events": {
+        "create": true,
+        "edit": false,
+        "delete": false,
+        "publish": false
+      },
+      "posts": {
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "publish": false
+      },
+      "library": {
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "publish": false
+      }
+    },
+    "status": "active",
+    "createdAt": "2025-11-18T00:18:09.848Z",
+    "lastLogin": "2025-11-18T00:36:24.175Z"
   }
 ]

@@ -10,6 +10,7 @@ const SESSION_DURATION = 8 * 60 * 60; // 8 hours in seconds
 export interface Permissions {
   manageUsers?: boolean;
   approveChanges?: boolean;
+  viewStatistics?: boolean;
   news?: {
     create?: boolean;
     edit?: boolean;

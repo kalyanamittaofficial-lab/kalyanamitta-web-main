@@ -15,6 +15,12 @@ const newsCount = newsData.length;
 const eventsCount = eventsData.length;
 const postsCount = postsData.length;
 const libraryCount = libraryData.resources?.length || 0;
+
+// Check if user can view statistics (admin role OR explicit permission)
+const canViewStatistics = user?.role === 'admin' || user?.permissions?.viewStatistics === true;
+
+// Debug log (remove after testing)
+console.log('Dashboard User:', user?.username, 'Role:', user?.role, 'viewStatistics:', user?.permissions?.viewStatistics, 'canViewStatistics:', canViewStatistics);
 ---
 
 <AdminLayout title="Admin Dashboard - Kalyanamitta">
@@ -47,7 +53,8 @@ const libraryCount = libraryData.resources?.length || 0;
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <!-- Stats Cards -->
+      <!-- Stats Cards (Admin Only with viewStatistics permission) -->
+      {canViewStatistics && (
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
           <div class="flex items-center justify-between">
@@ -105,8 +112,25 @@ const libraryCount = libraryData.resources?.length || 0;
           </div>
         </div>
       </div>
+      )}
 
-      <!-- Charts Section -->
+      <!-- No Access Message for Moderators -->
+      {!canViewStatistics && (
+        <div class="bg-blue-50 border-l-4 border-blue-400 p-6 mb-8">
+          <div class="flex items-start">
+            <svg class="w-6 h-6 text-blue-400 mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <div>
+              <h3 class="text-lg font-semibold text-blue-900 mb-2">Welcome to Admin Panel</h3>
+              <p class="text-blue-700">You can manage content using the sections below. Statistics are available to administrators only.</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <!-- Charts Section (Admin Only with viewStatistics permission) -->
+      {canViewStatistics && (
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <!-- Bar Chart -->
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
@@ -124,6 +148,7 @@ const libraryCount = libraryData.resources?.length || 0;
           </div>
         </div>
       </div>
+      )}
 
       <!-- System Management Section (Admin Only) -->
       {user?.role === 'admin' && user?.permissions?.manageUsers && (
