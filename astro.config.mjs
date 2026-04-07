@@ -2,13 +2,17 @@
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 
+import react from '@astrojs/react';
+
 export default defineConfig({
   output: 'static',
   compressHTML: true,
+
   build: {
     inlineStylesheets: 'auto',
     assets: '_assets'
   },
+
   vite: {
     plugins: [tailwindcss()],
     build: {
@@ -24,5 +28,7 @@ export default defineConfig({
         }
       }
     }
-  }
+  },
+
+  integrations: [react()]
 });
