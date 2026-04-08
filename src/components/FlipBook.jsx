@@ -1,8 +1,28 @@
-import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Leaf, Wind, Moon, Sun, Heart, Minus } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { ChevronLeft, ChevronRight, Leaf, Wind, Moon, Sun, Heart, Minus, Maximize, Minimize } from 'lucide-react';
 
 const FlipBook = () => {
   const [currentPage, setCurrentPage] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const containerRef = useRef(null);
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      containerRef.current?.requestFullscreen().catch(err => {
+        console.log(`Error attempting to enable fullscreen: ${err.message}`);
+      });
+    } else {
+      document.exitFullscreen();
+    }
+  };
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
 
   const brandName = "Kalyanamitta";
 
@@ -78,7 +98,7 @@ const FlipBook = () => {
 
   const EnsoCircle = () => (
     <div className="relative w-32 h-32 flex items-center justify-center opacity-40">
-      <svg viewBox="0 0 100 100" className="w-full h-full stroke-stone-300 fill-none stroke-[2] animate-draw">
+      <svg viewBox="0 0 100 100" className="w-full h-full stroke-monk-300 fill-none stroke-[2] animate-draw">
         <path d="M85,50 C85,70 70,85 50,85 C30,85 15,70 15,50 C15,30 30,15 50,15 C65,15 78,25 82,40" strokeLinecap="round" />
       </svg>
     </div>
@@ -91,15 +111,15 @@ const FlipBook = () => {
           <div className="flex flex-col items-center justify-center h-full text-center space-y-12 px-10">
             <EnsoCircle />
             <div className="space-y-4">
-              <h1 className="text-3xl sm:text-4xl font-light tracking-widest text-stone-800 leading-relaxed uppercase">
+              <h1 className="text-3xl sm:text-4xl font-light tracking-widest text-monk-900 leading-relaxed uppercase">
                 {page.title}
               </h1>
-              <div className="w-12 h-px bg-stone-300 mx-auto" />
-              <p className="text-stone-500 tracking-[0.3em] font-light text-xs uppercase">
+              <div className="w-12 h-px bg-monk-300 mx-auto" />
+              <p className="text-monk-700 tracking-[0.3em] font-light text-xs uppercase">
                 {page.subtitle}
               </p>
             </div>
-            <div className="max-w-xs text-stone-600 font-light italic leading-loose">
+            <div className="max-w-xs text-monk-800 font-light italic leading-loose">
               {page.content}
             </div>
           </div>
@@ -107,16 +127,16 @@ const FlipBook = () => {
       case "content":
         return (
           <div className="flex flex-col h-full justify-center space-y-12 p-12 sm:p-16">
-            <h2 className="text-xl font-light text-stone-800 tracking-widest uppercase border-b border-stone-200 pb-4">
+            <h2 className="text-xl font-light text-monk-900 tracking-widest uppercase border-b border-monk-300/30 pb-4">
               {page.title}
             </h2>
             <div className="space-y-10">
               {page.sections.map((sec, i) => (
                 <div key={i} className="flex gap-6 group">
-                  <div className="text-stone-300 font-serif italic text-2xl group-hover:text-stone-500 transition-colors">0{i+1}</div>
+                  <div className="text-monk-300 font-serif italic text-2xl group-hover:text-monk-700 transition-colors">0{i+1}</div>
                   <div className="space-y-1">
-                    <span className="text-[10px] font-bold tracking-[0.2em] text-stone-400 uppercase">{sec.label}</span>
-                    <p className="text-stone-600 leading-relaxed">{sec.text}</p>
+                    <span className="text-[10px] font-bold tracking-[0.2em] text-monk-700 uppercase">{sec.label}</span>
+                    <p className="text-monk-800 leading-relaxed">{sec.text}</p>
                   </div>
                 </div>
               ))}
@@ -126,32 +146,32 @@ const FlipBook = () => {
       case "quote":
         return (
           <div className="flex flex-col items-center justify-center h-full text-center space-y-12 p-12">
-            <Wind className="w-8 h-8 text-stone-300 animate-sway" />
+            <Wind className="w-8 h-8 text-monk-300 animate-sway" />
             <div className="space-y-10 max-w-md">
-              <p className="text-2xl font-light text-stone-800 leading-loose italic">
+              <p className="text-2xl font-light text-monk-900 leading-loose italic">
                 "{page.pali}"
               </p>
-              <div className="h-px w-16 bg-stone-200 mx-auto" />
-              <p className="text-stone-600 leading-relaxed font-light">
+              <div className="h-px w-16 bg-monk-200 mx-auto" />
+              <p className="text-monk-800 leading-relaxed font-light">
                 {page.meaning}
               </p>
             </div>
-            <p className="text-[10px] text-stone-400 tracking-widest uppercase italic">{page.note}</p>
+            <p className="text-[10px] text-monk-700 tracking-widest uppercase italic">{page.note}</p>
           </div>
         );
       case "list":
         return (
           <div className="flex flex-col h-full p-12">
-            <h2 className="text-lg font-light text-stone-800 tracking-[0.2em] uppercase mb-12 border-l-2 border-stone-200 pl-6">
+            <h2 className="text-lg font-light text-monk-900 tracking-[0.2em] uppercase mb-12 border-l-2 border-monk-300/50 pl-6">
               {page.title}
             </h2>
             <div className="grid grid-cols-1 gap-6 overflow-y-auto pr-4 custom-scrollbar">
               {page.items.map((item, i) => (
                 <div key={i} className="flex gap-6 items-start opacity-70 hover:opacity-100 transition-opacity">
-                  <Minus className="w-4 h-4 text-stone-400 mt-1 shrink-0" />
+                  <Minus className="w-4 h-4 text-monk-700 mt-1 shrink-0" />
                   <div className="space-y-1">
-                    <h3 className="text-stone-800 font-medium text-sm tracking-wide">{item.title}</h3>
-                    <p className="text-stone-500 text-xs leading-relaxed">{item.desc}</p>
+                    <h3 className="text-monk-900 font-medium text-sm tracking-wide">{item.title}</h3>
+                    <p className="text-monk-700 text-xs leading-relaxed">{item.desc}</p>
                   </div>
                 </div>
               ))}
@@ -162,36 +182,36 @@ const FlipBook = () => {
         return (
           <div className="flex flex-col h-full justify-center space-y-12 p-16">
             <div className="space-y-8 relative">
-              <Leaf className="w-6 h-6 text-stone-300 absolute -top-10 -left-6" />
-              <h2 className="text-xl font-light text-stone-800 tracking-widest uppercase">{page.title}</h2>
-              <p className="text-stone-600 text-lg leading-loose font-light italic">
+              <Leaf className="w-6 h-6 text-monk-300 absolute -top-10 -left-6" />
+              <h2 className="text-xl font-light text-monk-900 tracking-widest uppercase">{page.title}</h2>
+              <p className="text-monk-800 text-lg leading-loose font-light italic">
                 {page.content}
               </p>
             </div>
-            <div className="pt-8 border-t border-stone-200 flex items-center justify-between">
-              <p className="text-stone-400 text-xs tracking-[0.3em] uppercase">{page.conclusion}</p>
-              <Moon className="w-4 h-4 text-stone-300" />
+            <div className="pt-8 border-t border-monk-300/30 flex items-center justify-between">
+              <p className="text-monk-700 text-xs tracking-[0.3em] uppercase">{page.conclusion}</p>
+              <Moon className="w-4 h-4 text-monk-300" />
             </div>
           </div>
         );
       case "final":
         return (
           <div className="flex flex-col items-center justify-center h-full text-center space-y-10 p-12">
-            <div className="p-4 border border-stone-200 rounded-full">
-               <Sun className="w-6 h-6 text-stone-400" />
+            <div className="p-4 border border-monk-300/30 rounded-full">
+               <Sun className="w-6 h-6 text-monk-700" />
             </div>
             <div className="space-y-2">
-              <h2 className="text-3xl font-light text-stone-800 tracking-widest uppercase italic">{page.title}</h2>
-              <p className="text-stone-400 text-[10px] tracking-[0.4em] uppercase">{page.source}</p>
+              <h2 className="text-3xl font-light text-monk-900 tracking-widest uppercase italic">{page.title}</h2>
+              <p className="text-monk-700 text-[10px] tracking-[0.4em] uppercase">{page.source}</p>
             </div>
             <div className="space-y-8 max-w-sm">
-               <p className="text-stone-600 text-xl leading-loose font-light">
+               <p className="text-monk-800 text-xl leading-loose font-light">
                  {page.content}
                </p>
-               <div className="inline-block py-4 px-10 border border-stone-200 text-stone-800 text-sm tracking-[0.2em] uppercase hover:bg-stone-50 transition-colors cursor-default">
+               <div className="inline-block py-4 px-10 border border-monk-300/30 text-monk-900 text-sm tracking-[0.2em] uppercase hover:bg-monk-200 transition-colors cursor-default">
                  {page.action}
                </div>
-               <p className="pt-8 text-stone-300 text-[9px] tracking-[0.6em] uppercase">{brandName} Insight</p>
+               <p className="pt-8 text-monk-700 opacity-50 text-[9px] tracking-[0.6em] uppercase">{brandName} Insight</p>
             </div>
           </div>
         );
@@ -201,24 +221,45 @@ const FlipBook = () => {
   };
 
   return (
-    <div className="h-full min-h-[600px] w-full bg-[#fcfcfc] flex items-center justify-center p-6 sm:p-12 font-sans antialiased text-stone-600 selection:bg-stone-200 overflow-hidden relative rounded-2xl">
+    <div 
+      ref={containerRef}
+      className={`w-full bg-monk-100/50 flex items-center justify-center font-sans antialiased text-monk-800 selection:bg-monk-200 overflow-hidden relative group transition-all duration-700 ${isFullscreen ? 'h-screen rounded-none p-0 sm:p-4' : 'h-[85vh] min-h-[500px] rounded-2xl p-4 sm:p-8 border border-monk-300/20 shadow-inner'}`}
+    >
       
+      {/* Fullscreen Toggle */}
+      <button 
+        onClick={toggleFullscreen}
+        className={`absolute z-50 p-2 sm:p-3 bg-monk-50/80 hover:bg-monk-200 text-monk-700 hover:text-monk-900 rounded-full shadow-sm backdrop-blur-sm transition-all duration-300 ${isFullscreen ? 'top-4 right-4 sm:top-6 sm:right-6 opacity-100' : 'top-4 right-4 sm:top-6 sm:right-6 opacity-0 group-hover:opacity-100'}`}
+        title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+      >
+        {isFullscreen ? <Minimize className="w-5 h-5" /> : <Maximize className="w-5 h-5" />}
+      </button>
+
       {/* Zen Background Subtle Texture */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.03] invert">
+      <div className="absolute inset-0 pointer-events-none opacity-[0.05] mix-blend-overlay">
         <div className="absolute inset-0 bg-repeat bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')]" />
       </div>
 
-      <div className="relative w-full max-w-xl aspect-[3/4.5] sm:aspect-[4/5] bg-white border border-stone-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] flex flex-col transition-all duration-1000">
+      <div 
+        className="relative flex flex-col bg-monk-50 border border-monk-300/40 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] transition-all duration-700"
+        style={{
+          width: '100%',
+          maxWidth: '576px',
+          height: '100%',
+          maxHeight: isFullscreen ? '100vh' : '90vh',
+          aspectRatio: '4/5'
+        }}
+      >
         
         {/* Top Progress bar (Zen line) */}
         <div className="px-12 py-10 flex flex-col gap-4">
           <div className="flex items-center justify-between opacity-50">
-            <span className="text-[9px] tracking-[0.5em] uppercase font-light text-stone-500">{brandName}</span>
-            <span className="text-[9px] tracking-[0.2em] font-light text-stone-400">0{currentPage + 1} / 0{pages.length}</span>
+            <span className="text-[9px] tracking-[0.5em] uppercase font-light text-monk-700">{brandName}</span>
+            <span className="text-[9px] tracking-[0.2em] font-light text-monk-700">0{currentPage + 1} / 0{pages.length}</span>
           </div>
-          <div className="h-px w-full bg-stone-100 relative">
+          <div className="h-px w-full bg-monk-200 relative">
             <div 
-              className="absolute h-px bg-stone-800 transition-all duration-700 ease-in-out" 
+              className="absolute h-px bg-monk-900 transition-all duration-700 ease-in-out" 
               style={{ width: `${((currentPage + 1) / pages.length) * 100}%` }}
             />
           </div>
@@ -238,7 +279,7 @@ const FlipBook = () => {
         <div className="px-12 py-10 flex items-center justify-between">
           <button 
             onClick={prevPage}
-            className="p-4 text-stone-400 hover:text-stone-800 transition-colors disabled:opacity-30 cursor-pointer"
+            className="p-4 text-monk-700 hover:text-monk-900 transition-colors disabled:opacity-30 cursor-pointer"
             disabled={currentPage === 0}
             type="button"
           >
@@ -247,13 +288,13 @@ const FlipBook = () => {
           
           <div className="flex gap-3">
              {pages.map((_, idx) => (
-                <div key={idx} className={`w-1 h-1 rounded-full ${idx === currentPage ? 'bg-stone-800' : 'bg-stone-200'}`} />
+                <div key={idx} className={`w-1 h-1 rounded-full ${idx === currentPage ? 'bg-monk-900' : 'bg-monk-300'}`} />
              ))}
           </div>
 
           <button 
             onClick={nextPage}
-            className="p-4 text-stone-400 hover:text-stone-800 transition-colors cursor-pointer"
+            className="p-4 text-monk-700 hover:text-monk-900 transition-colors cursor-pointer"
             type="button"
           >
             <ChevronRight className="w-5 h-5 stroke-[1]" />
@@ -268,7 +309,7 @@ const FlipBook = () => {
 
         .custom-scrollbar::-webkit-scrollbar { width: 2px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e5e5e5; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #423F3C; }
 
         @keyframes zen-in {
           0% { opacity: 0; transform: translateY(5px); filter: blur(5px); }

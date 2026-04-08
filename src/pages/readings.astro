@@ -1,24 +1,25 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import FlipBook from '../components/FlipBook.jsx';
+import Bookshelf from '../components/Bookshelf.jsx';
 ---
 
 <Layout>
   <div class="max-w-6xl mx-auto px-4 sm:px-6">
     <!-- Page Header -->
-    <div class="mb-8 md:mb-12 pt-6 md:pt-8">
-      <h1 class="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-gray-900 mb-3 md:mb-4">
+    <div class="mb-4 md:mb-8 pt-6 md:pt-8 text-center max-w-2xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-display font-light text-monk-900 mb-4 tracking-wide text-wabi">
         Interactive Readings
       </h1>
-      <p class="text-base sm:text-lg text-gray-600 mb-4">
-        Flip through digital books containing timeless wisdom and reflections
+      <div class="h-px w-16 bg-monk-300 mx-auto mb-6"></div>
+      <p class="text-base sm:text-lg text-monk-800 font-light">
+        A quiet collection of digital books containing timeless wisdom and reflections. Choose a book from the shelf to begin.
       </p>
     </div>
 
-    <!-- FlipBook Container -->
+    <!-- Bookshelf Container -->
     <div class="w-full flex justify-center pb-12">
-      <!-- client:only="react" ensures the component renders only on the client side since it uses React hooks and dynamic states extensively -->
-      <FlipBook client:only="react" />
+      <!-- client:only="react" ensures the component renders only on the client side since it uses React hooks -->
+      <Bookshelf client:only="react" />
     </div>
   </div>
 </Layout>

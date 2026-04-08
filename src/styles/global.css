@@ -4,16 +4,50 @@
   --font-sans: 'Outfit', ui-sans-serif, system-ui, sans-serif;
   --font-display: 'Cormorant Garamond', 'Abhaya Libre', serif;
   
-  --color-monk-50: #FCFAF8;
-  --color-monk-100: #F7F5F0;
-  --color-monk-200: #EBE7E0;
-  --color-monk-300: #D6CEC3;
-  --color-monk-700: #8A8D79;
-  --color-monk-800: #5C554E;
-  --color-monk-900: #2B2724;
+  --color-monk-50: var(--theme-50, #FCFBF7);
+  --color-monk-100: var(--theme-100, #F6F3E6);
+  --color-monk-200: var(--theme-200, #EBE5D3);
+  --color-monk-300: var(--theme-300, #D8D0BA);
+  --color-monk-700: var(--theme-700, #7A7463);
+  --color-monk-800: var(--theme-800, #575244);
+  --color-monk-900: var(--theme-900, #38342B);
 }
 
 @layer base {
+  :root {
+    /* theme-sepia is default (fallback) */
+    --theme-50: #FCFBF7;
+    --theme-100: #F6F3E6;
+    --theme-200: #EBE5D3;
+    --theme-300: #D8D0BA;
+    --theme-700: #7A7463;
+    --theme-800: #575244;
+    --theme-900: #38342B;
+    background-color: var(--theme-100);
+    color: var(--theme-900);
+  }
+
+  :root[data-theme='dark'] {
+    /* Deep Zen (Dark) */
+    --theme-50: #1B1A19;
+    --theme-100: #121110;
+    --theme-200: #262422;
+    --theme-300: #423F3C;
+    --theme-700: #8C867D;
+    --theme-800: #BBAFA0;
+    --theme-900: #E8DFD1;
+  }
+
+  :root[data-theme='nature'] {
+    /* Lush Nature (Emerald) */
+    --theme-50: #FFFFFF;
+    --theme-100: #F8FAF9;
+    --theme-200: #E2Ebe4;
+    --theme-300: #A8C2B0;
+    --theme-700: #4A6351;
+    --theme-800: #2C4233;
+    --theme-900: #16261B;
+  }
   html {
     height: 100%;
   }
